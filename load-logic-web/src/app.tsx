@@ -1,15 +1,16 @@
 import "./app.css";
 import React from "react";
 import styled from "styled-components";
-import logo from "./logo.png";
 import { Switch, Route, Link, NavLink, Redirect } from "react-router-dom";
 import { Navbar, Nav as RBNav, NavDropdown } from "react-bootstrap";
 import { MdSearch, MdNotifications, MdSettings } from "react-icons/md";
 
+import logo from "./logo.png";
+
 function App() {
   return (
     <div>
-      <Navbar bg="dark" variant="dark">
+      <Navbar bg="dark" variant="dark" sticky="top">
         <Navbar.Brand as={Link} to="/">
           <img
             src={logo}

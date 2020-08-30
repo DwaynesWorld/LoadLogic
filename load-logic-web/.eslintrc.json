@@ -1,0 +1,34 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb",
+    "airbnb-typescript",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:i18next/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-empty-function": 1,
+    "@typescript-eslint/no-non-null-assertion": 1,
+    "@typescript-eslint/no-inferrable-types": 1,
+    "@typescript-eslint/unbound-method": 0,
+    "@typescript-eslint/prefer-regexp-exec": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "i18next/no-literal-string": [
+      0,
+      {
+        "ignore": ["error"],
+        "ignoreAttribute": ["name", "autoComplete"],
+        "ignoreProperty": ["name", "columnName"]
+      }
+    ]
+  }
+}
