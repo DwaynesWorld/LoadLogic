@@ -22,6 +22,7 @@
     "@typescript-eslint/prefer-regexp-exec": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
+    "import/prefer-default-export": 0,
     "i18next/no-literal-string": [
       0,
       {
@@ -29,6 +30,7 @@
         "ignoreAttribute": ["name", "autoComplete"],
         "ignoreProperty": ["name", "columnName"]
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": 0
   }
 }
