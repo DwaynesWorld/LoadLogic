@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MassTransit;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace LoadLogic.Services.Ordering.API
 {
@@ -26,6 +28,15 @@ namespace LoadLogic.Services.Ordering.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
+            services.AddMassTransit(config => config.UsingRabbitMq());
+            services.AddMassTransitHostedService();
+
+            services.Configure<HealthCheckPublisherOptions>(options =>
+            {
+                options.Delay = TimeSpan.FromSeconds(2);
+                options.Predicate = (check) => check.Tags.Contains("ready");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,9 +48,7 @@ namespace LoadLogic.Services.Ordering.API
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
