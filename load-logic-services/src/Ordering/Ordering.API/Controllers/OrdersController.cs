@@ -16,9 +16,9 @@ namespace LoadLogic.Services.Ordering.API.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<OrdersController> _logger;
 
-        public OrdersController(ILogger<WeatherForecastController> logger)
+        public OrdersController(ILogger<OrdersController> logger)
         {
             _logger = logger;
         }
