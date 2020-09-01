@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using LoadLogic.Services.Dispatching.Application.Abstractions;
+using LoadLogic.Services.Dispatching.Application.IntegrationEventConsumers;
+using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace LoadLogic.Services.Dispatching.API
 {
@@ -26,6 +24,10 @@ namespace LoadLogic.Services.Dispatching.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddMediatR(typeof(IHandler).Assembly);
+            services.AddMassTransit(ConfigureMassTransit);
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,15 +38,27 @@ namespace LoadLogic.Services.Dispatching.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
+            // app.UseHttpsRedirection();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        protected void ConfigureMassTransit(IServiceCollectionBusConfigurator busConfig)
+        {
+            busConfig.AddConsumer<OrderConfirmedIntegrationEventConsumer>();
+            busConfig.SetKebabCaseEndpointNameFormatter();
+
+            busConfig.UsingRabbitMq((context, config) =>
+            {
+                config.ReceiveEndpoint("event-listener", e =>
+                {
+                    e.ConfigureConsumer<OrderConfirmedIntegrationEventConsumer>(context);
+                });
             });
         }
     }

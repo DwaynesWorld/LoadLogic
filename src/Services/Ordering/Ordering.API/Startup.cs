@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using LoadLogic.Services.Ordering.Application.Abstractions;
+using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using MassTransit;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace LoadLogic.Services.Ordering.API
 {
@@ -28,15 +23,10 @@ namespace LoadLogic.Services.Ordering.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddHealthChecks();
-            services.AddMassTransit(config => config.UsingRabbitMq());
-            services.AddMassTransitHostedService();
 
-            services.Configure<HealthCheckPublisherOptions>(options =>
-            {
-                options.Delay = TimeSpan.FromSeconds(2);
-                options.Predicate = (check) => check.Tags.Contains("ready");
-            });
+            services.AddMediatR(typeof(IHandler).Assembly);
+            services.AddMassTransit(ConfigureMassTransit);
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +37,7 @@ namespace LoadLogic.Services.Ordering.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
@@ -55,6 +45,12 @@ namespace LoadLogic.Services.Ordering.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        protected void ConfigureMassTransit(IServiceCollectionBusConfigurator config)
+        {
+            config.SetKebabCaseEndpointNameFormatter();
+            config.UsingRabbitMq();
         }
     }
 }
