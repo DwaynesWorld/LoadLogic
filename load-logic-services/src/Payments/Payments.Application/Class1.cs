@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenHaul.Services.Payments.Application
+namespace LoadLogic.Services.Payments.Application
 {
     public class Class1
     {

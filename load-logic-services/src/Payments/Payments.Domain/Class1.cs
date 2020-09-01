@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenHaul.Services.Payments.Domain
+namespace LoadLogic.Services.Payments.Domain
 {
     public class Class1
     {

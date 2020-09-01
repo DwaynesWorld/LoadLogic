@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenHaul.Services.Ordering.Domain
+namespace LoadLogic.Services.Ordering.Domain
 {
     public class Class1
     {

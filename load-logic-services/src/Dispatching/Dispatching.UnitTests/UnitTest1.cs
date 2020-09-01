@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace OpenHaul.Services.Dispatching.UnitTests
+namespace LoadLogic.Services.Dispatching.UnitTests
 {
     public class UnitTest1
     {

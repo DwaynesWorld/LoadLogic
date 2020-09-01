@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenHaul.Services.Dispatching.Infrastructure
+namespace LoadLogic.Services.Dispatching.Infrastructure
 {
     public class Class1
     {

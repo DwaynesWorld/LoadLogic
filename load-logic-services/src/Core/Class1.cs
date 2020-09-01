@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LoadLogic.Services.Hauling.Infrastructure
+namespace LoadLogic.Services.Core
 {
     public class Class1
     {

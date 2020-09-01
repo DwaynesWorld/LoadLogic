@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenHaul.Services.Dispatching.API
+namespace LoadLogic.Services.Dispatching.API
 {
     public class WeatherForecast
     {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace OpenHaul.Services.Ordering.API
+namespace LoadLogic.Services.Ordering.API
 {
     public class Startup
     {

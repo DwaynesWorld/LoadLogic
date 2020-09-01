@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenHaul.Services.Payments.API
+namespace LoadLogic.Services.Payments.API
 {
     public class WeatherForecast
     {

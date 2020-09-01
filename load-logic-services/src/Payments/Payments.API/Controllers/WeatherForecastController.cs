@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace OpenHaul.Services.Payments.API.Controllers
+namespace LoadLogic.Services.Payments.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

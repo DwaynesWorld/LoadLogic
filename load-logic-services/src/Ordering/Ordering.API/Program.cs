@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace OpenHaul.Services.Ordering.API
+namespace LoadLogic.Services.Ordering.API
 {
     public class Program
     {

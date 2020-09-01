@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace OpenHaul.Services.Payments.API
+namespace LoadLogic.Services.Payments.API
 {
     public class Program
     {

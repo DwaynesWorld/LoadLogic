@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace LoadLogic.Services.Dispatching.API.Controllers
+namespace LoadLogic.Services.Ordering.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
@@ -18,7 +18,7 @@ namespace LoadLogic.Services.Dispatching.API.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public OrdersController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }

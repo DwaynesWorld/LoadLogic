@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenHaul.Services.Ordering.Infrastructure
+namespace LoadLogic.Services.Ordering.Infrastructure
 {
     public class Class1
     {
