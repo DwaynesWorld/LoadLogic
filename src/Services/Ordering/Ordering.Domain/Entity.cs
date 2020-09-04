@@ -16,7 +16,7 @@ namespace LoadLogic.Services.Ordering.Domain
 
         public void AddDomainEvent(INotification eventItem)
         {
-            _domainEvents = _domainEvents ?? new List<INotification>();
+            _domainEvents ??= new List<INotification>();
             _domainEvents.Add(eventItem);
         }
 

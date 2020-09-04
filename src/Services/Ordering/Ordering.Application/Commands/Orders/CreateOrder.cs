@@ -40,10 +40,11 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
             // orderRepo.Add(order);
             // orderRepo.SaveChangesAsync();
 
-            _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(Guid.Empty));
+            _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(Guid.Empty), cancellationToken);
+
             foreach (var @event in order.DomainEvents)
             {
-                _mediator.Publish(@event);
+                _mediator.Publish(@event, cancellationToken);
             }
 
             return Task.FromResult((long)1000);
