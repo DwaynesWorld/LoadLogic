@@ -1,0 +1,72 @@
+version: "3.4"
+
+services:
+  sqlserver:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    volumes:
+      - loadlogic-sql_data:/var/opt/mssql
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - loadlogic-rabbitmq_log:/var/log/rabbitmq
+      - loadlogic-rabbitmq_data:/var/lib/rabbitmq
+
+  dispatching-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+      - ConnectionString=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
+      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+    ports:
+      - "5101:80"
+
+  hauling-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+      - ConnectionString=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
+      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+    ports:
+      - "5111:80"
+
+  ordering-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+      - ConnectionString=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.OrderingDb;User Id=sa;Password=Pass@word}
+      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+    ports:
+      - "5121:80"
+
+  payments-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+      - ConnectionString=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
+      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+    ports:
+      - "5131:80"
+
+volumes:
+  loadlogic-sql_data:
+  loadlogic-rabbitmq_log:
+  loadlogic-rabbitmq_data:
