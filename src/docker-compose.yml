@@ -1,0 +1,44 @@
+version: "3.4"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  dispatching-api:
+    image: ${REGISTRY:-kt713}/dispatching.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Dispatching/Dispatching.API/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+
+  hauling-api:
+    image: ${REGISTRY:-kt713}/hauling.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Hauling/Hauling.API/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+
+  ordering-api:
+    image: ${REGISTRY:-kt713}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+
+  payments-api:
+    image: ${REGISTRY:-kt713}/payments.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Payments/Payments.API/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq

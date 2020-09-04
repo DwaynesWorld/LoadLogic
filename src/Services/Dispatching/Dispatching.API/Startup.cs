@@ -50,14 +50,23 @@ namespace LoadLogic.Services.Dispatching.API
 
         protected void ConfigureMassTransit(IServiceCollectionBusConfigurator busConfig)
         {
-            busConfig.AddConsumer<OrderConfirmedIntegrationEventConsumer>();
             busConfig.SetKebabCaseEndpointNameFormatter();
 
-            busConfig.UsingRabbitMq((context, config) =>
+            busConfig.UsingRabbitMq((context, factoryConfig) =>
             {
-                config.ReceiveEndpoint("event-listener", e =>
+                var connection = Configuration.GetValue<string>("EventBusConnection");
+                var username = Configuration.GetValue<string>("EventBusUserName");
+                var password = Configuration.GetValue<string>("EventBusPassword");
+
+                factoryConfig.Host(connection, hostConfig =>
                 {
-                    e.ConfigureConsumer<OrderConfirmedIntegrationEventConsumer>(context);
+                    hostConfig.Username(username);
+                    hostConfig.Password(password);
+                });
+
+                factoryConfig.ReceiveEndpoint("order-event-listener", e =>
+                {
+                    e.Consumer<OrderConfirmedIntegrationEventConsumer>();
                 });
             });
         }

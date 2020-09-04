@@ -47,10 +47,22 @@ namespace LoadLogic.Services.Ordering.API
             });
         }
 
-        protected void ConfigureMassTransit(IServiceCollectionBusConfigurator config)
+        protected void ConfigureMassTransit(IServiceCollectionBusConfigurator busConfig)
         {
-            config.SetKebabCaseEndpointNameFormatter();
-            config.UsingRabbitMq();
+            busConfig.SetKebabCaseEndpointNameFormatter();
+
+            busConfig.UsingRabbitMq((context, factoryConfig) =>
+            {
+                var connection = Configuration.GetValue<string>("EventBusConnection");
+                var username = Configuration.GetValue<string>("EventBusUserName");
+                var password = Configuration.GetValue<string>("EventBusPassword");
+
+                factoryConfig.Host(connection, hostConfig =>
+                {
+                    hostConfig.Username(username);
+                    hostConfig.Password(password);
+                });
+            });
         }
     }
 }

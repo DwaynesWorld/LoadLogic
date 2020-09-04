@@ -19,5 +19,4 @@
     <ProjectReference Include="..\Dispatching.Domain\Dispatching.Domain.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />
   </ItemGroup>
-
 </Project>
