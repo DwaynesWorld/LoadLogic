@@ -33,5 +33,12 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         public int TruckQuantity { get; private set; }
         public string ChargeType { get; private set; } = string.Empty;
         public decimal ChargeRate { get; private set; }
+
+#nullable disable
+        /// <summary>
+        /// Needed for Persistence
+        /// </summary>
+        private OrderItem() { }
+#nullable enable
     }
 }

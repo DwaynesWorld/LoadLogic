@@ -63,9 +63,14 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
             builder.Property(x => x.Activity)
                 .HasConversion(x => x!.Id, x => Enumeration.FromValue<OrderActivity>(x));
 
-            builder.Property(x => x.MaterialName).HasMaxLength(50);
-            builder.Property(x => x.MaterialUnit).HasMaxLength(5);
-            builder.Property(x => x.ChargeRate).HasPrecision(12, 6);
+            builder.Property(x => x.MaterialName)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.MaterialUnit)
+                .HasMaxLength(5);
+
+            builder.Property(x => x.ChargeRate)
+                .HasColumnType("decimal(12, 6)");
         }
     }
 }

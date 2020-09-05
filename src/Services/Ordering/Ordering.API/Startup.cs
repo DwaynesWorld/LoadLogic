@@ -1,9 +1,12 @@
+using System;
 using LoadLogic.Services.Ordering.Application.Abstractions;
+using LoadLogic.Services.Ordering.Infrastructure.Persistence;
 using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +30,18 @@ namespace LoadLogic.Services.Ordering.API
             services.AddMediatR(typeof(IHandler).Assembly);
             services.AddMassTransit(ConfigureMassTransit);
             services.AddMassTransitHostedService();
+
+            services.AddHealthChecks().AddDbContextCheck<OrderingContext>();
+            services.AddDbContext<OrderingContext>(options =>
+            {
+                var connectionString = Configuration["DatabaseConnection"];
+
+                options.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(OrderingContext).Assembly.GetName().Name);
+                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(15), errorNumbersToAdd: null);
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
