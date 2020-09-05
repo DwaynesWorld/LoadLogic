@@ -5,19 +5,15 @@ namespace LoadLogic.Services.Ordering.Domain.Events
 {
     public class OrderConfirmedDomainEvent : INotification
     {
-        public OrderConfirmedDomainEvent(
-            Guid credentialsCompanyId, Guid businessUnitId,
-            int orderNo, long contractorId)
+        public OrderConfirmedDomainEvent(int orderNo, long customerId)
         {
-            this.CredentialsCompanyId = credentialsCompanyId;
-            this.BusinessUnitId = businessUnitId;
             this.OrderNo = orderNo;
-            this.ContractorId = contractorId;
+            this.customerId = customerId;
         }
 
         public Guid CredentialsCompanyId { get; }
         public Guid BusinessUnitId { get; }
         public int OrderNo { get; }
-        public long ContractorId { get; }
+        public long customerId { get; }
     }
 }

@@ -49,6 +49,5 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 
             return state;
         }
-
     }
 }

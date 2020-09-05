@@ -23,7 +23,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - ConnectionString=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
+      - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
       - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
       - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
       - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -35,7 +35,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - ConnectionString=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
+      - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
       - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
       - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
       - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -47,7 +47,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - ConnectionString=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.OrderingDb;User Id=sa;Password=Pass@word}
+      - DatabaseConnection=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.OrderingDb;User Id=sa;Password=Pass@word}
       - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
       - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
       - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -59,7 +59,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - ConnectionString=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
+      - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
       - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
       - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
       - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}

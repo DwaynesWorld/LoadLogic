@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LoadLogic.Services.Common;
 using LoadLogic.Services.Core.IntegrationEvents;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MassTransit;
@@ -11,43 +11,62 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 {
     public sealed class CreateOrder : IRequest<long>
     {
-        public CreateOrder(int orderNo, long contractorId)
+        public CreateOrder(
+            long customerId, string customerName,
+            Email customerEmail, PhoneNumber customerPhone,
+            string jobName, string jobDescription, Address jobAddress,
+            DateTime jobStartDate, DateTime? jobEndDate)
         {
-            this.OrderNo = orderNo;
-            this.ContractorId = contractorId;
+            this.CustomerId = customerId;
+            this.CustomerName = customerName;
+            this.CustomerEmail = customerEmail;
+            this.CustomerPhone = customerPhone;
+            this.JobName = jobName;
+            this.JobDescription = jobDescription;
+            this.JobAddress = jobAddress;
+            this.JobStartDate = jobStartDate;
+            this.JobEndDate = jobEndDate;
         }
 
-        public int OrderNo { get; set; }
-        public long ContractorId { get; set; }
+        public long CustomerId { get; }
+        public string CustomerName { get; }
+        public Email CustomerEmail { get; }
+        public PhoneNumber CustomerPhone { get; }
+        public string JobName { get; }
+        public string JobDescription { get; }
+        public Address JobAddress { get; }
+        public DateTime JobStartDate { get; }
+        public DateTime? JobEndDate { get; }
     }
 
     internal class CreateOrderHandler : IRequestHandler<CreateOrder, long>
     {
-        private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IOrderRepository _orderRepository;
 
-        public CreateOrderHandler(IMediator mediator, IPublishEndpoint publishEndpoint)
+        public CreateOrderHandler(IPublishEndpoint publishEndpoint, IOrderRepository orderRepository)
         {
-            _mediator = mediator;
             _publishEndpoint = publishEndpoint;
+            _orderRepository = orderRepository;
         }
 
-        public Task<long> Handle(CreateOrder request, CancellationToken cancellationToken)
+        public async Task<long> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
-            var order = new Order(Guid.NewGuid(), Guid.NewGuid(), request.OrderNo, request.ContractorId);
+            var orderNo = await _orderRepository.NextOrderNo();
 
-            // TODO Order persistence
-            // orderRepo.Add(order);
-            // orderRepo.SaveChangesAsync();
+            var order = new Order(
+                orderNo, request.CustomerId,
+                request.CustomerName, request.CustomerEmail,
+                request.CustomerPhone, request.JobName,
+                request.JobDescription, request.JobAddress,
+                request.JobStartDate, request.JobEndDate);
 
-            _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(Guid.Empty), cancellationToken);
+            _orderRepository.Add(order);
 
-            foreach (var @event in order.DomainEvents)
-            {
-                _mediator.Publish(@event, cancellationToken);
-            }
+            await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(Guid.Empty), cancellationToken);
 
-            return Task.FromResult((long)1000);
+            return order.Id;
         }
     }
 }
