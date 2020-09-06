@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace LoadLogic.Services.Common
+namespace LoadLogic.Services
 {
     /// <summary>
     /// 

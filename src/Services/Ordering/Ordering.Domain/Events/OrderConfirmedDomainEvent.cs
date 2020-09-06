@@ -11,8 +11,8 @@ namespace LoadLogic.Services.Ordering.Domain.Events
             this.customerId = customerId;
         }
 
-        public Guid CredentialsCompanyId { get; }
-        public Guid BusinessUnitId { get; }
+        public long CredentialsCompanyId { get; }
+        public long BusinessUnitId { get; }
         public int OrderNo { get; }
         public long customerId { get; }
     }

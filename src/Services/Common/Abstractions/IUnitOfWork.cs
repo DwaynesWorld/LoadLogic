@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LoadLogic.Services.Common.Abstractions
+namespace LoadLogic.Services.Abstractions
 {
     public interface IUnitOfWork : IDisposable
     {

@@ -1,4 +1,4 @@
-﻿using LoadLogic.Services.Common;
+﻿using LoadLogic.Services;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

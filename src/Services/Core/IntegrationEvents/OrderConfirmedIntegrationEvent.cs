@@ -5,11 +5,11 @@ namespace LoadLogic.Services.Core.IntegrationEvents
     public class OrderConfirmedIntegrationEvent
     {
 
-        public OrderConfirmedIntegrationEvent(Guid userId)
+        public OrderConfirmedIntegrationEvent(long userId)
         {
             this.UserId = userId;
         }
 
-        public Guid UserId { get; private set; }
+        public long UserId { get; private set; }
     }
 }

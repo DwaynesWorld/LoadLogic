@@ -1,5 +1,5 @@
-using LoadLogic.Services.Common.Abstractions;
-using LoadLogic.Services.Common.Extensions;
+using LoadLogic.Services.Abstractions;
+using LoadLogic.Services.Extensions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace LoadLogic.Services.Common
+namespace LoadLogic.Services.Exceptions
 {
     [Serializable]
     public class InvalidEmailFormatException : Exception

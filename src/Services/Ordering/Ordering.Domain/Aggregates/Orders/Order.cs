@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LoadLogic.Services.Common;
-using LoadLogic.Services.Common.Abstractions;
+using LoadLogic.Services;
+using LoadLogic.Services.Abstractions;
 using LoadLogic.Services.Ordering.Domain.Events;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders

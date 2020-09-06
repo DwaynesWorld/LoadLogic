@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using LoadLogic.Services.Common.Abstractions;
+using LoadLogic.Services.Abstractions;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {

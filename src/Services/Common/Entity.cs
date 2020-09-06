@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using MediatR;
 
-namespace LoadLogic.Services.Common
+namespace LoadLogic.Services
 {
     public class Entity
     {
@@ -10,8 +10,8 @@ namespace LoadLogic.Services.Common
 
         public long Id { get; protected set; }
 
-        // public Guid IdentityCompanyId { get; protected set; }
-        // public Guid BusinessUnitId { get; protected set; }
+        // public long IdentityCompanyId { get; protected set; }
+        // public long BusinessUnitId { get; protected set; }
 
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 

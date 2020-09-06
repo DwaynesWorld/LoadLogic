@@ -1,4 +1,4 @@
-﻿using LoadLogic.Services.Common;
+﻿using LoadLogic.Services;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {

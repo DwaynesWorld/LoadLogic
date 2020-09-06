@@ -122,7 +122,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", b =>
                 {
-                    b.OwnsOne("LoadLogic.Services.Common.Address", "JobAddress", b1 =>
+                    b.OwnsOne("LoadLogic.Services.Address", "JobAddress", b1 =>
                         {
                             b1.Property<long>("OrderId")
                                 .ValueGeneratedOnAdd()
@@ -165,7 +165,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("LoadLogic.Services.Common.Email", "CustomerEmail", b1 =>
+                    b.OwnsOne("LoadLogic.Services.Email", "CustomerEmail", b1 =>
                         {
                             b1.Property<long>("OrderId")
                                 .ValueGeneratedOnAdd()
@@ -188,7 +188,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("LoadLogic.Services.Common.PhoneNumber", "CustomerPhone", b1 =>
+                    b.OwnsOne("LoadLogic.Services.PhoneNumber", "CustomerPhone", b1 =>
                         {
                             b1.Property<long>("OrderId")
                                 .ValueGeneratedOnAdd()

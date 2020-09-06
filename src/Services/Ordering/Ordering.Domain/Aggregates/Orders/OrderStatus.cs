@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LoadLogic.Services.Common;
+using LoadLogic.Services;
 using LoadLogic.Services.Ordering.Domain.Exceptions;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders

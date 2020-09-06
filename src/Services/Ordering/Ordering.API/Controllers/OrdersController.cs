@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LoadLogic.Services.Common;
+using LoadLogic.Services;
 using LoadLogic.Services.Ordering.API.Models;
 using LoadLogic.Services.Ordering.Application.Commands.Orders;
 using Microsoft.AspNetCore.Mvc;
