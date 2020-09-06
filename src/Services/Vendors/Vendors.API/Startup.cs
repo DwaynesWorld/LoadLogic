@@ -17,6 +17,7 @@ using System;
 using System.Linq;
 using LoadLogic.Services.Vendors.Application.Interfaces;
 using LoadLogic.Services.Vendors.Domain;
+using LoadLogic.Services.Vendors.Infrastructure.Services;
 
 namespace LoadLogic.Services.Vendors.API
 {
@@ -69,6 +70,7 @@ namespace LoadLogic.Services.Vendors.API
             services.AddMemoryCache();
 
 
+            services.AddTransient<IBlobService, StubbedBlobService>();
             services.AddTransient<IConnectionProvider, ConnectionProvider>();
             services.AddTransient(typeof(ICrudRepository<>), typeof(Repository<>));
             services.AddCustomProblemDetailsServices(WebHostEnvironment);

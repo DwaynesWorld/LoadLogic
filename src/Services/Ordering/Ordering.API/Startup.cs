@@ -1,6 +1,8 @@
 using System;
 using LoadLogic.Services.Ordering.Application.Abstractions;
+using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using LoadLogic.Services.Ordering.Infrastructure.Persistence;
+using LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories;
 using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MediatR;
@@ -30,6 +32,7 @@ namespace LoadLogic.Services.Ordering.API
             services.AddMediatR(typeof(IHandler).Assembly);
             services.AddMassTransit(ConfigureMassTransit);
             services.AddMassTransitHostedService();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             services.AddHealthChecks().AddDbContextCheck<OrderingContext>();
             services.AddDbContext<OrderingContext>(options =>
