@@ -36,9 +36,6 @@ namespace LoadLogic.Services.Vendors.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<AuthSettings>(Configuration.GetSection("Auth"));
-            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
-
             services.AddApiVersioning();
             services.AddVersionedApiExplorer(options =>
             {
@@ -68,8 +65,6 @@ namespace LoadLogic.Services.Vendors.API
             services.AddMediatR(typeof(IHandler).Assembly);
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
-
-
             services.AddTransient<IBlobService, StubbedBlobService>();
             services.AddTransient<IConnectionProvider, ConnectionProvider>();
             services.AddTransient(typeof(ICrudRepository<>), typeof(Repository<>));
@@ -78,27 +73,11 @@ namespace LoadLogic.Services.Vendors.API
             services.AddSwaggerGen();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerExamplesFromAssemblyOf<Startup>();
-            services.AddLogging(builder => builder.AddSerilog());
-
-            services.AddSingleton<ILogger>(sp =>
-            {
-                var logger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(Configuration)
-                    .Enrich.FromLogContext();
-
-                if (WebHostEnvironment.IsDevelopment())
-                {
-                    logger = logger.WriteTo.Console(theme: AnsiConsoleTheme.Code);
-                }
-
-                return logger.CreateLogger();
-            });
 
             services.AddHealthChecks().AddDbContextCheck<VendorsContext>();
             services.AddDbContext<VendorsContext>(options =>
             {
-                var connectionString = Configuration.GetConnectionString("DatabaseConnection");
-
+                var connectionString = Configuration.GetValue<string>("DatabaseConnection");
                 options.UseSqlServer(connectionString, sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(VendorsContext).Assembly.GetName().Name);
@@ -117,7 +96,7 @@ namespace LoadLogic.Services.Vendors.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseCors("default");

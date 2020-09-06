@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace LoadLogic.Services.Ordering.API
 {
@@ -28,7 +29,6 @@ namespace LoadLogic.Services.Ordering.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
             services.AddMediatR(typeof(IHandler).Assembly);
             services.AddMassTransit(ConfigureMassTransit);
             services.AddMassTransitHostedService();
@@ -37,8 +37,7 @@ namespace LoadLogic.Services.Ordering.API
             services.AddHealthChecks().AddDbContextCheck<OrderingContext>();
             services.AddDbContext<OrderingContext>(options =>
             {
-                var connectionString = Configuration["DatabaseConnection"];
-
+                var connectionString = Configuration.GetValue<string>("DatabaseConnection");
                 options.UseSqlServer(connectionString, sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(OrderingContext).Assembly.GetName().Name);
@@ -56,12 +55,14 @@ namespace LoadLogic.Services.Ordering.API
             }
 
             // app.UseHttpsRedirection();
+            app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
 

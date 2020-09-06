@@ -20,7 +20,7 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         {
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>();
             optionsBuilder.UseSqlServer(ConnectionString());
-            return new OrderingContext(optionsBuilder.Options, new StubMediator());
+            return new OrderingContext(optionsBuilder.Options, new StubbedMediator());
         }
 
         protected string ConnectionString()
@@ -37,11 +37,11 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = configuration["DatabaseConnection"];
+            var connectionString = configuration.GetValue<string>("DatabaseConnection");
             return connectionString;
         }
 
-        private class StubMediator : IMediator
+        private class StubbedMediator : IMediator
         {
             public Task Publish(object notification, CancellationToken cancellationToken = default)
             {

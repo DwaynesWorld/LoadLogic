@@ -34,7 +34,7 @@ namespace LoadLogic.Services.Vendors.Infrastructure.Persistence
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("VendorsContext");
+            var connectionString = configuration.GetValue<string>("DatabaseConnection");
             return connectionString;
         }
     }

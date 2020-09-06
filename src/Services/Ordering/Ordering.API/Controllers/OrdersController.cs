@@ -26,11 +26,19 @@ namespace LoadLogic.Services.Ordering.API.Controllers
         [Route("")]
         public async Task<IActionResult> CreateOrderAsync(CancellationToken cancellationToken)
         {
-            var message = new CreateOrder(
+            var command = new CreateOrder(
                 100, "John Doe", (Email)"john.doe@example.com", (PhoneNumber)"1281314460",
                 "Job Name", "Job Description", new Address(), DateTime.UtcNow, DateTime.UtcNow);
 
-            var id = await Mediator.Send(message, cancellationToken);
+            _logger.LogInformation(
+                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                nameof(CreateOrder),
+                nameof(CreateOrder.CustomerId),
+                command.CustomerId,
+                command);
+
+
+            var id = await Mediator.Send(command, cancellationToken);
             return Ok(id);
         }
     }

@@ -1,6 +1,12 @@
 version: "3.4"
 
 services:
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+
   sqlserver:
     environment:
       - SA_PASSWORD=Pass@word
