@@ -52,7 +52,7 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 
         public async Task<long> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
-            var orderNo = await _orderRepository.NextOrderNo();
+            var orderNo = await _orderRepository.GetNextOrderNo();
 
             var order = new Order(
                 orderNo, request.CustomerId,

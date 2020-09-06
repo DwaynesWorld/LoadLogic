@@ -7,7 +7,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
     {
         Task<Order?> FindByIdAsync(long id);
 
-        Task<int> NextOrderNo();
+        Task<int> GetNextOrderNo();
 
         void Add(Order order);
 

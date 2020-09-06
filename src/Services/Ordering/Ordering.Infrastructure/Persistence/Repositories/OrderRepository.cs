@@ -22,7 +22,7 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
             return await _context.Orders.FindAsync(id);
         }
 
-        public async Task<int> NextOrderNo()
+        public async Task<int> GetNextOrderNo()
         {
             using var connection = _context.Database.GetDbConnection();
             using var command = connection.CreateCommand();
