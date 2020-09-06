@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using LoadLogic.Services.Abstractions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
+using System.Data;
 
 namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 {
@@ -20,9 +22,19 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
             return await _context.Orders.FindAsync(id);
         }
 
-        public Task<int> NextOrderNo()
+        public async Task<int> NextOrderNo()
         {
-            return Task.FromResult(100);
+            using var connection = _context.Database.GetDbConnection();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT MAX(OrderNo) + 1 [NextOrderNo] FROM Orders";
+            command.CommandType = CommandType.Text;
+
+            await connection.OpenAsync();
+
+            using var reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
+            var nextOrderNo = await reader.GetFieldValueAsync<int?>("NextOrderNo");
+            return nextOrderNo ?? 101;
         }
 
         public void Add(Order order)
