@@ -120,7 +120,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Profiles
 
                     ,pc.[EmailAddress_Identifier] [Identifier]
                     ,pc.[EmailAddress_Domain] [Domain]
-                FROM ProfileVendors pc
+                FROM ProfileContacts pc
                 WHERE pc.[ProfileId] = @Id;
                 ";
 
@@ -136,7 +136,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Profiles
                 var profile = ReadProfile(reader);
                 profile.MinorityStatuses = ReadStatuses(reader);
                 profile.Products = ReadProducts(reader);
-                profile.Vendors = ReadVendors(reader);
+                profile.Contacts = ReadContacts(reader);
                 return profile;
             }
             catch (InvalidOperationException e)
@@ -189,7 +189,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Profiles
             ).ToList();
         }
 
-        private List<ContactDto> ReadVendors(GridReader reader)
+        private List<ContactDto> ReadContacts(GridReader reader)
         {
             return reader.Read<ContactDto, Email, ContactDto>(
                 (cp, e) =>

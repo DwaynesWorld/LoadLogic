@@ -138,10 +138,10 @@ namespace LoadLogic.Services.Vendors.UnitTests
             Assert.Equal(5, v.BondRate);
             Assert.Equal("Note", v.Note);
 
-            Assert.NotNull(v.Vendors);
-            Assert.Single(v.Vendors);
+            Assert.NotNull(v.Contacts);
+            Assert.Single(v.Contacts);
 
-            var c = v.Vendors.First();
+            var c = v.Contacts.First();
             Assert.Equal("First", c.FirstName);
             Assert.Equal("Last", c.LastName);
             Assert.Equal("test@test.com", c.EmailAddress);
@@ -314,10 +314,10 @@ namespace LoadLogic.Services.Vendors.UnitTests
             Assert.Equal(5, x1.BondRate);
             Assert.Equal("Note", x1.Note);
 
-            Assert.NotNull(x1.Vendors);
-            Assert.Single(x1.Vendors);
+            Assert.NotNull(x1.Contacts);
+            Assert.Single(x1.Contacts);
 
-            var c = x1.Vendors.First();
+            var c = x1.Contacts.First();
             Assert.Equal("First", c.FirstName);
             Assert.Equal("Last", c.LastName);
             Assert.Equal("test@test.com", c.EmailAddress);
@@ -333,10 +333,10 @@ namespace LoadLogic.Services.Vendors.UnitTests
             Assert.Equal(52, x2.BondRate);
             Assert.Equal("Note 2", x2.Note);
 
-            Assert.NotNull(x2.Vendors);
-            Assert.Single(x2.Vendors);
+            Assert.NotNull(x2.Contacts);
+            Assert.Single(x2.Contacts);
 
-            var c2 = x2.Vendors.First();
+            var c2 = x2.Contacts.First();
             Assert.Equal("First2", c2.FirstName);
             Assert.Equal("Last2", c2.LastName);
             Assert.Equal("test2@test.com", c2.EmailAddress);

@@ -94,7 +94,8 @@ namespace LoadLogic.Services.Vendors.Application.Commands.Profiles
             var match = await _profileRepo.FindAnyAsync(spec);
             if (match)
             {
-                throw new DuplicateProfileException(default);
+                // FIXME: Profile Id
+                throw new DuplicateProfileException(1);
             }
 
             Region? region = null;

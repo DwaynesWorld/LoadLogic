@@ -17,12 +17,12 @@ namespace LoadLogic.Services.Vendors.Infrastructure.Persistence
 
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<VendorMinorityStatus> VendorMinorityStatuses { get; private set; }
-        public DbSet<VendorContact> VendorVendors { get; private set; }
+        public DbSet<VendorContact> VendorContacts { get; private set; }
         public DbSet<VendorProduct> VendorProducts { get; private set; }
 
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<ProfileMinorityStatus> ProfileMinorityStatuses { get; private set; }
-        public DbSet<ProfileContact> ProfileVendors { get; private set; }
+        public DbSet<ProfileContact> ProfileContacts { get; private set; }
         public DbSet<ProfileProduct> ProfileProducts { get; private set; }
 
         public DbSet<Region> Regions { get; set; }

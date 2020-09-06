@@ -60,7 +60,8 @@ namespace LoadLogic.Services.Vendors.Application.Commands.Profiles
             var profile = await _profileRepo.FindOneAsync(spec, Profile.IncludeStatuses);
             if (profile == null)
             {
-                throw new NotFoundException(nameof(Profile), default);
+                // FIXME: Profile Id
+                throw new NotFoundException(nameof(Profile), 1);
             }
 
             var type = await _minorityTypeRepo.FindByIdAsync(request.MinorityTypeId);

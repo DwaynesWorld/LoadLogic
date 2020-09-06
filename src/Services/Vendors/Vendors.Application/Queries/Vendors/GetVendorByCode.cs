@@ -132,7 +132,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Vendors
 
                     ,vc.[EmailAddress_Identifier] [Identifier]
                     ,vc.[EmailAddress_Domain] [Domain]
-                FROM VendorVendors vc
+                FROM VendorContacts vc
                 WHERE vc.[VendorId] = @Id;
                 ";
 
@@ -166,7 +166,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Vendors
             using var childReader = await connection.QueryMultipleAsync(childQuery, childParameters);
             vendor.MinorityStatuses = ReadStatuses(childReader);
             vendor.Products = ReadProducts(childReader);
-            vendor.Vendors = ReadVendors(childReader);
+            vendor.Contacts = ReadContacts(childReader);
             return vendor;
         }
 
@@ -195,7 +195,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Vendors
             ).ToList();
         }
 
-        private List<ContactDto> ReadVendors(GridReader reader)
+        private List<ContactDto> ReadContacts(GridReader reader)
         {
             return reader.Read<ContactDto, Email, ContactDto>(
                 (cp, e) =>

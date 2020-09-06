@@ -283,10 +283,10 @@ namespace LoadLogic.Services.Vendors.UnitTests
             Assert.Equal("V1", result.Code);
             Assert.Equal("Vendor 1", result.Name);
             Assert.Equal(CommunicationMethod.Fax, result.CommunicationMethod);
-            Assert.NotNull(result.Vendors!);
-            Assert.Equal("Firstname", result.Vendors![0].FirstName!);
-            Assert.Equal("Lastname", result.Vendors![0].LastName!);
-            Assert.Equal("Title", result.Vendors![0].Title!);
+            Assert.NotNull(result.Contacts!);
+            Assert.Equal("Firstname", result.Contacts![0].FirstName!);
+            Assert.Equal("Lastname", result.Contacts![0].LastName!);
+            Assert.Equal("Title", result.Contacts![0].Title!);
             Assert.True(result.IsBonded);
             Assert.Equal(5, result.BondRate);
             Assert.Equal("Note", result.Note);

@@ -98,7 +98,8 @@ namespace LoadLogic.Services.Vendors.Application.Commands.Profiles
 
             if (profile == null)
             {
-                throw new NotFoundException(nameof(Profile), default);
+                // FIXME: Profile Id
+                throw new NotFoundException(nameof(Profile), 1);
             }
 
             var contact = new ProfileContact(

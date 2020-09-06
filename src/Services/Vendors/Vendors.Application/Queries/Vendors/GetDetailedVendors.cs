@@ -201,7 +201,7 @@ namespace LoadLogic.Services.Vendors.Application.Queries.Vendors
 
             foreach (var group in contactGroups)
             {
-                vendors[group.Key].Vendors = group.ToList();
+                vendors[group.Key].Contacts = group.ToList();
             }
         }
     }

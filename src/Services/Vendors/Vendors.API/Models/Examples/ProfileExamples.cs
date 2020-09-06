@@ -44,7 +44,7 @@ namespace LoadLogic.Services.Vendors.API.Models.Examples
             example.ProfileLogoUrl = faker.Image.LoremFlickrUrl();
             example.MinorityStatuses.AddRange(new EnumerableMinorityStatusDtoExample().GetExamples());
             example.Products.AddRange(new EnumerableProductDtoExample().GetExamples());
-            example.Vendors.AddRange(new EnumerableContactDtoExample().GetExamples());
+            example.Contacts.AddRange(new EnumerableContactDtoExample().GetExamples());
             return example;
         }
     }

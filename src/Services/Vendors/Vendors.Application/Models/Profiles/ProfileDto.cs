@@ -71,7 +71,7 @@ namespace LoadLogic.Services.Vendors.Application.Models.Profiles
         /// <summary>
         /// 
         /// </summary>
-        public List<ContactDto> Vendors { get; set; } = new List<ContactDto>();
+        public List<ContactDto> Contacts { get; set; } = new List<ContactDto>();
 
 
     }

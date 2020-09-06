@@ -45,7 +45,8 @@ namespace LoadLogic.Services.Vendors.Application.Commands.Profiles
             var profile = await _repository.FindOneAsync(spec, Profile.IncludeVendors);
             if (profile == null)
             {
-                throw new NotFoundException(nameof(Profile), default);
+                // FIXME: Profile Id
+                throw new NotFoundException(nameof(Profile), 1);
             }
 
             profile.RemoveContact(request.Id);
