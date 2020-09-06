@@ -60,15 +60,15 @@ RUN dotnet restore "LoadLogic.sln"
 
 # Copy everything else and build
 COPY . .
-WORKDIR /src/Services/Dispatching/Dispatching.API
+WORKDIR /src/Services/Vendors/Vendors.API
 RUN dotnet publish --no-restore -c Release -o out
 
 FROM build-env as unittests
-WORKDIR /src/Services/Dispatching/Dispatching.UnitTests
+WORKDIR /src/Services/Vendors/Vendors.UnitTests
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 EXPOSE 80
-COPY --from=build-env /src/Services/Dispatching/Dispatching.API/out .
-ENTRYPOINT ["dotnet", "Dispatching.API.dll"]
+COPY --from=build-env /src/Services/Vendors/Vendors.API/out .
+ENTRYPOINT ["dotnet", "Vendors.API.dll"]

@@ -42,3 +42,12 @@ services:
     depends_on:
       - sqlserver
       - rabbitmq
+
+  vendors-api:
+    image: ${REGISTRY:-kt713}/vendors.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Vendors/Vendors.API/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq

@@ -43,6 +43,13 @@ COPY "Services/Payments/Payments.Infrastructure/Payments.Infrastructure.csproj" 
 COPY "Services/Payments/Payments.Domain/Payments.Domain.csproj" "Services/Payments/Payments.Domain/Payments.Domain.csproj"
 COPY "Services/Payments/Payments.UnitTests/Payments.UnitTests.csproj" "Services/Payments/Payments.UnitTests/Payments.UnitTests.csproj"
 
+# Copy Vendors Service
+COPY "Services/Vendors/Vendors.API/Vendors.API.csproj" "Services/Vendors/Vendors.API/Vendors.API.csproj"
+COPY "Services/Vendors/Vendors.Application/Vendors.Application.csproj" "Services/Vendors/Vendors.Application/Vendors.Application.csproj"
+COPY "Services/Vendors/Vendors.Infrastructure/Vendors.Infrastructure.csproj" "Services/Vendors/Vendors.Infrastructure/Vendors.Infrastructure.csproj"
+COPY "Services/Vendors/Vendors.Domain/Vendors.Domain.csproj" "Services/Vendors/Vendors.Domain/Vendors.Domain.csproj"
+COPY "Services/Vendors/Vendors.UnitTests/Vendors.UnitTests.csproj" "Services/Vendors/Vendors.UnitTests/Vendors.UnitTests.csproj"
+
 #Copy Nuget config
 COPY "nuget.config" "nuget.config"
 
