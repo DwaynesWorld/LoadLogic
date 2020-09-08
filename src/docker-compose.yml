@@ -54,3 +54,12 @@ services:
     depends_on:
       - sqlserver
       - rabbitmq
+
+  customers-api:
+    image: ${REGISTRY:-kt713}/customers.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: Services/Customers
+      dockerfile: Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq

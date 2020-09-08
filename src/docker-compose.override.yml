@@ -84,6 +84,12 @@ services:
     ports:
       - "5141:80"
 
+  vendors-api:
+    environment:
+      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.Customers;User Id=sa;Password=Pass@word}
+    ports:
+      - "5141:8080"
+
 volumes:
   loadlogic-sql_data:
   loadlogic-rabbitmq_log:
