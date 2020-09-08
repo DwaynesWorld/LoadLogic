@@ -3,11 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using LoadLogic.Services.Abstractions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using System.Data;
+using System.Linq;
+using System.Threading;
 
 namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
+        private const int InitialOrderNo = 1;
+
         private readonly OrderingContext _context;
 
         public OrderRepository(OrderingContext context)
@@ -17,24 +21,26 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public async Task<Order?> FindByIdAsync(long id)
+        public async Task<Order?> FindByIdAsync(
+            long id,
+            CancellationToken cancellationToken = default)
         {
-            return await _context.Orders.FindAsync(id);
+            return await _context.Orders.FindAsync(id, cancellationToken);
         }
 
-        public async Task<int> GetNextOrderNo()
+        public async Task<int> GetNextOrderNo(CancellationToken cancellationToken = default)
         {
-            using var connection = _context.Database.GetDbConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = "SELECT MAX(OrderNo) + 1 [NextOrderNo] FROM Orders";
-            command.CommandType = CommandType.Text;
+            var last = await _context.Orders
+                .Select(o => o.OrderNo)
+                .OrderByDescending(o => o)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            await connection.OpenAsync();
+            if (last == 0)
+            {
+                return InitialOrderNo;
+            }
 
-            using var reader = await command.ExecuteReaderAsync();
-            await reader.ReadAsync();
-            var nextOrderNo = await reader.GetFieldValueAsync<int?>("NextOrderNo");
-            return nextOrderNo ?? 101;
+            return last + 1;
         }
 
         public void Add(Order order)

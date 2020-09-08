@@ -1,10 +1,13 @@
 import React from "react";
+import { Page } from "src/components";
+import { Container } from "@material-ui/core";
 
 export function Orders() {
-  // const columns = [
-  //   { name: "orderNo", title: "Order" },
-  //   { name: "date", title: "Date" },
-  // ];
-
-  return <div>Orders</div>;
+  return (
+    <Page title="Orders">
+      <Container maxWidth={false}>
+        <h2>Orders</h2>
+      </Container>
+    </Page>
+  );
 }

@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { Orders } from "./views/orders";
+import { Drivers } from "./views/drivers";
 
-export function OrderRouting() {
+export function DriverRouting() {
   return (
     <Suspense fallback={<div>Loading</div>}>
       <Routes>
-        <Route path="/" element={<Orders />} />
+        <Route path="/" element={<Drivers />} />
       </Routes>
     </Suspense>
   );
