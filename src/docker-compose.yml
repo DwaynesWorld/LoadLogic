@@ -58,8 +58,8 @@ services:
   customers-api:
     image: ${REGISTRY:-kt713}/customers.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
-      context: Services/Customers
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Services/Customers/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq

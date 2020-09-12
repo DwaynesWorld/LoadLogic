@@ -2,74 +2,47 @@ package main
 
 import (
 	"errors"
-	"fmt"
-	"net/url"
 
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
-// DBConfig params for new context
-type DBConfig struct {
-	Scheme       string
-	Hostname     string
-	Port         int
-	DatabaseName string
-	Username     string
-	Password     string
-}
-
-// Context :
+// Context  instance represents a session with the database
+// and can be used to query and save instances of your entities
 type Context struct {
 	Customer CustomerRepository
 	db       *gorm.DB
 }
 
-// SQLCustomerRepository :
-type SQLCustomerRepository struct {
-	db *gorm.DB
-}
-
-// NewContext : Creates a new db access context
-func NewContext(config *DBConfig) (*Context, error) {
-	query := url.Values{}
-	query.Add("database", config.DatabaseName)
-
-	u := &url.URL{
-		Scheme:   config.Scheme,
-		User:     url.UserPassword(config.Username, config.Password),
-		Host:     fmt.Sprintf("%s:%d", config.Hostname, config.Port),
-		RawQuery: query.Encode(),
-	}
-
-	dsn := u.String()
-	fmt.Println(dsn)
-
+// NewContext Creates a new db access context
+func NewContext(dsn string) (*Context, error) {
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
 	return &Context{
-		Customer: NewCustomerRepository(db),
+		Customer: newCustomerRepository(db),
 		db:       db,
 	}, nil
 }
 
-// AutoMigrate : run auto migration for given models
+// AutoMigrate runs auto migration for given models
 func (ctx *Context) AutoMigrate() error {
 	return ctx.db.AutoMigrate(&Customer{})
 }
 
-var _ CustomerRepository = &SQLCustomerRepository{}
-
-// NewCustomerRepository :
-func NewCustomerRepository(db *gorm.DB) *SQLCustomerRepository {
-	return &SQLCustomerRepository{db}
+// sqlCustomerRepository implements the CustomerRepository interface
+type sqlCustomerRepository struct {
+	db *gorm.DB
 }
 
-// GetCustomer :
-func (r *SQLCustomerRepository) GetCustomer(id uint64) (*Customer, error) {
+func newCustomerRepository(db *gorm.DB) *sqlCustomerRepository {
+	return &sqlCustomerRepository{db}
+}
+
+// GetCustomer returns a customer by ID
+func (r *sqlCustomerRepository) GetCustomer(id uint64) (*Customer, error) {
 	var customer Customer
 	err := r.db.Debug().Where("id = ?", id).Take(&customer).Error
 	if err != nil {
@@ -79,8 +52,8 @@ func (r *SQLCustomerRepository) GetCustomer(id uint64) (*Customer, error) {
 	return &customer, nil
 }
 
-// GetAllCustomers :
-func (r *SQLCustomerRepository) GetAllCustomers() ([]Customer, error) {
+// GetAllCustomers returns all customers
+func (r *sqlCustomerRepository) GetAllCustomers() ([]Customer, error) {
 	var customers []Customer
 	err := r.db.Debug().Limit(100).Find(&customers).Error
 	if err != nil {
@@ -90,8 +63,8 @@ func (r *SQLCustomerRepository) GetAllCustomers() ([]Customer, error) {
 	return customers, nil
 }
 
-// AddCustomer :
-func (r *SQLCustomerRepository) AddCustomer(customer *Customer) (*Customer, error) {
+// AddCustomer persists a customer entity to the DB
+func (r *sqlCustomerRepository) AddCustomer(customer *Customer) (*Customer, error) {
 	err := r.db.Debug().Create(&customer).Error
 	if err != nil {
 		return nil, err
@@ -99,8 +72,8 @@ func (r *SQLCustomerRepository) AddCustomer(customer *Customer) (*Customer, erro
 	return customer, nil
 }
 
-// UpdateCustomer :
-func (r *SQLCustomerRepository) UpdateCustomer(customer *Customer) (*Customer, error) {
+// UpdateCustomer updates a customer entity in the DB
+func (r *sqlCustomerRepository) UpdateCustomer(customer *Customer) (*Customer, error) {
 	err := r.db.Debug().Save(&customer).Error
 	if err != nil {
 		return nil, err
@@ -108,8 +81,8 @@ func (r *SQLCustomerRepository) UpdateCustomer(customer *Customer) (*Customer, e
 	return customer, nil
 }
 
-// DeleteCustomer :
-func (r *SQLCustomerRepository) DeleteCustomer(id uint64) error {
+// DeleteCustomer deletes a customer entity in the DB
+func (r *sqlCustomerRepository) DeleteCustomer(id uint64) error {
 	var customer Customer
 	err := r.db.Debug().Where("id = ?", id).Delete(&customer).Error
 	if err != nil {

@@ -84,11 +84,13 @@ services:
     ports:
       - "5141:80"
 
-  vendors-api:
+  customers-api:
     environment:
-      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.Customers;User Id=sa;Password=Pass@word}
+      - HOST=0.0.0.0
+      - PORT=8080
+      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic.Customers}
     ports:
-      - "5141:8080"
+      - "5151:8080"
 
 volumes:
   loadlogic-sql_data:

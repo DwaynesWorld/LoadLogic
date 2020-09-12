@@ -2,46 +2,11 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 WORKDIR /src
 
 ## Copy sln & csproj, restore as distinct layers
-COPY "LoadLogic.sln" "LoadLogic.sln"
+COPY "Services/Vendors/Vendors.sln" "Services/Vendors/Vendors.sln"
 
 # Copy Shared projects
 COPY "Services/Common/Common.csproj" "Services/Common/Common.csproj"
 COPY "Services/Core/Core.csproj" "Services/Core/Core.csproj"
-
-# Copy Dispatching Service
-COPY "Services/Dispatching/Dispatching.API/Dispatching.API.csproj" "Services/Dispatching/Dispatching.API/Dispatching.API.csproj"
-COPY "Services/Dispatching/Dispatching.Application/Dispatching.Application.csproj" "Services/Dispatching/Dispatching.Application/Dispatching.Application.csproj"
-COPY "Services/Dispatching/Dispatching.Infrastructure/Dispatching.Infrastructure.csproj" "Services/Dispatching/Dispatching.Infrastructure/Dispatching.Infrastructure.csproj"
-COPY "Services/Dispatching/Dispatching.Domain/Dispatching.Domain.csproj" "Services/Dispatching/Dispatching.Domain/Dispatching.Domain.csproj"
-COPY "Services/Dispatching/Dispatching.UnitTests/Dispatching.UnitTests.csproj" "Services/Dispatching/Dispatching.UnitTests/Dispatching.UnitTests.csproj"
-
-# Copy Hauling Service
-COPY "Services/Hauling/Hauling.API/Hauling.API.csproj" "Services/Hauling/Hauling.API/Hauling.API.csproj"
-COPY "Services/Hauling/Hauling.Application/Hauling.Application.csproj" "Services/Hauling/Hauling.Application/Hauling.Application.csproj"
-COPY "Services/Hauling/Hauling.Infrastructure/Hauling.Infrastructure.csproj" "Services/Hauling/Hauling.Infrastructure/Hauling.Infrastructure.csproj"
-COPY "Services/Hauling/Hauling.Domain/Hauling.Domain.csproj" "Services/Hauling/Hauling.Domain/Hauling.Domain.csproj"
-COPY "Services/Hauling/Hauling.UnitTests/Hauling.UnitTests.csproj" "Services/Hauling/Hauling.UnitTests/Hauling.UnitTests.csproj"
-
-# Copy Ordering Service
-COPY "Services/Ordering/Ordering.API/Ordering.API.csproj" "Services/Ordering/Ordering.API/Ordering.API.csproj"
-COPY "Services/Ordering/Ordering.Application/Ordering.Application.csproj" "Services/Ordering/Ordering.Application/Ordering.Application.csproj"
-COPY "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj"
-COPY "Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" "Services/Ordering/Ordering.Domain/Ordering.Domain.csproj"
-COPY "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj" "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj"
-
-# Copy Ordering Service
-COPY "Services/Ordering/Ordering.API/Ordering.API.csproj" "Services/Ordering/Ordering.API/Ordering.API.csproj"
-COPY "Services/Ordering/Ordering.Application/Ordering.Application.csproj" "Services/Ordering/Ordering.Application/Ordering.Application.csproj"
-COPY "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj"
-COPY "Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" "Services/Ordering/Ordering.Domain/Ordering.Domain.csproj"
-COPY "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj" "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj"
-
-# Copy Payments Service
-COPY "Services/Payments/Payments.API/Payments.API.csproj" "Services/Payments/Payments.API/Payments.API.csproj"
-COPY "Services/Payments/Payments.Application/Payments.Application.csproj" "Services/Payments/Payments.Application/Payments.Application.csproj"
-COPY "Services/Payments/Payments.Infrastructure/Payments.Infrastructure.csproj" "Services/Payments/Payments.Infrastructure/Payments.Infrastructure.csproj"
-COPY "Services/Payments/Payments.Domain/Payments.Domain.csproj" "Services/Payments/Payments.Domain/Payments.Domain.csproj"
-COPY "Services/Payments/Payments.UnitTests/Payments.UnitTests.csproj" "Services/Payments/Payments.UnitTests/Payments.UnitTests.csproj"
 
 # Copy Vendors Service
 COPY "Services/Vendors/Vendors.API/Vendors.API.csproj" "Services/Vendors/Vendors.API/Vendors.API.csproj"
@@ -54,12 +19,15 @@ COPY "Services/Vendors/Vendors.UnitTests/Vendors.UnitTests.csproj" "Services/Ven
 COPY "nuget.config" "nuget.config"
 
 # Restore Solutions
-RUN dotnet restore "LoadLogic.sln"
+RUN dotnet restore "Services/Vendors/Vendors.sln"
 
 ## Handle Specific Project
 
 # Copy everything else and build
-COPY . .
+COPY "Services/Common/" "Services/Common/"
+COPY "Services/Core/" "Services/Core/"
+COPY "Services/Vendors/" "Services/Vendors/"
+
 WORKDIR /src/Services/Vendors/Vendors.API
 RUN dotnet publish --no-restore -c Release -o out
 
