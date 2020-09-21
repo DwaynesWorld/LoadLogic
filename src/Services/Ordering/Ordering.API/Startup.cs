@@ -40,6 +40,7 @@ namespace LoadLogic.Services.Ordering.API
                 var connectionString = Configuration.GetValue<string>("DatabaseConnection");
                 options.UseSqlServer(connectionString, sqlOptions =>
                 {
+                    sqlOptions.UseNetTopologySuite();
                     sqlOptions.MigrationsAssembly(typeof(OrderingContext).Assembly.GetName().Name);
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(15), errorNumbersToAdd: null);
                 });

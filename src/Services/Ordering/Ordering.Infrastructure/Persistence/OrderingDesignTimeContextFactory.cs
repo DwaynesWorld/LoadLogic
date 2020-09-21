@@ -19,7 +19,7 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         public OrderingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>();
-            optionsBuilder.UseSqlServer(ConnectionString());
+            optionsBuilder.UseSqlServer(ConnectionString(), x => x.UseNetTopologySuite());
             return new OrderingContext(optionsBuilder.Options, new StubbedMediator());
         }
 

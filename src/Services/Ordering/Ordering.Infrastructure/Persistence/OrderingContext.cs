@@ -24,6 +24,8 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; private set; }
+        public DbSet<Route> Routes { get; private set; }
+        public DbSet<Leg> Legs { get; private set; }
 
         public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
@@ -35,6 +37,8 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         {
             modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RouteEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new LegEntityTypeConfiguration());
         }
     }
 }

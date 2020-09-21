@@ -59,6 +59,8 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
             builder.HasOne(x => x.Order).WithMany(x => x.OrderItems);
 
+            builder.HasOne(x => x.Route).WithOne(x => x.OrderItem);
+
             builder.Property(x => x.Activity)
                 .HasConversion(x => x!.Id, x => Enumeration.FromValue<OrderActivity>(x));
 
@@ -70,6 +72,39 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
             builder.Property(x => x.ChargeRate)
                 .HasColumnType("decimal(12, 6)");
+        }
+    }
+
+    public class RouteEntityTypeConfiguration : IEntityTypeConfiguration<Route>
+    {
+        public void Configure(EntityTypeBuilder<Route> builder)
+        {
+            builder.HasKey(x => x.Id)
+                .IsClustered(true);
+
+            builder.Property(x => x.Id)
+                .UseIdentityColumn(101);
+
+            builder.HasOne(x => x.OrderItem).WithOne(x => x.Route);
+
+            builder.HasMany(x => x.Legs).WithOne(x => x.Route);
+        }
+    }
+
+    public class LegEntityTypeConfiguration : IEntityTypeConfiguration<Leg>
+    {
+        public void Configure(EntityTypeBuilder<Leg> builder)
+        {
+            builder.HasKey(x => x.Id)
+                .IsClustered(true);
+
+            builder.Property(x => x.Id)
+                .UseIdentityColumn(101);
+
+            builder.HasOne(x => x.Route).WithMany(x => x.Legs);
+
+            builder.OwnsOne(x => x.LoadAddress);
+            builder.OwnsOne(x => x.DumpAddress);
         }
     }
 }
