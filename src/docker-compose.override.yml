@@ -72,18 +72,6 @@ services:
     ports:
       - "5131:80"
 
-  vendors-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - PORT=80
-      - DatabaseConnection=${VENDORS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.VendorsDb;User Id=sa;Password=Pass@word}
-      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-    ports:
-      - "5141:80"
-
   customers-api:
     environment:
       - HOST=0.0.0.0

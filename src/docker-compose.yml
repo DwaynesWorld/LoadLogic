@@ -14,7 +14,7 @@ services:
     image: ${REGISTRY:-kt713}/dispatching.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Dispatching/Dispatching.API/Dockerfile
+      dockerfile: dispatching-service/Dispatching.API/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -23,7 +23,7 @@ services:
     image: ${REGISTRY:-kt713}/hauling.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Hauling/Hauling.API/Dockerfile
+      dockerfile: hauling-service/Hauling.API/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -32,7 +32,7 @@ services:
     image: ${REGISTRY:-kt713}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+      dockerfile: ordering-service/Ordering.API/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -41,16 +41,7 @@ services:
     image: ${REGISTRY:-kt713}/payments.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Payments/Payments.API/Dockerfile
-    depends_on:
-      - sqlserver
-      - rabbitmq
-
-  vendors-api:
-    image: ${REGISTRY:-kt713}/vendors.api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Services/Vendors/Vendors.API/Dockerfile
+      dockerfile: payments-service/Payments.API/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -59,7 +50,7 @@ services:
     image: ${REGISTRY:-kt713}/customers.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Customers/Dockerfile
+      dockerfile: customer-service/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
