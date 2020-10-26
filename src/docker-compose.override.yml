@@ -24,29 +24,29 @@ services:
       - loadlogic-rabbitmq_log:/var/log/rabbitmq
       - loadlogic-rabbitmq_data:/var/lib/rabbitmq
 
-  dispatching-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - PORT=80
-      - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
-      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-    ports:
-      - "5101:80"
+  # dispatching-api:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - PORT=80
+  #     - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
+  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+  #   ports:
+  #     - "5101:80"
 
-  hauling-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - PORT=80
-      - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
-      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-    ports:
-      - "5111:80"
+  # hauling-api:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - PORT=80
+  #     - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
+  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+  #   ports:
+  #     - "5111:80"
 
   ordering-api:
     environment:
@@ -60,17 +60,17 @@ services:
     ports:
       - "5121:80"
 
-  payments-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - PORT=80
-      - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
-      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-    ports:
-      - "5131:80"
+  # payments-api:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - PORT=80
+  #     - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
+  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
+  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
+  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+  #   ports:
+  #     - "5131:80"
 
   customers-api:
     environment:

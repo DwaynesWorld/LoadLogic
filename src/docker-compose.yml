@@ -10,47 +10,47 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
-  dispatching-api:
-    image: ${REGISTRY:-kt713}/dispatching.api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: dispatching-service/Dispatching.API/Dockerfile
-    depends_on:
-      - sqlserver
-      - rabbitmq
+  # dispatching-api:
+  #   image: ${REGISTRY:-kt713}/dispatching.api:${PLATFORM:-linux}-${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: dispatching/~/Dockerfile
+  #   depends_on:
+  #     - sqlserver
+  #     - rabbitmq
 
-  hauling-api:
-    image: ${REGISTRY:-kt713}/hauling.api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: hauling-service/Hauling.API/Dockerfile
-    depends_on:
-      - sqlserver
-      - rabbitmq
+  # hauling-api:
+  #   image: ${REGISTRY:-kt713}/hauling.api:${PLATFORM:-linux}-${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: hauling/~/Dockerfile
+  #   depends_on:
+  #     - sqlserver
+  #     - rabbitmq
 
   ordering-api:
     image: ${REGISTRY:-kt713}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: ordering-service/Ordering.API/Dockerfile
+      dockerfile: ordering/Ordering/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
 
-  payments-api:
-    image: ${REGISTRY:-kt713}/payments.api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: payments-service/Payments.API/Dockerfile
-    depends_on:
-      - sqlserver
-      - rabbitmq
+  # payments-api:
+  #   image: ${REGISTRY:-kt713}/payments.api:${PLATFORM:-linux}-${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: payments/~/Dockerfile
+  #   depends_on:
+  #     - sqlserver
+  #     - rabbitmq
 
   customers-api:
     image: ${REGISTRY:-kt713}/customers.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: customer-service/Dockerfile
+      dockerfile: customers/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
