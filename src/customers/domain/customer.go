@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Customer entity.
 type Customer struct {

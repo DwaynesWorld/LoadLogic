@@ -1,48 +1,117 @@
 package main
 
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
+
+	kitlog "github.com/go-kit/kit/log"
+	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
+	stdprometheus "github.com/prometheus/client_golang/prometheus"
+
+	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/persistence"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
 const defaultHost = "localhost"
 const defaultPort = "8080"
-const defaultDsn = "sqlserver://sa:Pass@word@localhost:5433?database=LoadLogic.Customers"
+const defaultDsn = "sqlserver://sa:Pass@word@localhost:1433?database=LoadLogic_CustomersDB"
 
 func main() {
-	// dsn := strings.TrimSpace(os.Getenv("DatabaseConnection"))
-	// if dsn == "" {
-	// 	dsn = defaultDsn
-	// }
+	dsn := envString("DatabaseConnection", defaultDsn, true)
+	host := envString("HOST", defaultHost, true)
+	port := envString("PORT", defaultPort, true)
+	addr := fmt.Sprintf("%s:%s", host, port)
 
-	// fmt.Println("DatabaseConnection:", dsn)
+	var logger kitlog.Logger
+	logger = kitlog.NewLogfmtLogger(kitlog.NewSyncWriter(os.Stderr))
+	logger = kitlog.With(logger, "ts", kitlog.DefaultTimestampUTC)
+	httpLogger := kitlog.With(logger, "component", "http")
 
-	// db, err := NewContext(dsn)
+	db, err := persistence.NewSQL(dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	persistence.AutoMigrate(db)
 
-	// db.AutoMigrate()
+	fieldKeys := []string{"method"}
 
-	// e := echo.New()
+	var cs service.Service
+	cs = service.NewService(domain.NewCustomerStore(db))
+	cs = service.NewLoggingService(kitlog.With(logger, "component", "customers"), cs)
+	cs = service.NewInstrumentingService(
+		kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
+			Namespace: "api",
+			Subsystem: "customers_service",
+			Name:      "request_count",
+			Help:      "Number of requests received.",
+		}, fieldKeys),
+		kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
+			Namespace: "api",
+			Subsystem: "customers_service",
+			Name:      "request_latency_microseconds",
+			Help:      "Total duration of requests in microseconds.",
+		}, fieldKeys),
+		cs,
+	)
 
-	// e.Use(middleware.Logger())
-	// e.Use(middleware.Recover())
+	mux := http.NewServeMux()
+	mux.Handle("/v1/", service.MakeHandler(cs, httpLogger))
 
-	// e.GET("/customers", GetCustomers)
-	// e.GET("/customers/:id", GetCustomer)
-	// e.POST("/customers", AddCustomer)
-	// e.PUT("/customers/:id", UpdateCustomer)
-	// e.DELETE("/customers/:id", DeleteCustomer)
+	http.Handle("/", cors(mux))
+	http.Handle("/metrics", promhttp.Handler())
+	startServer(addr, logger)
+}
 
-	// host := strings.TrimSpace(os.Getenv("HOST"))
-	// if host == "" {
-	// 	host = defaultHost
-	// }
+func startServer(addr string, logger kitlog.Logger) {
+	errs := make(chan error, 2)
 
-	// port := strings.TrimSpace(os.Getenv("PORT"))
-	// if port == "" {
-	// 	port = defaultPort
-	// }
+	go func() {
+		logger.Log("transport", "http", "address", addr, "msg", "listening")
+		errs <- http.ListenAndServe(addr, nil)
+	}()
 
-	// addr := fmt.Sprintf("%s:%s", host, port)
+	go func() {
+		c := make(chan os.Signal)
+		signal.Notify(c, syscall.SIGINT)
+		errs <- fmt.Errorf("%s", <-c)
+	}()
 
-	// fmt.Println(fmt.Sprintf("The server is running at http://%s.", addr))
-	// e.Logger.Fatal(e.Start(addr))
+	logger.Log("Server terminated.", <-errs)
+}
+
+func cors(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
+
+		if r.Method == "OPTIONS" {
+			return
+		}
+
+		h.ServeHTTP(w, r)
+	})
+}
+
+func envString(env, fallback string, log bool) string {
+	var e string
+	e = strings.TrimSpace(os.Getenv(env))
+
+	if e == "" {
+		e = fallback
+	}
+
+	if log {
+		fmt.Println(env, e)
+	}
+
+	return e
 }

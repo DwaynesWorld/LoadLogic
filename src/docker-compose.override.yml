@@ -7,6 +7,10 @@ services:
     ports:
       - "5340:80"
 
+  prometheus:
+    ports:
+      - "9090:9090"
+
   sqlserver:
     environment:
       - SA_PASSWORD=Pass@word
@@ -29,7 +33,7 @@ services:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
   #     - PORT=80
-  #     - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.DispatchingDb;User Id=sa;Password=Pass@word}
+  #     - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_DispatchingDB;User Id=sa;Password=Pass@word}
   #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
   #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
   #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -41,7 +45,7 @@ services:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
   #     - PORT=80
-  #     - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.HaulingDb;User Id=sa;Password=Pass@word}
+  #     - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_HaulingDB;User Id=sa;Password=Pass@word}
   #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
   #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
   #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -53,7 +57,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - DatabaseConnection=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.OrderingDb;User Id=sa;Password=Pass@word}
+      - DatabaseConnection=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
       - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
       - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
       - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -65,7 +69,7 @@ services:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
   #     - PORT=80
-  #     - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic.PaymentsDb;User Id=sa;Password=Pass@word}
+  #     - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_PaymentsDB;User Id=sa;Password=Pass@word}
   #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
   #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
   #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
@@ -76,7 +80,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=8080
-      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic.Customers}
+      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
     ports:
       - "5151:8080"
 

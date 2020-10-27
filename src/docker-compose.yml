@@ -4,6 +4,9 @@ services:
   seq:
     image: datalust/seq:latest
 
+  prometheus:
+    image: prom/prometheus:latest
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
@@ -17,6 +20,8 @@ services:
   #     dockerfile: dispatching/~/Dockerfile
   #   depends_on:
   #     - sqlserver
+  #     - seq
+  #     - prometheus
   #     - rabbitmq
 
   # hauling-api:
@@ -26,6 +31,8 @@ services:
   #     dockerfile: hauling/~/Dockerfile
   #   depends_on:
   #     - sqlserver
+  #     - seq
+  #     - prometheus
   #     - rabbitmq
 
   ordering-api:
@@ -35,6 +42,8 @@ services:
       dockerfile: ordering/Ordering/Dockerfile
     depends_on:
       - sqlserver
+      - seq
+      - prometheus
       - rabbitmq
 
   # payments-api:
@@ -44,6 +53,8 @@ services:
   #     dockerfile: payments/~/Dockerfile
   #   depends_on:
   #     - sqlserver
+  #     - seq
+  #     - prometheus
   #     - rabbitmq
 
   customers-api:
@@ -53,4 +64,6 @@ services:
       dockerfile: customers/Dockerfile
     depends_on:
       - sqlserver
+      - seq
+      - prometheus
       - rabbitmq
