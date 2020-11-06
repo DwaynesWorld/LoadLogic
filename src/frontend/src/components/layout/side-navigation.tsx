@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Divider, Drawer, List, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 
 import {
   BarChart as BarChartIcon,
@@ -9,35 +16,32 @@ import {
   Truck as TruckIcon,
   User as UserIcon,
   Users as UsersIcon,
+  HelpCircle as HelpIcon,
+  CreditCard as BillingIcon,
 } from "react-feather";
 
 import { NavItem } from "./nav-item";
 
 const items = [
   {
-    to: "/app/dashboard",
-    icon: BarChartIcon,
-    title: "Dashboard",
-  },
-  {
     to: "/app/orders",
     icon: FolderIcon,
     title: "Orders",
   },
   {
+    to: "/app/tracking",
+    icon: TruckIcon,
+    title: "Tracking",
+  },
+  {
     to: "/app/billing",
-    icon: FileTextIcon,
+    icon: BillingIcon,
     title: "Billing",
   },
   {
-    to: "/app/customers",
+    to: "/app/people",
     icon: UsersIcon,
-    title: "Customers",
-  },
-  {
-    to: "/app/drivers",
-    icon: TruckIcon,
-    title: "Drivers",
+    title: "People",
   },
 ];
 
@@ -52,10 +56,15 @@ export function SideNavigation() {
       open={true}
     >
       <Box height="100%" display="flex" flexDirection="column">
-        <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-          some
+        <Box
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+          flexDirection="row"
+          p={2}
+        >
+          Some
         </Box>
-        <Divider />
         <Box p={2}>
           <List>
             {items.map((item) => (
@@ -70,9 +79,17 @@ export function SideNavigation() {
         </Box>
         <Box flexGrow={3} />
         <Divider />
-        <Box flexGrow={1} p={2} m={2}>
-          <NavItem to="/app/settings" icon={SettingsIcon} title="Settings" />
-          <NavItem to="/app/account" icon={UserIcon} title="Account" />
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexGrow={1}
+          p={2}
+          m={2}
+          justifyContent="flex-end"
+        >
+          {/* <NavItem to="/app/settings" icon={SettingsIcon} title="Settings" /> */}
+          {/* <NavItem to="/app/account" icon={UserIcon} title="Account" /> */}
+          <NavItem to="/app/help" icon={HelpIcon} title="Help" />
         </Box>
       </Box>
     </Drawer>
@@ -84,6 +101,7 @@ const useStyles = makeStyles(() => ({
     width: 256,
     top: 0,
     height: "100%",
+    backgroundColor: "black",
   },
   avatar: {
     cursor: "pointer",

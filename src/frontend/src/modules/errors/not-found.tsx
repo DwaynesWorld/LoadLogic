@@ -1,7 +1,14 @@
 import React from "react";
-import { Box, Container, Typography, makeStyles } from "@material-ui/core";
-import { Page } from "src/components";
+import {
+  Box,
+  Container,
+  Typography,
+  makeStyles,
+  Button,
+} from "@material-ui/core";
 
+import { Page } from "src/components";
+import { Link } from "react-router-dom";
 export function NotFoundView() {
   const classes = useStyles();
 
@@ -11,7 +18,7 @@ export function NotFoundView() {
         display="flex"
         flexDirection="column"
         height="100%"
-        justifyContent="center"
+        // justifyContent="center"
       >
         <Container maxWidth="md">
           <Typography align="center" color="textPrimary" variant="h1">
@@ -29,6 +36,11 @@ export function NotFoundView() {
             />
           </Box>
         </Container>
+        <Box className={classes.actionContainer}>
+          <Link to="/app/orders">
+            <Button>Go Back Home</Button>
+          </Link>
+        </Box>
       </Box>
     </Page>
   );
@@ -46,5 +58,11 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     maxWidth: "100%",
     width: 560,
+  },
+  actionContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 50,
   },
 }));

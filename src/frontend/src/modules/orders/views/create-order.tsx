@@ -1,10 +1,8 @@
 import React from "react";
 import { Page } from "src/components";
 import { Box, Button, Container, makeStyles } from "@material-ui/core";
-import { OrderList } from "../components/order-list";
-import { Link } from "react-router-dom";
 
-export function Orders() {
+export function CreateOrder() {
   const styles = useStyles();
 
   return (
@@ -16,23 +14,16 @@ export function Orders() {
           justifyContent="space-between"
           pt={2}
         >
-          <h2>Orders</h2>
+          <h2>Create Order</h2>
           <Box display="flex" flexDirection="row">
-            <Link to="create">
-              <Button
-                className={styles.createButton}
-                color="primary"
-                variant="contained"
-              >
-                Create Order
-              </Button>
-            </Link>
+            <Button
+              className={styles.saveButton}
+              color="primary"
+              variant="contained"
+            >
+              Save Draft
+            </Button>
           </Box>
-        </Box>
-      </Container>
-      <Container maxWidth={false}>
-        <Box pt={3}>
-          <OrderList />
         </Box>
       </Container>
     </Page>
@@ -40,7 +31,7 @@ export function Orders() {
 }
 
 const useStyles = makeStyles((theme) => ({
-  createButton: {
+  saveButton: {
     textTransform: "none",
     fontSize: 15,
     fontWeight: theme.typography.fontWeightMedium,

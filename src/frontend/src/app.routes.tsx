@@ -1,11 +1,10 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { AppLayout, GenericLayout } from "src/components";
-import { DashboardRouting } from "./modules/dashboard";
 import { OrderRouting } from "./modules/orders";
 import { BillingRouting } from "./modules/billing";
 import { CustomerRouting } from "./modules/customers";
-import { DriverRouting } from "./modules/drivers";
+import { TrackingRouting } from "./modules/tracking";
 import { SettingsRouting } from "./modules/settings";
 import { LoginView } from "./modules/auth";
 import { NotFoundView } from "./modules/errors";
@@ -15,11 +14,10 @@ export const routes = [
     path: "app",
     element: <AppLayout />,
     children: [
-      { path: "dashboard", element: <DashboardRouting /> },
       { path: "orders", element: <OrderRouting /> },
+      { path: "tracking", element: <TrackingRouting /> },
       { path: "billing", element: <BillingRouting /> },
-      { path: "customers", element: <CustomerRouting /> },
-      { path: "drivers", element: <DriverRouting /> },
+      { path: "people", element: <CustomerRouting /> },
       { path: "settings", element: <SettingsRouting /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
@@ -30,7 +28,7 @@ export const routes = [
     children: [
       { path: "login", element: <LoginView /> },
       { path: "404", element: <NotFoundView /> },
-      { path: "/", element: <Navigate to="/app/dashboard" /> },
+      { path: "/", element: <Navigate to="/app/orders" /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

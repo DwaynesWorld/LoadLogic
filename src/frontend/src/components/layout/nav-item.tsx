@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink as RouterLink } from "react-router-dom";
-import { Button, ListItem, makeStyles } from "@material-ui/core";
+import { Button, colors, ListItem, makeStyles } from "@material-ui/core";
 
 interface Props {
   title: string;
@@ -32,29 +32,29 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
   button: {
-    color: theme.palette.text.secondary,
+    color: colors.grey[400],
     fontSize: 15,
     fontWeight: theme.typography.fontWeightMedium,
     justifyContent: "flex-start",
     letterSpacing: 0,
-    padding: "10px 8px",
+    padding: "15px 8px",
     textTransform: "none",
     width: "100%",
   },
   icon: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(3),
   },
   title: {
     marginRight: "auto",
   },
   active: {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.primary.main,
+    backgroundColor: colors.grey[900],
+    color: colors.grey[50],
     "& $title": {
       fontWeight: theme.typography.fontWeightBold,
     },
     "& $icon": {
-      color: theme.palette.primary.main,
+      color: colors.grey[100],
     },
   },
 }));

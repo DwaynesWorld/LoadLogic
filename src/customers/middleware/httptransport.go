@@ -1,4 +1,4 @@
-package service
+package middleware
 
 import (
 	"context"
@@ -13,11 +13,12 @@ import (
 	kithttp "github.com/go-kit/kit/transport/http"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/gorilla/mux"
 )
 
 // MakeHandler returns a handler for the customer service.
-func MakeHandler(s Service, logger kitlog.Logger) http.Handler {
+func MakeHandler(s service.CustomersService, logger kitlog.Logger) http.Handler {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorHandler(kitxport.NewLogErrorHandler(logger)),
 		kithttp.ServerErrorEncoder(encodeError),

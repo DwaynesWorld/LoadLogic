@@ -14,6 +14,7 @@ import (
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/middleware"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/persistence"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -43,10 +44,10 @@ func main() {
 
 	fieldKeys := []string{"method"}
 
-	var cs service.Service
+	var cs service.CustomersService
 	cs = service.NewService(domain.NewCustomerStore(db))
-	cs = service.NewLoggingService(kitlog.With(logger, "component", "customers"), cs)
-	cs = service.NewInstrumentingService(
+	cs = middleware.NewLoggingService(kitlog.With(logger, "component", "customers"), cs)
+	cs = middleware.NewInstrumentingService(
 		kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
 			Namespace: "api",
 			Subsystem: "customers_service",
@@ -63,7 +64,7 @@ func main() {
 	)
 
 	mux := http.NewServeMux()
-	mux.Handle("/v1/", service.MakeHandler(cs, httpLogger))
+	mux.Handle("/v1/", middleware.MakeHandler(cs, httpLogger))
 
 	http.Handle("/", cors(mux))
 	http.Handle("/metrics", promhttp.Handler())

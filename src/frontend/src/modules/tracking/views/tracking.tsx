@@ -2,11 +2,11 @@ import React from "react";
 import { Page } from "src/components";
 import { Container } from "@material-ui/core";
 
-export function Drivers() {
+export function Tracking() {
   return (
-    <Page title="Drivers">
+    <Page title="Tracking">
       <Container maxWidth={false}>
-        <h2>Drivers</h2>
+        <h2>Tracking</h2>
       </Container>
     </Page>
   );

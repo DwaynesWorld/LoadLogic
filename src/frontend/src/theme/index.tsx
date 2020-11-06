@@ -11,13 +11,14 @@ export const theme = createMuiTheme({
       paper: colors.common.white,
     },
     primary: {
-      main: colors.blue[700],
+      main: colors.common.black,
+      contrastText: colors.grey[100],
     },
     secondary: {
       main: colors.blue[400],
     },
     text: {
-      primary: colors.blueGrey[900],
+      primary: colors.grey[900],
       secondary: colors.blueGrey[600],
     },
   },

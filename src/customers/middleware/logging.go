@@ -1,19 +1,20 @@
-package service
+package middleware
 
 import (
 	"time"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/go-kit/kit/log"
 )
 
 type loggingService struct {
 	logger log.Logger
-	Service
+	service.CustomersService
 }
 
 // NewLoggingService returns a new instance of a logging Service.
-func NewLoggingService(logger log.Logger, s Service) Service {
+func NewLoggingService(logger log.Logger, s service.CustomersService) service.CustomersService {
 	return &loggingService{logger, s}
 }
 
@@ -26,7 +27,7 @@ func (s *loggingService) GetCustomer(id uint64) (c *domain.Customer, err error) 
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.GetCustomer(id)
+	return s.CustomersService.GetCustomer(id)
 }
 
 func (s *loggingService) GetAllCustomers() (c []domain.Customer, err error) {
@@ -37,7 +38,7 @@ func (s *loggingService) GetAllCustomers() (c []domain.Customer, err error) {
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.GetAllCustomers()
+	return s.CustomersService.GetAllCustomers()
 }
 
 func (s *loggingService) CreateCustomer(firstname string, lastname string, email string, phone string) (c *domain.Customer, err error) {
@@ -52,7 +53,7 @@ func (s *loggingService) CreateCustomer(firstname string, lastname string, email
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.CreateCustomer(firstname, lastname, email, phone)
+	return s.CustomersService.CreateCustomer(firstname, lastname, email, phone)
 }
 
 func (s *loggingService) UpdateCustomer(id uint64, firstname string, lastname string, email string, phone string) (c *domain.Customer, err error) {
@@ -68,7 +69,7 @@ func (s *loggingService) UpdateCustomer(id uint64, firstname string, lastname st
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.UpdateCustomer(id, firstname, lastname, email, phone)
+	return s.CustomersService.UpdateCustomer(id, firstname, lastname, email, phone)
 }
 
 func (s *loggingService) DeleteCustomer(id uint64) (err error) {
@@ -80,5 +81,5 @@ func (s *loggingService) DeleteCustomer(id uint64) (err error) {
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.DeleteCustomer(id)
+	return s.CustomersService.DeleteCustomer(id)
 }

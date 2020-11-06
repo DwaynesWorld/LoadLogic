@@ -1,9 +1,10 @@
-package service
+package middleware
 
 import (
 	"context"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/go-kit/kit/endpoint"
 )
 
@@ -16,7 +17,7 @@ type getCustomerResponse struct {
 	Err      error            `json:"error,omitempty"`
 }
 
-func makeGetCustomerEndpoint(s Service) endpoint.Endpoint {
+func makeGetCustomerEndpoint(s service.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getCustomerRequest)
 		customer, err := s.GetCustomer(req.ID)
@@ -32,7 +33,7 @@ type getAllCustomersResponse struct {
 	Err       error             `json:"error,omitempty"`
 }
 
-func makeGetAllCustomersEndpoint(s Service) endpoint.Endpoint {
+func makeGetAllCustomersEndpoint(s service.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		customers, err := s.GetAllCustomers()
 		return getAllCustomersResponse{Customers: customers, Err: err}, nil
@@ -51,7 +52,7 @@ type createCustomerResponse struct {
 	Err      error            `json:"error,omitempty"`
 }
 
-func makeCreateCustomerEndpoint(s Service) endpoint.Endpoint {
+func makeCreateCustomerEndpoint(s service.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createCustomerRequest)
 		customer, err := s.CreateCustomer(req.FirstName, req.LastName, req.Email, req.Phone)
@@ -71,7 +72,7 @@ type updateCustomerResponse struct {
 	Err      error            `json:"error,omitempty"`
 }
 
-func makeUpdateCustomerEndpoint(s Service) endpoint.Endpoint {
+func makeUpdateCustomerEndpoint(s service.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(updateCustomerRequest)
 		customer, err := s.UpdateCustomer(req.ID, req.FirstName, req.LastName, req.Email, req.Phone)
@@ -87,7 +88,7 @@ type deleteCustomerResponse struct {
 	Err error `json:"error,omitempty"`
 }
 
-func makeDeleteCustomerEndpoint(s Service) endpoint.Endpoint {
+func makeDeleteCustomerEndpoint(s service.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(deleteCustomerRequest)
 		err := s.DeleteCustomer(req.ID)

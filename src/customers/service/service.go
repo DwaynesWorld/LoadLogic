@@ -4,8 +4,8 @@ import (
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
 )
 
-// Service is the interface that provides customer operations.
-type Service interface {
+// CustomersService is the interface that provides customer operations.
+type CustomersService interface {
 	GetCustomer(id uint64) (*domain.Customer, error)
 	GetAllCustomers() ([]domain.Customer, error)
 	CreateCustomer(firstname string, lastname string, email string, phone string) (*domain.Customer, error)
@@ -14,25 +14,25 @@ type Service interface {
 }
 
 // NewService creates a customer service with necessary dependencies.
-func NewService(store domain.CustomerStore) Service {
-	return &service{
+func NewService(store domain.CustomerStore) CustomersService {
+	return &customerService{
 		store: store,
 	}
 }
 
-type service struct {
+type customerService struct {
 	store domain.CustomerStore
 }
 
-func (s *service) GetCustomer(id uint64) (*domain.Customer, error) {
+func (s *customerService) GetCustomer(id uint64) (*domain.Customer, error) {
 	return s.store.Find(id)
 }
 
-func (s *service) GetAllCustomers() ([]domain.Customer, error) {
+func (s *customerService) GetAllCustomers() ([]domain.Customer, error) {
 	return s.store.FindAll()
 }
 
-func (s *service) CreateCustomer(firstname string, lastname string, email string, phone string) (*domain.Customer, error) {
+func (s *customerService) CreateCustomer(firstname string, lastname string, email string, phone string) (*domain.Customer, error) {
 	c := &domain.Customer{
 		ID:        0,
 		FirstName: firstname,
@@ -43,7 +43,7 @@ func (s *service) CreateCustomer(firstname string, lastname string, email string
 	return s.store.Create(c)
 }
 
-func (s *service) UpdateCustomer(id uint64, firstname string, lastname string, email string, phone string) (*domain.Customer, error) {
+func (s *customerService) UpdateCustomer(id uint64, firstname string, lastname string, email string, phone string) (*domain.Customer, error) {
 	c := &domain.Customer{
 		ID:        id,
 		FirstName: firstname,
@@ -54,6 +54,6 @@ func (s *service) UpdateCustomer(id uint64, firstname string, lastname string, e
 	return s.store.Update(c)
 }
 
-func (s *service) DeleteCustomer(id uint64) error {
+func (s *customerService) DeleteCustomer(id uint64) error {
 	return s.store.Delete(id)
 }
