@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink as RouterLink } from "react-router-dom";
 import { Button, colors, ListItem, makeStyles } from "@material-ui/core";
+import { Icon as IconType } from "react-feather";
 
 interface Props {
   title: string;
   to: string;
-  icon: any;
+  icon: IconType;
 }
 export function NavItem({ to, icon: Icon, title, ...rest }: Props) {
   const classes = useStyles();

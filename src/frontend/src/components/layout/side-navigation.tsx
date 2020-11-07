@@ -1,20 +1,12 @@
 import React from "react";
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Box, Divider, Drawer, List, makeStyles } from "@material-ui/core";
 
 import {
-  BarChart as BarChartIcon,
-  Settings as SettingsIcon,
+  // BarChart as BarChartIcon,
+  // Settings as SettingsIcon,
   Folder as FolderIcon,
-  FileText as FileTextIcon,
   Truck as TruckIcon,
-  User as UserIcon,
+  // User as UserIcon,
   Users as UsersIcon,
   HelpCircle as HelpIcon,
   CreditCard as BillingIcon,
@@ -53,7 +45,7 @@ export function SideNavigation() {
       anchor="left"
       classes={{ paper: classes.drawer }}
       variant="persistent"
-      open={true}
+      open
     >
       <Box height="100%" display="flex" flexDirection="column">
         <Box

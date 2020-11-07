@@ -21,7 +21,7 @@ namespace LoadLogic.Services
                 {
                     var index = value.IndexOf("@", StringComparison.Ordinal);
                     Identifier = value.Substring(0, index);
-                    Domain = value.Substring(index + 1);
+                    Domain = value[(index + 1)..];
                 }
                 catch (Exception ex)
                 {

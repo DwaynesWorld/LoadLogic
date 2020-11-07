@@ -8,12 +8,12 @@ namespace LoadLogic.Services.Ordering.Domain.Events
         public OrderConfirmedDomainEvent(int orderNo, long customerId)
         {
             this.OrderNo = orderNo;
-            this.customerId = customerId;
+            this.CustomerId = customerId;
         }
 
         public long CredentialsCompanyId { get; }
         public long BusinessUnitId { get; }
         public int OrderNo { get; }
-        public long customerId { get; }
+        public long CustomerId { get; }
     }
 }

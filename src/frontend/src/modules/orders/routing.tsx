@@ -8,7 +8,7 @@ export function OrderRouting() {
     <Suspense fallback={<div>Loading</div>}>
       <Routes>
         <Route path="/" element={<Orders />} />
-        <Route path="/create" element={<CreateOrder />} />
+        <Route path="create" element={<CreateOrder />} />
       </Routes>
     </Suspense>
   );

@@ -1,8 +1,9 @@
 import React from "react";
 import { Page } from "src/components";
 import { Box, Button, Container, makeStyles } from "@material-ui/core";
-import { OrderList } from "../components/order-list";
 import { Link } from "react-router-dom";
+
+import { OrderList } from "../components/order-list";
 
 export function Orders() {
   const styles = useStyles();

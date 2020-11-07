@@ -20,6 +20,8 @@
     "@typescript-eslint/no-inferrable-types": 1,
     "@typescript-eslint/unbound-method": 0,
     "@typescript-eslint/prefer-regexp-exec": 0,
+    "@typescript-eslint/comma-dangle": 0,
+    "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "import/prefer-default-export": 0,
