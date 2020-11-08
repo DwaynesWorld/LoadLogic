@@ -12,7 +12,7 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
     /// <summary>
     /// Helper Class for database operations during development.
     /// Current directory should be Ordering root.
-    /// Command: dotnet ef migrations add MIGRATION_NAME -s Ordering -o Infrastructure/Persistence/Migrations
+    /// Command: dotnet ef migrations add [MIGRATION_NAME] -o Infrastructure/Persistence/Migrations
     /// </summary>
     public class OrderingDesignTimeContextFactory : IDesignTimeDbContextFactory<OrderingContext>
     {

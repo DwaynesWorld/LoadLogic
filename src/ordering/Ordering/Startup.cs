@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Prometheus;
 using Serilog;
 
 namespace LoadLogic.Services.Ordering.API
@@ -34,7 +35,10 @@ namespace LoadLogic.Services.Ordering.API
             services.AddMassTransitHostedService();
             services.AddTransient<IOrderRepository, OrderRepository>();
 
-            services.AddHealthChecks().AddDbContextCheck<OrderingContext>();
+            services.AddHealthChecks()
+                .AddDbContextCheck<OrderingContext>()
+                .ForwardToPrometheus();
+
             services.AddDbContext<OrderingContext>(options =>
             {
                 var connectionString = Configuration.GetValue<string>("DatabaseConnection");
@@ -58,25 +62,27 @@ namespace LoadLogic.Services.Ordering.API
             // app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseRouting();
+            app.UseHttpMetrics();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
+                endpoints.MapMetrics();
             });
         }
 
         protected void ConfigureMassTransit(IServiceCollectionBusConfigurator busConfig)
         {
             busConfig.SetKebabCaseEndpointNameFormatter();
-
             busConfig.UsingRabbitMq((context, factoryConfig) =>
             {
                 var connection = Configuration.GetValue<string>("EventBusConnection");
                 var username = Configuration.GetValue<string>("EventBusUserName");
                 var password = Configuration.GetValue<string>("EventBusPassword");
 
+                factoryConfig.UseHealthCheck(context);
                 factoryConfig.Host(connection, hostConfig =>
                 {
                     hostConfig.Username(username);

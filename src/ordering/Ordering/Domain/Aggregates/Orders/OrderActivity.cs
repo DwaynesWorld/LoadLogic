@@ -8,7 +8,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
     public class OrderActivity : Enumeration
     {
-        public static OrderActivity HaulAway = new OrderActivity(1, nameof(HaulAway).ToLowerInvariant());
+        public static OrderActivity Haul = new OrderActivity(1, nameof(Haul).ToLowerInvariant());
         public static OrderActivity OnSiteLoadDump = new OrderActivity(2, nameof(OnSiteLoadDump).ToLowerInvariant());
         public static OrderActivity MultiSiteLoadDump = new OrderActivity(3, nameof(MultiSiteLoadDump).ToLowerInvariant());
 
@@ -16,7 +16,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         {
         }
 
-        public static IEnumerable<OrderActivity> List() => new[] { HaulAway, OnSiteLoadDump, MultiSiteLoadDump };
+        public static IEnumerable<OrderActivity> List() => new[] { Haul, OnSiteLoadDump, MultiSiteLoadDump };
 
         public static OrderActivity FromName(string name)
         {

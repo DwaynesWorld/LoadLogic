@@ -6,6 +6,7 @@ using LoadLogic.Services.Core.IntegrationEvents;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MassTransit;
 using MediatR;
+using Prometheus;
 
 namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 {
@@ -41,6 +42,7 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 
     internal class CreateOrderHandler : IRequestHandler<CreateOrder, long>
     {
+        private static readonly Counter _createOrderCount = Metrics.CreateCounter("ordering_create_order_total", "Number of orders created.");
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IOrderRepository _orderRepository;
 
@@ -52,7 +54,7 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 
         public async Task<long> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
-            var orderNo = await _orderRepository.GetNextOrderNo();
+            var orderNo = await _orderRepository.GetNextOrderNo(cancellationToken);
 
             var order = new Order(
                 orderNo, request.CustomerId,
@@ -65,6 +67,8 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             await _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(9999), cancellationToken);
+
+            _createOrderCount.Inc();
 
             return order.Id;
         }

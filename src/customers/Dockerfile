@@ -10,7 +10,7 @@ ENV GO111MODULE=on \
 WORKDIR /build
 
 # Copy the code into the container
-COPY "src/customers/" .
+COPY "customers/" .
 
 # Build the application
 RUN go build 
@@ -22,7 +22,7 @@ WORKDIR /dist
 RUN cp /build/customers .
 
 # Export necessary port
-EXPOSE 8080
+EXPOSE 80
 
 # Command to run when starting the container
 CMD ["/dist/customers"]
