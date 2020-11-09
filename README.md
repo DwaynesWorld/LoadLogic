@@ -1,10 +1,8 @@
-# .NET Microservices Reference Application
+# Microservices Reference Application
 
 ## Introduction
 
-Sample .NET Core reference application, based on a simplified microservices architecture and Docker containers.
-
-See [Domain.md](docs/Contributing.md).
+Sample application, based on a simplified microservices architecture and Docker containers.
 
 ## Getting Started With Development
 

@@ -3,19 +3,19 @@ package middleware
 import (
 	"time"
 
+	"github.com/DwaynesWorld/LoadLogic/src/customers/application"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
-	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/go-kit/kit/metrics"
 )
 
 type instrumentingService struct {
 	requestCount   metrics.Counter
 	requestLatency metrics.Histogram
-	service.CustomersService
+	application.CustomersService
 }
 
 // NewInstrumentingService returns a new instance of a instrumenting Service.
-func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram, s service.CustomersService) service.CustomersService {
+func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram, s application.CustomersService) application.CustomersService {
 	return &instrumentingService{
 		requestCount:     counter,
 		requestLatency:   latency,

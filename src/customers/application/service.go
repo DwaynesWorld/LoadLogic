@@ -1,4 +1,4 @@
-package service
+package application
 
 import (
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"

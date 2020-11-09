@@ -1,6 +1,6 @@
 # Contributing
 
-Each bounded context in this application is divided into a microservice consiting of several class libraries and one api. It attempts to follow DDD (Domain Driven Design). It also follows the [Microsoft Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/).
+Each bounded context in this application is divided into a microservice consiting of an api. It attempts to follow DDD (Domain Driven Design). For .NET projects it also follows the [Microsoft Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/).
 
 ### Domain Layer
 
@@ -24,6 +24,10 @@ This layer is kept thin, it does not contain business rules or knowledge, but on
 .Net Standard 2.1
 .Net Core 5.0
 Language is C# 8.0
+Golang 1.15.4
+Docker
+protoc 3.13.0
+yarn
 ```
 
 ## Getting Started
@@ -32,17 +36,11 @@ Language is C# 8.0
 
 ```
 git clone
-cd into root
+cd into src
 ```
 
-`Build Solution`
+`Start Services`
 
 ```
-dotnet build
-```
-
-`Run project`
-
-```
-dotnet run
+docker-compose up --build
 ```

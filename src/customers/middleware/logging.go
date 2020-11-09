@@ -3,18 +3,18 @@ package middleware
 import (
 	"time"
 
+	"github.com/DwaynesWorld/LoadLogic/src/customers/application"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
-	"github.com/DwaynesWorld/LoadLogic/src/customers/service"
 	"github.com/go-kit/kit/log"
 )
 
 type loggingService struct {
 	logger log.Logger
-	service.CustomersService
+	application.CustomersService
 }
 
 // NewLoggingService returns a new instance of a logging Service.
-func NewLoggingService(logger log.Logger, s service.CustomersService) service.CustomersService {
+func NewLoggingService(logger log.Logger, s application.CustomersService) application.CustomersService {
 	return &loggingService{logger, s}
 }
 
