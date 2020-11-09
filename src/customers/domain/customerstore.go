@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +30,7 @@ func (s *sqlCustomerStore) Find(id uint64) (*Customer, error) {
 	var customer Customer
 	err := s.db.Debug().Where("id = ?", id).Take(&customer).Error
 	if err != nil {
-		if err.Error() == "record not found" {
+		if strings.Contains(err.Error(), "record not found") {
 			return nil, ErrCustomerNotFound
 		}
 

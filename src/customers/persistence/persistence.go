@@ -25,14 +25,12 @@ func NewSQL(dsn string) (*gorm.DB, error) {
 		if err != nil {
 			if strings.Contains(err.Error(), "Unable to open tcp connection") {
 				fmt.Println("attempting to retry database connection")
-				time.Sleep(time.Duration(500*retries) * time.Millisecond)
+				time.Sleep(time.Duration(retries) * time.Second)
 				retries++
 			} else {
 				return nil, err
 			}
-		}
-
-		if db != nil {
+		} else {
 			return db, nil
 		}
 	}

@@ -12,10 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\Common.csproj"/>
-    <ProjectReference Include="..\..\core\Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.28.1" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.0.3" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.3" />
     <PackageReference Include="MediatR" Version="8.1.0" />

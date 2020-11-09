@@ -92,34 +92,23 @@ func decodeGetCustomerRequest(_ context.Context, r *http.Request) (interface{}, 
 }
 
 func decodeCreateCustomerRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	customer := &domain.Customer{}
+	customer := &createCustomerRequest{}
 
 	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		return nil, err
 	}
 
-	return createCustomerRequest{
-		customer.FirstName,
-		customer.LastName,
-		customer.Email,
-		customer.Phone,
-	}, nil
+	return customer, nil
 }
 
 func decodeUpdateCustomerRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	customer := &domain.Customer{}
+	customer := &updateCustomerRequest{}
 
 	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		return nil, err
 	}
 
-	return updateCustomerRequest{
-		customer.ID,
-		customer.FirstName,
-		customer.LastName,
-		customer.Email,
-		customer.Phone,
-	}, nil
+	return customer, nil
 }
 
 func decodeDeleteCustomerRequest(_ context.Context, r *http.Request) (interface{}, error) {

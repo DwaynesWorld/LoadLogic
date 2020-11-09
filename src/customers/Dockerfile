@@ -1,5 +1,7 @@
 FROM golang:alpine
 
+RUN apk update && apk add bash
+
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -12,11 +14,15 @@ WORKDIR /build
 # Copy the code into the container
 COPY "customers/" .
 
+
 # Build the application
 RUN go build 
 
 # Move to /dist directory as the place for resulting binary folder
 WORKDIR /dist
+
+COPY wait-for-it.sh wait-for-it.sh
+RUN chmod +x wait-for-it.sh
 
 # Copy binary from build to main folder
 RUN cp /build/customers .
@@ -25,4 +31,4 @@ RUN cp /build/customers .
 EXPOSE 80
 
 # Command to run when starting the container
-CMD ["/dist/customers"]
+ENTRYPOINT ["/dist/customers"]

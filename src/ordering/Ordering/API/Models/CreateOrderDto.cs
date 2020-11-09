@@ -1,4 +1,4 @@
-namespace LoadLogic.Services.Ordering.Models
+namespace LoadLogic.Services.Ordering.API.Models
 {
     public class CreateOrderDto
     {

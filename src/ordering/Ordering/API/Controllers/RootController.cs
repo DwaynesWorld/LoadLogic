@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LoadLogic.Services.Ordering.Controllers
+namespace LoadLogic.Services.Ordering.API.Controllers
 {
     public abstract class RootController : ControllerBase
     {

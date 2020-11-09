@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LoadLogic.Services;
-using LoadLogic.Services.Ordering.Models;
+using LoadLogic.Services.Ordering.API.Models;
 using LoadLogic.Services.Ordering.Application.Commands.Orders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace LoadLogic.Services.Ordering.Controllers
+namespace LoadLogic.Services.Ordering.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -31,7 +31,7 @@ namespace LoadLogic.Services.Ordering.Controllers
                 "Job Name", "Job Description", new Address(), DateTime.UtcNow, DateTime.UtcNow);
 
             _logger.LogInformation(
-                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
                 nameof(CreateOrder),
                 nameof(CreateOrder.CustomerId),
                 command.CustomerId,

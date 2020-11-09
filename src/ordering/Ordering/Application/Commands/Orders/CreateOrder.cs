@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using LoadLogic.Services;
-using LoadLogic.Services.Core.IntegrationEvents;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MassTransit;
 using MediatR;
@@ -66,7 +64,7 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
             _orderRepository.Add(order);
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            await _publishEndpoint.Publish(new OrderConfirmedIntegrationEvent(9999), cancellationToken);
+            await _publishEndpoint.Publish(new OrderConfirmedEvent { UserId = 9999 }, cancellationToken);
 
             _createOrderCount.Inc();
 

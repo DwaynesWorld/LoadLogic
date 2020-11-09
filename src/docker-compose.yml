@@ -55,6 +55,15 @@ services:
     build:
       context: .
       dockerfile: customers/Dockerfile
+    entrypoint:
+      [
+        "/dist/wait-for-it.sh",
+        "sqlserver:1433",
+        "-t",
+        "120",
+        "--",
+        "/dist/customers",
+      ]
     depends_on:
       - sqlserver
       - seq
