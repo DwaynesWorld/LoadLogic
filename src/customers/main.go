@@ -17,7 +17,6 @@ import (
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/middleware"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/persistence"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const defaultHost = "localhost"
@@ -63,11 +62,9 @@ func main() {
 		cs,
 	)
 
-	mux := http.NewServeMux()
-	mux.Handle("/v1/", middleware.MakeHandler(cs, httpLogger))
+	endpoints := middleware.NewEndpoints(cs)
+	middleware.NewHTTPTransport(endpoints, httpLogger)
 
-	http.Handle("/", cors(mux))
-	http.Handle("/metrics", promhttp.Handler())
 	startServer(addr, logger)
 }
 
@@ -86,20 +83,6 @@ func startServer(addr string, logger kitlog.Logger) {
 	}()
 
 	logger.Log("Server terminated.", <-errs)
-}
-
-func cors(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
-
-		if r.Method == "OPTIONS" {
-			return
-		}
-
-		h.ServeHTTP(w, r)
-	})
 }
 
 func envString(env, fallback string, log bool) string {

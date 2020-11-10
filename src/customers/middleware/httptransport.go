@@ -11,49 +11,57 @@ import (
 	kitlog "github.com/go-kit/kit/log"
 	kitxport "github.com/go-kit/kit/transport"
 	kithttp "github.com/go-kit/kit/transport/http"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/DwaynesWorld/LoadLogic/src/customers/application"
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
 	"github.com/gorilla/mux"
 )
 
-// MakeHandler returns a handler for the customer service.
-func MakeHandler(s application.CustomersService, logger kitlog.Logger) http.Handler {
+// NewHTTPTransport creates an HTTP transport for the customer service.
+func NewHTTPTransport(endpoints EndpointSet, httpLogger kitlog.Logger) {
+	mux := http.NewServeMux()
+	mux.Handle("/v1/", newHTTPHandler(endpoints, httpLogger))
+
+	http.Handle("/", cors(mux))
+	http.Handle("/metrics", promhttp.Handler())
+}
+
+func newHTTPHandler(endpoints EndpointSet, logger kitlog.Logger) http.Handler {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorHandler(kitxport.NewLogErrorHandler(logger)),
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
 	getAllCustomersHandler := kithttp.NewServer(
-		makeGetAllCustomersEndpoint(s),
+		endpoints.GetAllCustomersEndpoint,
 		decodeGetAllCustomersRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	getCustomerHandler := kithttp.NewServer(
-		makeGetCustomerEndpoint(s),
+		endpoints.GetCustomerEndpoint,
 		decodeGetCustomerRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	createCustomerHandler := kithttp.NewServer(
-		makeCreateCustomerEndpoint(s),
+		endpoints.CreateCustomerEndpoint,
 		decodeCreateCustomerRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	updateCustomerHandler := kithttp.NewServer(
-		makeUpdateCustomerEndpoint(s),
+		endpoints.UpdateCustomerEndpoint,
 		decodeUpdateCustomerRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	deleteCustomerHandler := kithttp.NewServer(
-		makeDeleteCustomerEndpoint(s),
+		endpoints.DeleteCustomerEndpoint,
 		decodeDeleteCustomerRequest,
 		encodeResponse,
 		opts...,
@@ -70,6 +78,10 @@ func MakeHandler(s application.CustomersService, logger kitlog.Logger) http.Hand
 	return r
 }
 
+// ErrBadRequest is a http specific error
+// representing a bad http request
+var ErrBadRequest = errors.New("bad request")
+
 func decodeGetAllCustomersRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	return getAllCustomersRequest{}, nil
 }
@@ -79,7 +91,7 @@ func decodeGetCustomerRequest(_ context.Context, r *http.Request) (interface{}, 
 	paramID, ok := vars["id"]
 
 	if !ok {
-		return nil, errors.New("Bad Request")
+		return nil, ErrBadRequest
 	}
 
 	id, err := strconv.ParseUint(paramID, 0, 0)
@@ -92,7 +104,7 @@ func decodeGetCustomerRequest(_ context.Context, r *http.Request) (interface{}, 
 }
 
 func decodeCreateCustomerRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	customer := &createCustomerRequest{}
+	customer := createCustomerRequest{}
 
 	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		return nil, err
@@ -102,7 +114,7 @@ func decodeCreateCustomerRequest(_ context.Context, r *http.Request) (interface{
 }
 
 func decodeUpdateCustomerRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	customer := &updateCustomerRequest{}
+	customer := updateCustomerRequest{}
 
 	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		return nil, err
@@ -116,7 +128,7 @@ func decodeDeleteCustomerRequest(_ context.Context, r *http.Request) (interface{
 	paramID, ok := vars["id"]
 
 	if !ok {
-		return nil, errors.New("Bad Request")
+		return nil, ErrBadRequest
 	}
 
 	id, err := strconv.ParseUint(paramID, 0, 0)
@@ -128,16 +140,7 @@ func decodeDeleteCustomerRequest(_ context.Context, r *http.Request) (interface{
 	return deleteCustomerRequest{ID: id}, nil
 }
 
-type errorer interface {
-	error() error
-}
-
 func encodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
-	if e, ok := response.(errorer); ok && e.error() != nil {
-		encodeError(ctx, e.error(), w)
-		return nil
-	}
-
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	return json.NewEncoder(w).Encode(response)
 }
@@ -150,11 +153,27 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 		w.WriteHeader(http.StatusNotFound)
 	case domain.ErrUnknownDatabaseError:
 		w.WriteHeader(http.StatusFailedDependency)
+	case ErrBadRequest:
+		w.WriteHeader(http.StatusBadRequest)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"error": err.Error(),
+	})
+}
+
+func cors(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
+
+		if r.Method == "OPTIONS" {
+			return
+		}
+
+		h.ServeHTTP(w, r)
 	})
 }

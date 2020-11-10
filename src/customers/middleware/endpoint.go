@@ -8,20 +8,39 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
+// EndpointSet is the set of all service endpoints
+type EndpointSet struct {
+	GetCustomerEndpoint     endpoint.Endpoint
+	GetAllCustomersEndpoint endpoint.Endpoint
+	CreateCustomerEndpoint  endpoint.Endpoint
+	UpdateCustomerEndpoint  endpoint.Endpoint
+	DeleteCustomerEndpoint  endpoint.Endpoint
+}
+
+// NewEndpoints creates set of enpoints to be used across one or more transports
+func NewEndpoints(s application.CustomersService) EndpointSet {
+	return EndpointSet{
+		GetCustomerEndpoint:     makeGetCustomerEndpoint(s),
+		GetAllCustomersEndpoint: makeGetAllCustomersEndpoint(s),
+		CreateCustomerEndpoint:  makeCreateCustomerEndpoint(s),
+		UpdateCustomerEndpoint:  makeUpdateCustomerEndpoint(s),
+		DeleteCustomerEndpoint:  makeDeleteCustomerEndpoint(s),
+	}
+}
+
 type getCustomerRequest struct {
 	ID uint64 `json:"id"`
 }
 
 type getCustomerResponse struct {
 	Customer *domain.Customer `json:"customer"`
-	Err      error            `json:"error,omitempty"`
 }
 
 func makeGetCustomerEndpoint(s application.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getCustomerRequest)
 		customer, err := s.GetCustomer(req.ID)
-		return getCustomerResponse{Customer: customer, Err: err}, nil
+		return getCustomerResponse{Customer: customer}, err
 	}
 }
 
@@ -30,13 +49,12 @@ type getAllCustomersRequest struct {
 
 type getAllCustomersResponse struct {
 	Customers []domain.Customer `json:"customers"`
-	Err       error             `json:"error,omitempty"`
 }
 
 func makeGetAllCustomersEndpoint(s application.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		customers, err := s.GetAllCustomers()
-		return getAllCustomersResponse{Customers: customers, Err: err}, nil
+		return getAllCustomersResponse{Customers: customers}, err
 	}
 }
 
@@ -49,14 +67,13 @@ type createCustomerRequest struct {
 
 type createCustomerResponse struct {
 	Customer *domain.Customer `json:"customer"`
-	Err      error            `json:"error,omitempty"`
 }
 
 func makeCreateCustomerEndpoint(s application.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createCustomerRequest)
 		customer, err := s.CreateCustomer(req.FirstName, req.LastName, req.Email, req.Phone)
-		return createCustomerResponse{Customer: customer, Err: err}, nil
+		return createCustomerResponse{Customer: customer}, err
 	}
 }
 
@@ -69,14 +86,13 @@ type updateCustomerRequest struct {
 }
 type updateCustomerResponse struct {
 	Customer *domain.Customer `json:"customer"`
-	Err      error            `json:"error,omitempty"`
 }
 
 func makeUpdateCustomerEndpoint(s application.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(updateCustomerRequest)
 		customer, err := s.UpdateCustomer(req.ID, req.FirstName, req.LastName, req.Email, req.Phone)
-		return updateCustomerResponse{Customer: customer, Err: err}, nil
+		return updateCustomerResponse{Customer: customer}, err
 	}
 }
 
@@ -85,13 +101,12 @@ type deleteCustomerRequest struct {
 }
 
 type deleteCustomerResponse struct {
-	Err error `json:"error,omitempty"`
 }
 
 func makeDeleteCustomerEndpoint(s application.CustomersService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(deleteCustomerRequest)
 		err := s.DeleteCustomer(req.ID)
-		return deleteCustomerResponse{Err: err}, nil
+		return deleteCustomerResponse{}, err
 	}
 }
