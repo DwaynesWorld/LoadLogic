@@ -10,7 +10,7 @@ using Serilog;
 using System.IO;
 using System;
 
-namespace LoadLogic.Services.Ordering.API
+namespace LoadLogic.Services.Ordering
 {
     public class Program
     {
@@ -24,20 +24,20 @@ namespace LoadLogic.Services.Ordering.API
 
             try
             {
-                Log.Information("Configuring web host ({ApplicationContext})...", AppName);
+                Log.Information("Configuring web host {ApplicationContext}...", AppName);
                 var host = CreateHostBuilder(configuration, args);
 
-                Log.Information("Attempting DB Migrations...");
+                Log.Information("Attempting database migrations...");
                 MigrateDatabase(host);
 
-                Log.Information("Starting web host ({ApplicationContext})...", AppName);
+                Log.Information("Starting web host {ApplicationContext}...", AppName);
                 host.Run();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
+                Log.Fatal(ex, "Program terminated unexpectedly {ApplicationContext}!", AppName);
                 return 1;
             }
             finally
@@ -91,17 +91,17 @@ namespace LoadLogic.Services.Ordering.API
                 var orderingContext = scope.ServiceProvider.GetService<OrderingContext>();
                 if (orderingContext is null)
                 {
-                    Log.Information($"Attempted DB migration unsuccessful. Unable to resolve {nameof(OrderingContext)}");
+                    Log.Information($"Attempted database migration unsuccessful. Unable to resolve {nameof(OrderingContext)}");
                 }
                 else
                 {
                     orderingContext.Database.Migrate();
-                    Log.Information("Attempted DB migration successfully.");
+                    Log.Information("Attempted database migration executed successfully.");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An error occurred migrating the DB.");
+                Log.Error(ex, "An error occurred migrating the database.");
             }
         }
     }

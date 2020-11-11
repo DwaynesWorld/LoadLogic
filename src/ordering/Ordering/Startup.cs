@@ -15,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Prometheus;
 using Serilog;
 
-namespace LoadLogic.Services.Ordering.API
+namespace LoadLogic.Services.Ordering
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace LoadLogic.Services.Ordering.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMediatR(typeof(IHandler).Assembly);
+            services.AddMediatR(typeof(Startup));
             services.AddMassTransit(ConfigureMassTransit);
             services.AddMassTransitHostedService();
             services.AddTransient<IOrderRepository, OrderRepository>();

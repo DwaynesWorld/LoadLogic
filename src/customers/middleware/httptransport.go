@@ -8,17 +8,16 @@ import (
 	"net/http"
 	"strconv"
 
-	kitlog "github.com/go-kit/kit/log"
-	kitxport "github.com/go-kit/kit/transport"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
 	"github.com/gorilla/mux"
 )
 
 // NewHTTPTransport creates an HTTP transport for the customer service.
-func NewHTTPTransport(endpoints EndpointSet, httpLogger kitlog.Logger) {
+func NewHTTPTransport(endpoints EndpointSet, httpLogger *log.Entry) {
 	mux := http.NewServeMux()
 	mux.Handle("/v1/", newHTTPHandler(endpoints, httpLogger))
 
@@ -26,9 +25,9 @@ func NewHTTPTransport(endpoints EndpointSet, httpLogger kitlog.Logger) {
 	http.Handle("/metrics", promhttp.Handler())
 }
 
-func newHTTPHandler(endpoints EndpointSet, logger kitlog.Logger) http.Handler {
+func newHTTPHandler(endpoints EndpointSet, logger *log.Entry) http.Handler {
 	opts := []kithttp.ServerOption{
-		kithttp.ServerErrorHandler(kitxport.NewLogErrorHandler(logger)),
+		kithttp.ServerErrorHandler(newLogErrorHandler(logger)),
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
@@ -162,6 +161,20 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"error": err.Error(),
 	})
+}
+
+type logErrorHandler struct {
+	logger *log.Entry
+}
+
+func newLogErrorHandler(logger *log.Entry) *logErrorHandler {
+	return &logErrorHandler{
+		logger: logger,
+	}
+}
+
+func (h *logErrorHandler) Handle(ctx context.Context, err error) {
+	h.logger.Error(err)
 }
 
 func cors(h http.Handler) http.Handler {
