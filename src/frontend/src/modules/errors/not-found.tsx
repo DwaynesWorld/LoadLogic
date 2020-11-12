@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Container,
@@ -8,7 +9,7 @@ import {
 } from "@material-ui/core";
 
 import { Page } from "src/components";
-import { Link } from "react-router-dom";
+
 export function NotFoundView() {
   const classes = useStyles();
 

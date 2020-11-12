@@ -1,18 +1,19 @@
-import React, { forwardRef } from "react";
+import React, { ForwardedRef, forwardRef } from "react";
 import { Helmet } from "react-helmet";
 
-interface InnerPageProps
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  > {
+type ReactDiv = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>;
+
+interface InnerPageProps extends ReactDiv {
   children: React.ReactNode;
-  title?: string;
+  title: string;
 }
 
 function InnerPage(
   { children, title = "", ...rest }: InnerPageProps,
-  ref: any
+  ref: ForwardedRef<any>
 ) {
   return (
     <div ref={ref} {...rest}>
