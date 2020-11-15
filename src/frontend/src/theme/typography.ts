@@ -1,3 +1,5 @@
+import { colors } from "@material-ui/core";
+
 export const typography = {
   h1: {
     fontWeight: 500,
@@ -29,7 +31,20 @@ export const typography = {
     fontSize: 14,
     letterSpacing: "-0.05px",
   },
+  button: {
+    fontWeight: 600,
+  },
+  body1: {
+    fontSize: 14,
+    letterSpacing: "-0.05px",
+  },
+  body2: {
+    fontSize: 12,
+    letterSpacing: "-0.05px",
+    color: colors.grey[800],
+  },
   overline: {
+    fontSize: 13,
     fontWeight: 500,
   },
 };

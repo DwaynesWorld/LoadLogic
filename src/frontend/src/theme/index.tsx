@@ -25,6 +25,6 @@ export const theme = createMuiTheme({
   shadows,
   typography: {
     ...typography,
-    fontFamily: ['"Lato"', "sans-serif"].join(","),
+    fontFamily: ["Open Sans", "Helvetica", "Arial", "sans-serif"].join(","),
   },
 });

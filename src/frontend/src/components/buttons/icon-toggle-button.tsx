@@ -1,6 +1,6 @@
 import React from "react";
 import ToggleButton, { ToggleButtonProps } from "@material-ui/lab/ToggleButton";
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { SvgIconComponent } from "@material-ui/icons";
 
 interface Props extends ToggleButtonProps {
@@ -16,10 +16,12 @@ export function IconToggleButton({ icon: Icon, title, ...props }: Props) {
         justifyContent="space-between"
         alignContent="center"
       >
-        <Box pr={1}>
+        <Box display="flex" pr={1}>
           <Icon />
         </Box>
-        <Box>{title}</Box>
+        <Box display="flex">
+          <Typography variant="h6">{title}</Typography>
+        </Box>
       </Box>
     </ToggleButton>
   );
