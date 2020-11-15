@@ -86,6 +86,14 @@ services:
     ports:
       - "5151:80"
 
+  locations-api:
+    environment:
+      - HOST=0.0.0.0
+      - PORT=80
+      - DatabaseConnection=${LOCATIONS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
+    ports:
+      - "5161:80"
+
   prometheus:
     ports:
       - "9090:9090"

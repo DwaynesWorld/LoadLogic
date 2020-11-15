@@ -69,6 +69,25 @@ services:
       - seq
       - rabbitmq
 
+  locations-api:
+    image: ${REGISTRY:-kt713}/locations.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: locations/Dockerfile
+    entrypoint:
+      [
+        "/dist/wait-for-it.sh",
+        "sqlserver:1433",
+        "-t",
+        "120",
+        "--",
+        "/dist/locations",
+      ]
+    depends_on:
+      - sqlserver
+      - seq
+      - rabbitmq
+
   prometheus:
     image: prom/prometheus:latest
     depends_on:

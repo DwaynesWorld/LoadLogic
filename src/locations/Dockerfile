@@ -1,0 +1,34 @@
+FROM golang:alpine
+
+RUN apk update && apk add bash
+
+# Set necessary environmet variables needed for our image
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+# Move to working directory /build
+WORKDIR /build
+
+# Copy the code into the container
+COPY "locations/" .
+
+
+# Build the application
+RUN go build 
+
+# Move to /dist directory as the place for resulting binary folder
+WORKDIR /dist
+
+COPY wait-for-it.sh wait-for-it.sh
+RUN chmod +x wait-for-it.sh
+
+# Copy binary from build to main folder
+RUN cp /build/locations .
+
+# Export necessary port
+EXPOSE 80
+
+# Command to run when starting the container
+ENTRYPOINT ["/dist/locations"]
