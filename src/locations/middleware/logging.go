@@ -27,6 +27,7 @@ func (s *loggingService) GetLocation(id uint64) (c *domain.Location, err error) 
 			"Error":  err,
 		}).Info("Method GetLocation invoked")
 	}(time.Now())
+
 	return s.LocationsService.GetLocation(id)
 }
 
@@ -38,38 +39,73 @@ func (s *loggingService) GetAllLocations() (c []domain.Location, err error) {
 			"Error":  err,
 		}).Info("Method GetAllLocations invoked")
 	}(time.Now())
+
 	return s.LocationsService.GetAllLocations()
 }
 
-func (s *loggingService) CreateLocation(firstname string, lastname string, email string, phone string) (c *domain.Location, err error) {
+func (s *loggingService) CreateLocation(
+	name string, web string, contactFirstName string, contactLastName string,
+	contactEmail string, phone1 string, phone2 string, address1 string, address2 string,
+	city string, county string, state string, country string, zip string) (c *domain.Location, err error) {
+
 	defer func(begin time.Time) {
 		s.logger.WithFields(log.Fields{
-			"Method":    "CreateLocation",
-			"Firstname": firstname,
-			"Lastname":  lastname,
-			"Email":     email,
-			"Phone":     phone,
-			"Took":      time.Since(begin),
-			"Error":     err,
+			"Method":           "CreateLocation",
+			"Name":             name,
+			"Web":              web,
+			"Address1":         address1,
+			"Address2":         address2,
+			"City":             city,
+			"County":           county,
+			"State":            state,
+			"Country":          country,
+			"Zip":              zip,
+			"ContactFirstName": contactFirstName,
+			"ContactLastName":  contactLastName,
+			"ContactEmail":     contactEmail,
+			"Phone1":           phone1,
+			"Phone2":           phone2,
+			"Took":             time.Since(begin),
+			"Error":            err,
 		}).Info("Method CreateLocation invoked")
 	}(time.Now())
-	return s.LocationsService.CreateLocation(firstname, lastname, email, phone)
+
+	return s.LocationsService.CreateLocation(
+		name, web, contactFirstName, contactLastName, contactEmail, phone1,
+		phone2, address1, address2, city, county, state, country, zip)
 }
 
-func (s *loggingService) UpdateLocation(id uint64, firstname string, lastname string, email string, phone string) (c *domain.Location, err error) {
+func (s *loggingService) UpdateLocation(
+	id uint64, name string, web string, contactFirstName string, contactLastName string,
+	contactEmail string, phone1 string, phone2 string, address1 string, address2 string,
+	city string, county string, state string, country string, zip string) (c *domain.Location, err error) {
+
 	defer func(begin time.Time) {
 		s.logger.WithFields(log.Fields{
-			"Method":    "UpdateLocation",
-			"Id":        id,
-			"Firstname": firstname,
-			"lastname":  lastname,
-			"Email":     email,
-			"Phone":     phone,
-			"Took":      time.Since(begin),
-			"Error":     err,
+			"Method":           "UpdateLocation",
+			"Id":               id,
+			"Name":             name,
+			"Web":              web,
+			"Address1":         address1,
+			"Address2":         address2,
+			"City":             city,
+			"County":           county,
+			"State":            state,
+			"Country":          country,
+			"Zip":              zip,
+			"ContactFirstName": contactFirstName,
+			"ContactLastName":  contactLastName,
+			"ContactEmail":     contactEmail,
+			"Phone1":           phone1,
+			"Phone2":           phone2,
+			"Took":             time.Since(begin),
+			"Error":            err,
 		}).Info("Method UpdateLocation invoked")
 	}(time.Now())
-	return s.LocationsService.UpdateLocation(id, firstname, lastname, email, phone)
+
+	return s.LocationsService.UpdateLocation(
+		id, name, web, contactFirstName, contactLastName, contactEmail, phone1,
+		phone2, address1, address2, city, county, state, country, zip)
 }
 
 func (s *loggingService) DeleteLocation(id uint64) (err error) {
@@ -81,5 +117,6 @@ func (s *loggingService) DeleteLocation(id uint64) (err error) {
 			"Error":  err,
 		}).Info("Method DeleteLocation invoked")
 	}(time.Now())
+
 	return s.LocationsService.DeleteLocation(id)
 }

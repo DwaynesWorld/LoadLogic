@@ -59,10 +59,20 @@ func makeGetAllLocationsEndpoint(s application.LocationsService) endpoint.Endpoi
 }
 
 type createLocationRequest struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone"`
+	Name             string `json:"name"`
+	Web              string `json:"web"`
+	ContactFirstName string `json:"contact_first_name"`
+	ContactLastName  string `json:"contact_last_name"`
+	ContactEmail     string `json:"contact_email"`
+	Phone1           string `json:"phone1"`
+	Phone2           string `json:"phone2"`
+	Address1         string `json:"address1"`
+	Address2         string `json:"address2"`
+	City             string `json:"city"`
+	County           string `json:"county"`
+	State            string `json:"state"`
+	Country          string `json:"country"`
+	Zip              string `json:"zip"`
 }
 
 type createLocationResponse struct {
@@ -71,18 +81,30 @@ type createLocationResponse struct {
 
 func makeCreateLocationEndpoint(s application.LocationsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(createLocationRequest)
-		location, err := s.CreateLocation(req.FirstName, req.LastName, req.Email, req.Phone)
+		r := request.(createLocationRequest)
+		location, err := s.CreateLocation(
+			r.Name, r.Web, r.ContactFirstName, r.ContactLastName, r.ContactEmail, r.Phone1,
+			r.Phone2, r.Address1, r.Address2, r.City, r.County, r.State, r.Country, r.Zip)
 		return createLocationResponse{Location: location}, err
 	}
 }
 
 type updateLocationRequest struct {
-	ID        uint64 `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone"`
+	ID               uint64 `json:"id"`
+	Name             string `json:"name"`
+	Web              string `json:"web"`
+	ContactFirstName string `json:"contact_first_name"`
+	ContactLastName  string `json:"contact_last_name"`
+	ContactEmail     string `json:"contact_email"`
+	Phone1           string `json:"phone1"`
+	Phone2           string `json:"phone2"`
+	Address1         string `json:"address1"`
+	Address2         string `json:"address2"`
+	City             string `json:"city"`
+	County           string `json:"county"`
+	State            string `json:"state"`
+	Country          string `json:"country"`
+	Zip              string `json:"zip"`
 }
 type updateLocationResponse struct {
 	Location *domain.Location `json:"location"`
@@ -90,8 +112,10 @@ type updateLocationResponse struct {
 
 func makeUpdateLocationEndpoint(s application.LocationsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(updateLocationRequest)
-		location, err := s.UpdateLocation(req.ID, req.FirstName, req.LastName, req.Email, req.Phone)
+		r := request.(updateLocationRequest)
+		location, err := s.UpdateLocation(
+			r.ID, r.Name, r.Web, r.ContactFirstName, r.ContactLastName, r.ContactEmail,
+			r.Phone1, r.Phone2, r.Address1, r.Address2, r.City, r.County, r.State, r.Country, r.Zip)
 		return updateLocationResponse{Location: location}, err
 	}
 }

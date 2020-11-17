@@ -11,9 +11,15 @@ ENV GO111MODULE=on \
 # Move to working directory /build
 WORKDIR /build
 
+# Copy go.mod and go.sum files to the workspace
+COPY "locations/go.mod" . 
+COPY "locations/go.sum" .
+
+# Get dependancies
+RUN go mod download
+
 # Copy the code into the container
 COPY "locations/" .
-
 
 # Build the application
 RUN go build 

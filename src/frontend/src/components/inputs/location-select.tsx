@@ -21,7 +21,7 @@ interface Props {
 const filterOptions = createFilterOptions({
   matchFrom: "any",
   limit: 50,
-  stringify: (option: Location) => `${option.name} ${option.address}`,
+  stringify: (option: Location) => `${option.name} ${option.address1}`,
 });
 
 export function LocationSelect({ onChange }: Props) {
@@ -60,8 +60,8 @@ function renderAutocompleteOption(
 ) {
   const nameMatches = match(option.name, inputValue);
   const nameParts = parse(option.name, nameMatches);
-  const addressMatches = match(option.address, inputValue);
-  const addressParts = parse(option.address, addressMatches);
+  const addressMatches = match(option.address1, inputValue);
+  const addressParts = parse(option.address1, addressMatches);
 
   return (
     <div>
@@ -105,18 +105,20 @@ function renderAutocompleteOption(
 }
 
 export interface Location {
+  address1: string;
+  address2?: string;
+  city: string;
+  contact_email: string;
   contact_first_name: string;
   contact_last_name: string;
-  name: string;
-  address: string;
-  city: string;
   county: string;
-  state: string;
-  zip: string;
+  name: string;
   phone1: string;
   phone2: string;
-  contact_email: string;
+  state: string;
+  country?: string;
   web: string;
+  zip: string;
 }
 
 const locations: Location[] = [
@@ -124,7 +126,7 @@ const locations: Location[] = [
     contact_first_name: "Merilyn",
     contact_last_name: "Bayless",
     name: "20 20 Printing Inc",
-    address: "195 13n N",
+    address1: "195 13n N",
     city: "Santa Clara",
     county: "Santa Clara",
     state: "CA",
@@ -138,7 +140,7 @@ const locations: Location[] = [
     contact_first_name: "Beckie",
     contact_last_name: "Silvestrini",
     name: "A All American Travel Inc",
-    address: "7116 Western Ave",
+    address1: "7116 Western Ave",
     city: "Dearborn",
     county: "Wayne",
     state: "MI",
@@ -152,7 +154,7 @@ const locations: Location[] = [
     contact_first_name: "Tamar",
     contact_last_name: "Hoogland",
     name: "A K Construction Co",
-    address: "2737 Pistorio Rd #9230",
+    address1: "2737 Pistorio Rd #9230",
     city: "London",
     county: "Madison",
     state: "OH",
@@ -166,7 +168,7 @@ const locations: Location[] = [
     contact_first_name: "Joesph",
     contact_last_name: "Degonia",
     name: "A R Packaging",
-    address: "2887 Knowlton St #5435",
+    address1: "2887 Knowlton St #5435",
     city: "Berkeley",
     county: "Alameda",
     state: "CA",
@@ -180,7 +182,7 @@ const locations: Location[] = [
     contact_first_name: "Lavera",
     contact_last_name: "Perin",
     name: "Abc Enterprises Inc",
-    address: "678 3rd Ave",
+    address1: "678 3rd Ave",
     city: "Miami",
     county: "Miami-Dade",
     state: "FL",
@@ -194,7 +196,7 @@ const locations: Location[] = [
     contact_first_name: "Jeanice",
     contact_last_name: "Claucherty",
     name: "Accurel Systems Intrntl Corp",
-    address: "19 Amboy Ave",
+    address1: "19 Amboy Ave",
     city: "Miami",
     county: "Miami-Dade",
     state: "FL",
@@ -208,7 +210,7 @@ const locations: Location[] = [
     contact_first_name: "Martina",
     contact_last_name: "Staback",
     name: "Ace Signs Inc",
-    address: "7 W Wabansia Ave #227",
+    address1: "7 W Wabansia Ave #227",
     city: "Orlando",
     county: "Orange",
     state: "FL",
@@ -222,7 +224,7 @@ const locations: Location[] = [
     contact_first_name: "Diane",
     contact_last_name: "Devreese",
     name: "Acme Supply Co",
-    address: "1953 Telegraph Rd",
+    address1: "1953 Telegraph Rd",
     city: "Saint Joseph",
     county: "Buchanan",
     state: "MO",
@@ -236,7 +238,7 @@ const locations: Location[] = [
     contact_first_name: "Lashandra",
     contact_last_name: "Klang",
     name: "Acqua Group",
-    address: "810 N La Brea Ave",
+    address1: "810 N La Brea Ave",
     city: "King of Prussia",
     county: "Montgomery",
     state: "PA",
@@ -250,7 +252,7 @@ const locations: Location[] = [
     contact_first_name: "Bulah",
     contact_last_name: "Padilla",
     name: "Admiral Party Rentals & Sales",
-    address: "8927 Vandever Ave",
+    address1: "8927 Vandever Ave",
     city: "Waco",
     county: "McLennan",
     state: "TX",
@@ -264,7 +266,7 @@ const locations: Location[] = [
     contact_first_name: "Weldon",
     contact_last_name: "Acuff",
     name: "Advantage Martgage Company",
-    address: "73 W Barstow Ave",
+    address1: "73 W Barstow Ave",
     city: "Arlington Heights",
     county: "Cook",
     state: "IL",
@@ -278,7 +280,7 @@ const locations: Location[] = [
     contact_first_name: "Chauncey",
     contact_last_name: "Motley",
     name: "Affiliated With Travelodge",
-    address: "63 E Aurora Dr",
+    address1: "63 E Aurora Dr",
     city: "Orlando",
     county: "Orange",
     state: "FL",
@@ -292,7 +294,7 @@ const locations: Location[] = [
     contact_first_name: "Sarah",
     contact_last_name: "Candlish",
     name: "Alabama Educational Tv Comm",
-    address: "45 2nd Ave #9759",
+    address1: "45 2nd Ave #9759",
     city: "Atlanta",
     county: "Fulton",
     state: "GA",
@@ -306,7 +308,7 @@ const locations: Location[] = [
     contact_first_name: "Benedict",
     contact_last_name: "Sama",
     name: "Alexander & Alexander Inc",
-    address: "4923 Carey Ave",
+    address1: "4923 Carey Ave",
     city: "Saint Louis",
     county: "Saint Louis City",
     state: "MO",
@@ -320,7 +322,7 @@ const locations: Location[] = [
     contact_first_name: "Laticia",
     contact_last_name: "Merced",
     name: "Alinabal Inc",
-    address: "72 Mannix Dr",
+    address1: "72 Mannix Dr",
     city: "Cincinnati",
     county: "Hamilton",
     state: "OH",
@@ -334,7 +336,7 @@ const locations: Location[] = [
     contact_first_name: "Blondell",
     contact_last_name: "Pugh",
     name: "Alpenlite Inc",
-    address: "201 Hawk Ct",
+    address1: "201 Hawk Ct",
     city: "Providence",
     county: "Providence",
     state: "RI",
@@ -348,7 +350,7 @@ const locations: Location[] = [
     contact_first_name: "Nu",
     contact_last_name: "Mcnease",
     name: "Amazonia Film Project",
-    address: "88 Sw 28th Ter",
+    address1: "88 Sw 28th Ter",
     city: "Harrison",
     county: "Hudson",
     state: "NJ",
@@ -362,7 +364,7 @@ const locations: Location[] = [
     contact_first_name: "Moon",
     contact_last_name: "Parlato",
     name: "Ambelang, Jessica M Md",
-    address: "74989 Brandon St",
+    address1: "74989 Brandon St",
     city: "Wellsville",
     county: "Allegany",
     state: "NY",
@@ -376,7 +378,7 @@ const locations: Location[] = [
     contact_first_name: "Celeste",
     contact_last_name: "Korando",
     name: "American Arts & Graphics",
-    address: "7 W Pinhook Rd",
+    address1: "7 W Pinhook Rd",
     city: "Lynbrook",
     county: "Nassau",
     state: "NY",
@@ -390,7 +392,7 @@ const locations: Location[] = [
     contact_first_name: "Matthew",
     contact_last_name: "Neither",
     name: "American Council On Sci & Hlth",
-    address: "636 Commerce Dr #42",
+    address1: "636 Commerce Dr #42",
     city: "Shakopee",
     county: "Scott",
     state: "MN",
@@ -404,7 +406,7 @@ const locations: Location[] = [
     contact_first_name: "Felix",
     contact_last_name: "Hirpara",
     name: "American Speedy Printing Ctrs",
-    address: "7563 Cornwall Rd #4462",
+    address1: "7563 Cornwall Rd #4462",
     city: "Denver",
     county: "Lancaster",
     state: "PA",
@@ -418,7 +420,7 @@ const locations: Location[] = [
     contact_first_name: "Joseph",
     contact_last_name: "Cryer",
     name: "Ames Stationers",
-    address: "60 Fillmore Ave",
+    address1: "60 Fillmore Ave",
     city: "Huntington Beach",
     county: "Orange",
     state: "CA",
@@ -432,7 +434,7 @@ const locations: Location[] = [
     contact_first_name: "Erinn",
     contact_last_name: "Canlas",
     name: "Anchor Computer Inc",
-    address: "13 S Hacienda Dr",
+    address1: "13 S Hacienda Dr",
     city: "Livingston",
     county: "Essex",
     state: "NJ",
@@ -446,7 +448,7 @@ const locations: Location[] = [
     contact_first_name: "Nelida",
     contact_last_name: "Sawchuk",
     name: "Anchorage Museum Of Hist & Art",
-    address: "3 State Route 35 S",
+    address1: "3 State Route 35 S",
     city: "Paramus",
     county: "Bergen",
     state: "NJ",

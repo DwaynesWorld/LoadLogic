@@ -39,20 +39,34 @@ func (s *instrumentingService) GetAllLocations() (c []domain.Location, err error
 	return s.LocationsService.GetAllLocations()
 }
 
-func (s *instrumentingService) CreateLocation(firstname string, lastname string, email string, phone string) (c *domain.Location, err error) {
+func (s *instrumentingService) CreateLocation(
+	name string, web string, contactFirstName string, contactLastName string,
+	contactEmail string, phone1 string, phone2 string, address1 string, address2 string,
+	city string, county string, state string, country string, zip string) (c *domain.Location, err error) {
+
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "CreateLocation").Add(1)
 		s.requestLatency.With("method", "CreateLocation").Observe(time.Since(begin).Seconds())
 	}(time.Now())
-	return s.LocationsService.CreateLocation(firstname, lastname, email, phone)
+
+	return s.LocationsService.CreateLocation(
+		name, web, contactFirstName, contactLastName, contactEmail, phone1,
+		phone2, address1, address2, city, county, state, country, zip)
 }
 
-func (s *instrumentingService) UpdateLocation(id uint64, firstname string, lastname string, email string, phone string) (c *domain.Location, err error) {
+func (s *instrumentingService) UpdateLocation(
+	id uint64, name string, web string, contactFirstName string, contactLastName string,
+	contactEmail string, phone1 string, phone2 string, address1 string, address2 string,
+	city string, county string, state string, country string, zip string) (c *domain.Location, err error) {
+
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "UpdateLocation").Add(1)
 		s.requestLatency.With("method", "UpdateLocation").Observe(time.Since(begin).Seconds())
 	}(time.Now())
-	return s.LocationsService.UpdateLocation(id, firstname, lastname, email, phone)
+
+	return s.LocationsService.UpdateLocation(
+		id, name, web, contactFirstName, contactLastName, contactEmail, phone1,
+		phone2, address1, address2, city, county, state, country, zip)
 }
 
 func (s *instrumentingService) DeleteLocation(id uint64) (err error) {

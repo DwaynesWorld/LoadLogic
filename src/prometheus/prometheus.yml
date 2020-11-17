@@ -22,6 +22,7 @@ scrape_configs:
       - targets:
           - "ordering-api:80"
           - "customers-api:80"
+          - "locations-api:80"
 
   - job_name: "brokers"
     scrape_interval: 5s
