@@ -35,9 +35,9 @@ services:
       - "9901:9901"
       - "10000:10000"
     volumes:
-      - ./envoy/:/etc/envoy/
+      - ./api-gateway/:/etc/envoy/
 
-  # dispatching_service:
+  # dispatching-api:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -49,7 +49,7 @@ services:
   #   ports:
   #     - "5101:80"
 
-  # hauling_service:
+  # hauling-api:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -61,7 +61,7 @@ services:
   #   ports:
   #     - "5111:80"
 
-  ordering_service:
+  ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -73,7 +73,7 @@ services:
     ports:
       - "5121:80"
 
-  # payments_service:
+  # payments-api:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -85,7 +85,7 @@ services:
   #   ports:
   #     - "5131:80"
 
-  customers_service:
+  customers-api:
     environment:
       - HOST=0.0.0.0
       - PORT=80
@@ -93,7 +93,7 @@ services:
     ports:
       - "5151:80"
 
-  locations_service:
+  locations-api:
     environment:
       - HOST=0.0.0.0
       - PORT=80
@@ -105,7 +105,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - ./monitoring/:/etc/prometheus/
       - loadlogic-prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"

@@ -20,9 +20,9 @@ scrape_configs:
     scrape_interval: 20s
     static_configs:
       - targets:
-          - "ordering_service:80"
-          - "customers_service:80"
-          - "locations_service:80"
+          - "ordering-api:80"
+          - "customers-api:80"
+          - "locations-api:80"
 
   - job_name: "brokers"
     scrape_interval: 20s

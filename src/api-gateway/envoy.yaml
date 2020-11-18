@@ -2,7 +2,7 @@ admin:
   access_log_path: /tmp/admin_access.log
   address:
     socket_address:
-      protocol: TCP
+      protocol: tcp
       address: 0.0.0.0
       port_value: 9901
 static_resources:
@@ -10,7 +10,7 @@ static_resources:
     - name: listener_0
       address:
         socket_address:
-          protocol: TCP
+          protocol: tcp
           address: 0.0.0.0
           port_value: 10000
       filter_chains:
@@ -25,18 +25,39 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-                        - match:
-                            prefix: "/ordering/"
+                        - name: "o-short"
+                          match:
+                            prefix: "/o/"
                           route:
                             prefix_rewrite: "/"
                             cluster: ordering_cluster
-                        - match:
-                            prefix: "/customers/"
+                        - name: "o-long"
+                          match:
+                            prefix: "/ordering-api/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: ordering_cluster
+                        - name: "c-short"
+                          match:
+                            prefix: "/c/"
                           route:
                             prefix_rewrite: "/"
                             cluster: customers_cluster
-                        - match:
-                            prefix: "/locations/"
+                        - name: "c-long"
+                          match:
+                            prefix: "/customers-api/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: customers_cluster
+                        - name: "l-short"
+                          match:
+                            prefix: "/l/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: locations_cluster
+                        - name: "l-long"
+                          match:
+                            prefix: "/locations-api/"
                           route:
                             prefix_rewrite: "/"
                             cluster: locations_cluster
@@ -45,10 +66,10 @@ static_resources:
   clusters:
     - name: ordering_cluster
       connect_timeout: 0.25s
-      type: LOGICAL_DNS
+      type: logical_dns
       # Comment out the following line to test on v6 networks
-      dns_lookup_family: V4_ONLY
-      lb_policy: ROUND_ROBIN
+      dns_lookup_family: v4_only
+      lb_policy: round_robin
       load_assignment:
         cluster_name: ordering_cluster
         endpoints:
@@ -56,14 +77,14 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: ordering_service
+                      address: ordering-api
                       port_value: 80
     - name: customers_cluster
       connect_timeout: 0.25s
-      type: LOGICAL_DNS
+      type: logical_dns
       # Comment out the following line to test on v6 networks
-      dns_lookup_family: V4_ONLY
-      lb_policy: ROUND_ROBIN
+      dns_lookup_family: v4_only
+      lb_policy: round_robin
       load_assignment:
         cluster_name: customers_cluster
         endpoints:
@@ -71,14 +92,14 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: customers_service
+                      address: customers-api
                       port_value: 80
     - name: locations_cluster
       connect_timeout: 0.25s
-      type: LOGICAL_DNS
+      type: logical_dns
       # Comment out the following line to test on v6 networks
-      dns_lookup_family: V4_ONLY
-      lb_policy: ROUND_ROBIN
+      dns_lookup_family: v4_only
+      lb_policy: round_robin
       load_assignment:
         cluster_name: locations_cluster
         endpoints:
@@ -86,5 +107,5 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: locations_service
+                      address: locations-api
                       port_value: 80
