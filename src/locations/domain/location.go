@@ -14,7 +14,7 @@ type Location struct {
 	Address2         string `gorm:"size:100;not null;"                json:"address2"`
 	City             string `gorm:"size:50;not null;"                 json:"city"`
 	County           string `gorm:"size:100;not null;"                json:"county"`
-	State            string `gorm:"size:2;not null;"                  json:"state"`
+	State            string `gorm:"size:10;not null;"                 json:"state"`
 	Country          string `gorm:"size:40;not null;"                 json:"country"`
-	Zip              string `gorm:"size:2;not null;"                  json:"zip"`
+	Zip              string `gorm:"size:20;not null;"                 json:"zip"`
 }

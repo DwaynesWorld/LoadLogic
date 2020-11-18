@@ -10,8 +10,11 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
-  # dispatching-api:
-  #   image: ${REGISTRY:-kt713}/dispatching.api:${PLATFORM:-linux}-${TAG:-latest}
+  envoy:
+    image: envoyproxy/envoy:v1.16.0
+
+  # dispatching_service:
+  #   image: ${REGISTRY:-kt713}/dispatching_service:${PLATFORM:-linux}-${TAG:-latest}
   #   build:
   #     context: .
   #     dockerfile: dispatching/~/Dockerfile
@@ -20,8 +23,8 @@ services:
   #     - seq
   #     - rabbitmq
 
-  # hauling-api:
-  #   image: ${REGISTRY:-kt713}/hauling.api:${PLATFORM:-linux}-${TAG:-latest}
+  # hauling_service:
+  #   image: ${REGISTRY:-kt713}/hauling_service:${PLATFORM:-linux}-${TAG:-latest}
   #   build:
   #     context: .
   #     dockerfile: hauling/~/Dockerfile
@@ -30,8 +33,8 @@ services:
   #     - seq
   #     - rabbitmq
 
-  ordering-api:
-    image: ${REGISTRY:-kt713}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
+  ordering_service:
+    image: ${REGISTRY:-kt713}/ordering_service:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: ordering/Ordering/Dockerfile
@@ -40,8 +43,8 @@ services:
       - seq
       - rabbitmq
 
-  # payments-api:
-  #   image: ${REGISTRY:-kt713}/payments.api:${PLATFORM:-linux}-${TAG:-latest}
+  # payments_service:
+  #   image: ${REGISTRY:-kt713}/payments_service:${PLATFORM:-linux}-${TAG:-latest}
   #   build:
   #     context: .
   #     dockerfile: payments/~/Dockerfile
@@ -50,8 +53,8 @@ services:
   #     - seq
   #     - rabbitmq
 
-  customers-api:
-    image: ${REGISTRY:-kt713}/customers.api:${PLATFORM:-linux}-${TAG:-latest}
+  customers_service:
+    image: ${REGISTRY:-kt713}/customers_service:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: customers/Dockerfile
@@ -69,8 +72,8 @@ services:
       - seq
       - rabbitmq
 
-  locations-api:
-    image: ${REGISTRY:-kt713}/locations.api:${PLATFORM:-linux}-${TAG:-latest}
+  locations_service:
+    image: ${REGISTRY:-kt713}/locations_service:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: locations/Dockerfile
@@ -91,5 +94,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     depends_on:
-      - ordering-api
-      - customers-api
+      - rabbitmq
+      - ordering_service
+      - customers_service
+      - locations_service

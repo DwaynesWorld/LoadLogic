@@ -30,7 +30,14 @@ services:
       - loadlogic-rabbitmq_log:/var/log/rabbitmq
       - loadlogic-rabbitmq_data:/var/lib/rabbitmq
 
-  # dispatching-api:
+  envoy:
+    ports:
+      - "9901:9901"
+      - "10000:10000"
+    volumes:
+      - ./envoy/:/etc/envoy/
+
+  # dispatching_service:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -42,7 +49,7 @@ services:
   #   ports:
   #     - "5101:80"
 
-  # hauling-api:
+  # hauling_service:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -54,7 +61,7 @@ services:
   #   ports:
   #     - "5111:80"
 
-  ordering-api:
+  ordering_service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -66,7 +73,7 @@ services:
     ports:
       - "5121:80"
 
-  # payments-api:
+  # payments_service:
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -78,7 +85,7 @@ services:
   #   ports:
   #     - "5131:80"
 
-  customers-api:
+  customers_service:
     environment:
       - HOST=0.0.0.0
       - PORT=80
@@ -86,7 +93,7 @@ services:
     ports:
       - "5151:80"
 
-  locations-api:
+  locations_service:
     environment:
       - HOST=0.0.0.0
       - PORT=80
@@ -101,5 +108,5 @@ services:
       - ./prometheus/:/etc/prometheus/
       - loadlogic-prometheus_data:/prometheus
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--config.file=/etc/prometheus/prometheus.yaml"
       - "--storage.tsdb.path=/prometheus"
