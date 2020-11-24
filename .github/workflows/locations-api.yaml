@@ -34,4 +34,4 @@ jobs:
           file: ./src/locations/Dockerfile
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: loadlogicacr.azurecr.io/locations-api:latest, loadlogicacr.azurecr.io/locations-api:${GITHUB_SHA::8}
+          tags: loadlogicacr.azurecr.io/locations-api:latest

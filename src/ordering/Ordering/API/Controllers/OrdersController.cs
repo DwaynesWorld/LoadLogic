@@ -27,7 +27,7 @@ namespace LoadLogic.Services.Ordering.API.Controllers
         public async Task<IActionResult> GetOrder(CancellationToken cancellationToken)
         {
             await Task.Yield();
-            var order = new OrderDto(100, 1, "John Doe", (Email)"john.doe@example.com");
+            var order = new OrderDto(100, 1, "John Does", (Email)"john.doe@example.com");
             return Ok(order);
         }
 
