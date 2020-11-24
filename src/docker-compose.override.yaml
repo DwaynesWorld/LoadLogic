@@ -37,59 +37,23 @@ services:
     volumes:
       - ./api-gateway/:/etc/envoy/
 
-  # dispatching-api:
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://0.0.0.0:80
-  #     - PORT=80
-  #     - DatabaseConnection=${DISPATCHING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_DispatchingDB;User Id=sa;Password=Pass@word}
-  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-  #   ports:
-  #     - "5101:80"
-
-  # hauling-api:
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://0.0.0.0:80
-  #     - PORT=80
-  #     - DatabaseConnection=${HAULING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_HaulingDB;User Id=sa;Password=Pass@word}
-  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-  #   ports:
-  #     - "5111:80"
-
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - DatabaseConnection=${ORDERING_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
-      - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-      - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-      - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
+      - DATABASE_CONNECTION_STRING=${ORDERING_DB_CONNECTION_STRING:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
+      - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING:-rabbitmq}
+      - EVENTBUS_USERNAME=${EVENTBUS_USERNAME:-guest}
+      - EVENTBUS_PASSWORD=${EVENTBUS_PASSWORD:-guest}
     ports:
       - "5121:80"
-
-  # payments-api:
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://0.0.0.0:80
-  #     - PORT=80
-  #     - DatabaseConnection=${PAYMENTS_DB_CONNECTION:-Server=sqlserver;Database=LoadLogic_PaymentsDB;User Id=sa;Password=Pass@word}
-  #     - EventBusConnection=${EVENT_BUS_CONNECTION:-rabbitmq}
-  #     - EventBusUserName=${EVENT_BUS_USERNAME:-guest}
-  #     - EventBusPassword=${EVENT_BUS_PASSWORD:-guest}
-  #   ports:
-  #     - "5131:80"
 
   customers-api:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - DatabaseConnection=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
+      - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
     ports:
       - "5151:80"
 
@@ -97,7 +61,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - DatabaseConnection=${LOCATIONS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
+      - DATABASE_CONNECTION_STRING=${LOCATIONS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
     ports:
       - "5161:80"
 

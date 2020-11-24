@@ -79,7 +79,7 @@ func setupLoggers() (*log.Entry, *log.Entry) {
 }
 
 func setupPersistence(logger *log.Entry) *gorm.DB {
-	dsn := envString("DatabaseConnection", defaultDsn, true)
+	dsn := envString("DATABASE_CONNECTION_STRING", defaultDsn, true)
 
 	db, err := persistence.NewSQL(dsn)
 	if err != nil {

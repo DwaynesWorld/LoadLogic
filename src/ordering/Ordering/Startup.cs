@@ -41,7 +41,7 @@ namespace LoadLogic.Services.Ordering
 
             services.AddDbContext<OrderingContext>(options =>
             {
-                var connectionString = Configuration.GetValue<string>("DatabaseConnection");
+                var connectionString = Configuration.GetValue<string>("DATABASE_CONNECTION_STRING");
                 options.UseSqlServer(connectionString, sqlOptions =>
                 {
                     sqlOptions.UseNetTopologySuite();
@@ -78,9 +78,9 @@ namespace LoadLogic.Services.Ordering
             busConfig.SetKebabCaseEndpointNameFormatter();
             busConfig.UsingRabbitMq((context, factoryConfig) =>
             {
-                var connection = Configuration.GetValue<string>("EventBusConnection");
-                var username = Configuration.GetValue<string>("EventBusUserName");
-                var password = Configuration.GetValue<string>("EventBusPassword");
+                var connection = Configuration.GetValue<string>("EVENTBUS_CONNECTION_STRING");
+                var username = Configuration.GetValue<string>("EVENTBUS_USERNAME");
+                var password = Configuration.GetValue<string>("EVENTBUS_PASSWORD");
 
                 factoryConfig.UseHealthCheck(context);
                 factoryConfig.Host(connection, hostConfig =>

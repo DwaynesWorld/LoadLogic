@@ -13,28 +13,8 @@ services:
   envoy:
     image: envoyproxy/envoy:v1.16.0
 
-  # dispatching-api:
-  #   image: ${REGISTRY:-kt713}/dispatching-api:${PLATFORM:-linux}-${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: dispatching/~/Dockerfile
-  #   depends_on:
-  #     - sqlserver
-  #     - seq
-  #     - rabbitmq
-
-  # hauling-api:
-  #   image: ${REGISTRY:-kt713}/hauling-api:${PLATFORM:-linux}-${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: hauling/~/Dockerfile
-  #   depends_on:
-  #     - sqlserver
-  #     - seq
-  #     - rabbitmq
-
   ordering-api:
-    image: ${REGISTRY:-kt713}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-kt713}/ordering-api:${TAG:-latest}
     build:
       context: .
       dockerfile: ordering/Ordering/Dockerfile
@@ -43,49 +23,21 @@ services:
       - seq
       - rabbitmq
 
-  # payments-api:
-  #   image: ${REGISTRY:-kt713}/payments-api:${PLATFORM:-linux}-${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: payments/~/Dockerfile
-  #   depends_on:
-  #     - sqlserver
-  #     - seq
-  #     - rabbitmq
-
   customers-api:
-    image: ${REGISTRY:-kt713}/customers-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-kt713}/customers-api:${TAG:-latest}
     build:
       context: .
       dockerfile: customers/Dockerfile
-    entrypoint:
-      [
-        "/dist/wait-for-it.sh",
-        "sqlserver:1433",
-        "-t",
-        "120",
-        "--",
-        "/dist/customers",
-      ]
     depends_on:
       - sqlserver
       - seq
       - rabbitmq
 
   locations-api:
-    image: ${REGISTRY:-kt713}/locations-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-kt713}/locations-api:${TAG:-latest}
     build:
       context: .
       dockerfile: locations/Dockerfile
-    entrypoint:
-      [
-        "/dist/wait-for-it.sh",
-        "sqlserver:1433",
-        "-t",
-        "120",
-        "--",
-        "/dist/locations",
-      ]
     depends_on:
       - sqlserver
       - seq

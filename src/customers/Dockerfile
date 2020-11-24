@@ -27,9 +27,6 @@ RUN go build
 # Move to /dist directory as the place for resulting binary folder
 WORKDIR /dist
 
-COPY wait-for-it.sh wait-for-it.sh
-RUN chmod +x wait-for-it.sh
-
 # Copy binary from build to main folder
 RUN cp /build/customers .
 
