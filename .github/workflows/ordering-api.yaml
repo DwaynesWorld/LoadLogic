@@ -1,0 +1,37 @@
+name: ordering-api-workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/ordering/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+
+      - name: Set Up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: loadlogicacr.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./src
+          file: ./src/ordering/Ordering/Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: loadlogicacr.azurecr.io/ordering-api:latest, loadlogicacr.azurecr.io/ordering-api:${GITHUB_SHA::8}

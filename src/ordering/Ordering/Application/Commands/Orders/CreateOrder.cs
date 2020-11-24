@@ -8,9 +8,9 @@ using Prometheus;
 
 namespace LoadLogic.Services.Ordering.Application.Commands.Orders
 {
-    public sealed class CreateOrder : IRequest<long>
+    public sealed class CreateOrderCommand : IRequest<long>
     {
-        public CreateOrder(
+        public CreateOrderCommand(
             long customerId, string customerName,
             Email customerEmail, PhoneNumber customerPhone,
             string jobName, string jobDescription, Address jobAddress,
@@ -38,19 +38,19 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
         public DateTime? JobEndDate { get; }
     }
 
-    internal class CreateOrderHandler : IRequestHandler<CreateOrder, long>
+    internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, long>
     {
         private static readonly Counter _createOrderCount = Metrics.CreateCounter("ordering_create_order_total", "Number of orders created.");
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IOrderRepository _orderRepository;
 
-        public CreateOrderHandler(IPublishEndpoint publishEndpoint, IOrderRepository orderRepository)
+        public CreateOrderCommandHandler(IPublishEndpoint publishEndpoint, IOrderRepository orderRepository)
         {
             _publishEndpoint = publishEndpoint;
             _orderRepository = orderRepository;
         }
 
-        public async Task<long> Handle(CreateOrder request, CancellationToken cancellationToken)
+        public async Task<long> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var orderNo = await _orderRepository.GetNextOrderNo(cancellationToken);
 

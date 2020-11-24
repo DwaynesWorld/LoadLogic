@@ -1,0 +1,36 @@
+version: "3.4"
+
+services:
+  ordering-api:
+    image: ${REGISTRY:}/ordering-api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ordering/Ordering/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+      # - DATABASE_CONNECTION_STRING=${ORDERING_DB_CONNECTION_STRING}
+      # - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING}
+      # - EVENTBUS_USERNAME=${EVENTBUS_USERNAME}
+      # - EVENTBUS_PASSWORD=${EVENTBUS_PASSWORD}
+
+  customers-api:
+    image: ${REGISTRY:-kt713}/customers-api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: customers/Dockerfile
+    environment:
+      - HOST=0.0.0.0
+      - PORT=80
+      # - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB_CONNECTION_STRING}
+
+  locations-api:
+    image: ${REGISTRY:-kt713}/locations-api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: locations/Dockerfile
+    environment:
+      - HOST=0.0.0.0
+      - PORT=80
+      # - DATABASE_CONNECTION_STRING=${LOCATIONS_DB_CONNECTION_STRING}
