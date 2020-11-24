@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: Build & Push Images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
