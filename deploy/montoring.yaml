@@ -16,8 +16,6 @@ spec:
       containers:
       - name: monitoring
         image: loadlogicacr.azurecr.io/monitoring:latest
-        imagePullSecrets:
-          - name: acr-registry-secrets
         resources:
           limits:
             memory: "1024Mi"
@@ -25,6 +23,8 @@ spec:
         ports:
         - name: http
           containerPort: 9090
+      imagePullSecrets:
+        - name: acr-registry-secrets
 ---
 apiVersion: v1
 kind: Service

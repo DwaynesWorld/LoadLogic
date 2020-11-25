@@ -16,8 +16,6 @@ spec:
       containers:
       - name: api-gateway
         image: loadlogicacr.azurecr.io/api-gateway:latest
-        imagePullSecrets:
-          - name: acr-registry-secrets
         resources:
           limits:
             memory: "1024Mi"
@@ -27,6 +25,8 @@ spec:
           containerPort: 10000
         - name: envoy-admin
           containerPort: 9901
+      imagePullSecrets:
+        - name: acr-registry-secrets
 ---
 apiVersion: v1
 kind: Service

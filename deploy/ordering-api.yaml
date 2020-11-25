@@ -15,8 +15,6 @@ spec:
       containers:
       - name: ordering-api
         image: loadlogicacr.azurecr.io/ordering-api:latest
-        imagePullSecrets:
-          - name: acr-registry-secrets
         env:
         - name: "ASPNETCORE_ENVIRONMENT"
           value: "Development"
@@ -27,6 +25,7 @@ spec:
         - name: "DATABASE_CONNECTION_STRING"
           valueFrom:
             secretKeyRef:
+              name: db-connection-strings
               key: orderingdb
         - name: "EVENTBUS_CONNECTION_STRING"
           value: "rabbitmq"
@@ -50,3 +49,5 @@ spec:
           httpGet:
             path: /health
             port: 80
+      imagePullSecrets:
+        - name: acr-registry-secrets
