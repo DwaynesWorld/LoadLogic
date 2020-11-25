@@ -12,3 +12,6 @@ k create secret generic db-connection-strings \
   --from-literal=customersdb=$CUSTOMERS_DB \
   --from-literal=locationsdb=$LOCATIONS_DB
 
+
+# Getting a dashboard bearer token
+k -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')

@@ -71,14 +71,14 @@ namespace LoadLogic.Services.Ordering
 
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
-            var seqServerUrl = configuration.GetValue<string>("Serilog:SeqServerUrl");
+            var seqServerUrl = configuration.GetValue<string>("SEQ_SERVER_URL");
 
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", AppName)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-                .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
+                .WriteTo.Seq(seqServerUrl)
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
