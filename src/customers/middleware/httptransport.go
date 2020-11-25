@@ -7,22 +7,23 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-
-	kithttp "github.com/go-kit/kit/transport/http"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	log "github.com/sirupsen/logrus"
+	"time"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/domain"
+	"github.com/etherlabsio/healthcheck"
+	kithttp "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	log "github.com/sirupsen/logrus"
 )
 
 // NewHTTPTransport creates an HTTP transport for the customer service.
 func NewHTTPTransport(endpoints EndpointSet, httpLogger *log.Entry) {
 	mux := http.NewServeMux()
 	mux.Handle("/v1/", newHTTPHandler(endpoints, httpLogger))
-
 	http.Handle("/", cors(mux))
 	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/health", newHealthCheckHandler())
 }
 
 func newHTTPHandler(endpoints EndpointSet, logger *log.Entry) http.Handler {
@@ -73,6 +74,34 @@ func newHTTPHandler(endpoints EndpointSet, logger *log.Entry) http.Handler {
 	r.Handle("/v1/customers/{id:[0-9]+}", getCustomerHandler).Methods(http.MethodGet)
 	r.Handle("/v1/customers/{id:[0-9]+}", updateCustomerHandler).Methods(http.MethodPut)
 	r.Handle("/v1/customers/{id:[0-9]+}", deleteCustomerHandler).Methods(http.MethodDelete)
+
+	return r
+}
+
+func newHealthCheckHandler() http.Handler {
+	r := mux.NewRouter()
+	r.Handle("/health", healthcheck.Handler(
+		// WithTimeout allows you to set a max overall timeout.
+		healthcheck.WithTimeout(5*time.Second),
+
+		// // Checkers fail the status in case of any error.
+		// healthcheck.WithChecker(
+		// 	"heartbeat", checkers.Heartbeat("$PROJECT_PATH/heartbeat"),
+		// ),
+
+		// healthcheck.WithChecker(
+		// 	"database", healthcheck.CheckerFunc(
+		// 		func(ctx context.Context) error {
+		// 			return db.PingContext(ctx)
+		// 		},
+		// 	),
+		// ),
+
+		// // Observers do not fail the status in case of error.
+		// healthcheck.WithObserver(
+		// 	"diskspace", checkers.DiskSpace("/var/log", 90),
+		// ),
+	))
 
 	return r
 }

@@ -3,6 +3,7 @@ module github.com/DwaynesWorld/LoadLogic/src/locations
 go 1.15
 
 require (
+	github.com/etherlabsio/healthcheck v0.0.0-20191224061800-dd3d2fd8c3f6
 	github.com/go-kit/kit v0.10.0
 	github.com/gorilla/mux v1.8.0
 	github.com/nullseed/logruseq v0.0.0-20191022112445-275e5c09bb04

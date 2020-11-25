@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ordering-api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ordering-api
+  template:
+    metadata:
+      labels:
+        app: ordering-api
+    spec:
+      containers:
+      - name: ordering-api
+        image: loadlogicacr.azurecr.io/ordering-api:latest
+        imagePullSecrets:
+          - name: acr-registry-secrets
+        env:
+        - name: "ASPNETCORE_ENVIRONMENT"
+          value: "Development"
+        - name: "ASPNETCORE_URLS"
+          value: "http://0.0.0.0:80"
+        - name: "PORT"
+          value: "80"
+        - name: "DATABASE_CONNECTION_STRING"
+          valueFrom:
+            secretKeyRef:
+              key: orderingdb
+        - name: "EVENTBUS_CONNECTION_STRING"
+          value: "rabbitmq"
+        - name: "EVENTBUS_USERNAME"
+          value: "guest"
+        - name: "EVENTBUS_PASSWORD"
+          value: "guest"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          initialDelaySeconds: 45
+          httpGet:
+            path: /health
+            port: 80
+        readinessProbe:
+          initialDelaySeconds: 45
+          httpGet:
+            path: /health
+            port: 80

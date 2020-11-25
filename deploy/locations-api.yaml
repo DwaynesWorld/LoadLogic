@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: locations-api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: locations-api
+  template:
+    metadata:
+      labels:
+        app: locations-api
+    spec:
+      containers:
+      - name: locations-api
+        image: loadlogicacr.azurecr.io/locations-api:latest
+        imagePullSecrets:
+          - name: acr-registry-secrets
+        env:
+        - name: "HOST"
+          value: "0.0.0.0"
+        - name: "PORT"
+          value: "80"
+        - name: "DATABASE_CONNECTION_STRING"
+          valueFrom:
+            secretKeyRef:
+              key: locationsdb
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          initialDelaySeconds: 45
+          httpGet:
+            path: /health
+            port: 80
+        readinessProbe:
+          initialDelaySeconds: 45
+          httpGet:
+            path: /health
+            port: 80

@@ -42,7 +42,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - DATABASE_CONNECTION_STRING=${ORDERING_DB_CONNECTION_STRING:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
+      - DATABASE_CONNECTION_STRING=${ORDERING_DB:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
       - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING:-rabbitmq}
       - EVENTBUS_USERNAME=${EVENTBUS_USERNAME:-guest}
       - EVENTBUS_PASSWORD=${EVENTBUS_PASSWORD:-guest}
@@ -53,7 +53,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
+      - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
     ports:
       - "5151:80"
 
@@ -61,7 +61,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - DATABASE_CONNECTION_STRING=${LOCATIONS_DB_CONNECTION:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
+      - DATABASE_CONNECTION_STRING=${LOCATIONS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
     ports:
       - "5161:80"
 

@@ -1,6 +1,7 @@
 name: ordering-api-workflow
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -9,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Images
+    name: Build & Push Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
