@@ -66,7 +66,7 @@ static_resources:
   clusters:
     - name: ordering_cluster
       connect_timeout: 0.25s
-      type: logical_dns
+      type: strict_dns
       # Comment out the following line to test on v6 networks
       dns_lookup_family: v4_only
       lb_policy: round_robin
@@ -77,11 +77,11 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: ordering-api
+                      address: ordering-api-service
                       port_value: 80
     - name: customers_cluster
       connect_timeout: 0.25s
-      type: logical_dns
+      type: strict_dns
       # Comment out the following line to test on v6 networks
       dns_lookup_family: v4_only
       lb_policy: round_robin
@@ -92,11 +92,11 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: customers-api
+                      address: customers-api-service
                       port_value: 80
     - name: locations_cluster
       connect_timeout: 0.25s
-      type: logical_dns
+      type: strict_dns
       # Comment out the following line to test on v6 networks
       dns_lookup_family: v4_only
       lb_policy: round_robin
@@ -107,5 +107,5 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: locations-api
+                      address: locations-api-service
                       port_value: 80
