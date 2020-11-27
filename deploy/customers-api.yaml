@@ -1,7 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-api-service
+  labels:
+    app: customers-api
+spec:
+  type: ClusterIP
+  selector:
+    app: customers-api
+  ports:
+  - port: 80
+    targetPort: 80
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: customers-api-deployment
+  name: customers-api
+  labels:
+    app: customers-api
 spec:
   replicas: 2
   selector:
@@ -20,6 +36,8 @@ spec:
           value: "0.0.0.0"
         - name: "PORT"
           value: "80"
+        - name: "SEQ"
+          value: "http://seq-service"
         - name: "DATABASE_CONNECTION_STRING"
           valueFrom:
             secretKeyRef:

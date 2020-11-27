@@ -1,7 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: locations-api-service
+  labels:
+    app: locations-api
+spec:
+  type: ClusterIP
+  selector:
+    app: locations-api
+  ports:
+  - port: 80
+    targetPort: 80
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: locations-api-deployment
+  name: locations-api
+  labels:
+    app: locations-api
 spec:
   replicas: 2
   selector:
@@ -20,6 +36,8 @@ spec:
           value: "0.0.0.0"
         - name: "PORT"
           value: "80"
+        - name: "SEQ"
+          value: "http://seq-service"
         - name: "DATABASE_CONNECTION_STRING"
           valueFrom:
             secretKeyRef:
