@@ -7,7 +7,7 @@ volumes:
   loadlogic-rabbitmq_data:
 
 services:
-  seq:
+  seq-service:
     environment:
       - ACCEPT_EULA=Y
     ports:
@@ -22,7 +22,7 @@ services:
     volumes:
       - loadlogic-sql_data:/var/opt/mssql
 
-  rabbitmq:
+  rabbitmq-service:
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -37,35 +37,38 @@ services:
     volumes:
       - ./api-gateway/:/etc/envoy/
 
-  ordering-api:
+  ordering-api-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
+      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
       - DATABASE_CONNECTION_STRING=${ORDERING_DB:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
-      - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING:-rabbitmq}
+      - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING:-rabbitmq-service}
       - EVENTBUS_USERNAME=${EVENTBUS_USERNAME:-guest}
       - EVENTBUS_PASSWORD=${EVENTBUS_PASSWORD:-guest}
     ports:
       - "5121:80"
 
-  customers-api:
+  customers-api-service:
     environment:
       - HOST=0.0.0.0
       - PORT=80
+      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
       - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
     ports:
       - "5151:80"
 
-  locations-api:
+  locations-api-service:
     environment:
       - HOST=0.0.0.0
       - PORT=80
+      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
       - DATABASE_CONNECTION_STRING=${LOCATIONS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
     ports:
       - "5161:80"
 
-  prometheus:
+  monitoring-service:
     ports:
       - "9090:9090"
     volumes:

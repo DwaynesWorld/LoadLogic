@@ -1,19 +1,19 @@
 version: "3.4"
 
 services:
-  seq:
+  seq-service:
     image: datalust/seq:latest
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
-  rabbitmq:
+  rabbitmq-service:
     image: rabbitmq:3-management-alpine
 
   envoy:
     image: envoyproxy/envoy:v1.16.0
 
-  ordering-api:
+  ordering-api-service:
     image: ${REGISTRY:-kt713}/ordering-api:${TAG:-latest}
     build:
       context: .
@@ -23,7 +23,7 @@ services:
       - seq
       - rabbitmq
 
-  customers-api:
+  customers-api-service:
     image: ${REGISTRY:-kt713}/customers-api:${TAG:-latest}
     build:
       context: .
@@ -33,7 +33,7 @@ services:
       - seq
       - rabbitmq
 
-  locations-api:
+  locations-api-service:
     image: ${REGISTRY:-kt713}/locations-api:${TAG:-latest}
     build:
       context: .
@@ -43,7 +43,7 @@ services:
       - seq
       - rabbitmq
 
-  prometheus:
+  monitoring-service:
     image: prom/prometheus:latest
     depends_on:
       - rabbitmq

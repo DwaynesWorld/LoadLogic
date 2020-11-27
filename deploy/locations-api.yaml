@@ -36,7 +36,7 @@ spec:
           value: "0.0.0.0"
         - name: "PORT"
           value: "80"
-        - name: "SEQ"
+        - name: "SEQ_SERVER_URL"
           value: "http://seq-service"
         - name: "DATABASE_CONNECTION_STRING"
           valueFrom:

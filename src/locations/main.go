@@ -63,7 +63,7 @@ func startServer(logger *log.Entry) {
 }
 
 func setupLoggers() (*log.Entry, *log.Entry) {
-	seq := envString("SEQ", defaultSeq, false)
+	seq := envString("SEQ_SERVER_URL", defaultSeq, false)
 
 	base := log.New()
 	base.AddHook(logruseq.NewSeqHook(seq))
