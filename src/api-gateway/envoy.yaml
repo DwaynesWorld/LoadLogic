@@ -5,7 +5,7 @@ admin:
       protocol: tcp
       address: 0.0.0.0
       port_value: 9901
-      
+
 static_resources:
   listeners:
     - name: listener_0
@@ -56,13 +56,13 @@ static_resources:
                             prefix: "/l/"
                           route:
                             prefix_rewrite: "/"
-                            cluster: locations-api-service
+                            cluster: locations_cluster
                         - name: "l-long"
                           match:
                             prefix: "/locations-api/"
                           route:
                             prefix_rewrite: "/"
-                            cluster: locations-api-service
+                            cluster: locations_cluster
                 http_filters:
                   - name: envoy.filters.http.router
   clusters:
@@ -94,13 +94,13 @@ static_resources:
                     socket_address:
                       address: customers-api-service
                       port_value: 80
-    - name: locations-api-service
+    - name: locations_cluster
       connect_timeout: 0.25s
       type: strict_dns
       dns_lookup_family: v4_only
       lb_policy: round_robin
       load_assignment:
-        cluster_name: locations-api-service
+        cluster_name: locations_cluster
         endpoints:
           - lb_endpoints:
               - endpoint:
