@@ -21,10 +21,15 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_http
                 codec_type: AUTO
+                http_filters:
+                  - name: envoy.filters.http.router
                 route_config:
                   name: local_route
                   virtual_hosts:
                     - name: local_service
+                      retry_policy:
+                        retry_on: "5xx, reset, connect-failure"
+                        num_retries: 3
                       domains: ["*"]
                       routes:
                         - name: "o-short"
@@ -63,8 +68,6 @@ static_resources:
                           route:
                             prefix_rewrite: "/"
                             cluster: locations_cluster
-                http_filters:
-                  - name: envoy.filters.http.router
   clusters:
     - name: ordering_cluster
       connect_timeout: 0.25s
