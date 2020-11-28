@@ -10,7 +10,7 @@ spec:
     app: api-gateway
   ports:
   - port: 80
-    targetPort: 10000
+    targetPort: 80
     nodePort: 30000
 ---
 apiVersion: v1
@@ -52,7 +52,7 @@ spec:
             cpu: "200m"
         ports:
         - name: http
-          containerPort: 10000
+          containerPort: 80
         - name: envoy-admin
           containerPort: 9901
       imagePullSecrets:
