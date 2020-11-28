@@ -2,6 +2,7 @@ admin:
   access_log_path: /tmp/admin_access.log
   address:
     socket_address:
+      protocol: tcp
       address: 0.0.0.0
       port_value: 9901
 static_resources:
@@ -9,105 +10,99 @@ static_resources:
     - name: listener_0
       address:
         socket_address:
+          protocol: tcp
           address: 0.0.0.0
-          port_value: 80
+          port_value: 10000
       filter_chains:
         - filters:
-            - name: envoy.http_connection_manager
-              config:
-                codec_type: auto
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager
                 stat_prefix: ingress_http
                 route_config:
                   name: local_route
                   virtual_hosts:
                     - name: local_service
-                      domains: 
-                        - "*"
+                      domains: ["*"]
                       routes:
                         - name: "o-short"
                           match:
                             prefix: "/o/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
                             cluster: ordering_cluster
                         - name: "o-long"
                           match:
                             prefix: "/ordering-api/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
                             cluster: ordering_cluster
                         - name: "c-short"
                           match:
                             prefix: "/c/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
                             cluster: customers_cluster
                         - name: "c-long"
                           match:
                             prefix: "/customers-api/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
                             cluster: customers_cluster
                         - name: "l-short"
                           match:
                             prefix: "/l/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
-                            cluster: locations_cluster
+                            cluster: locations-api-service
                         - name: "l-long"
                           match:
                             prefix: "/locations-api/"
                           route:
-                            auto_host_rewrite: true
                             prefix_rewrite: "/"
-                            cluster: locations_cluster
+                            cluster: locations-api-services
                 http_filters:
-                  - name: envoy.router
-                access_log:
-                  - name: envoy.file_access_log
-                    filter:
-                      not_health_check_filter: {}
-                    config:
-                      json_format:
-                        time: "%START_TIME%"
-                        protocol: "%PROTOCOL%"
-                        duration: "%DURATION%"
-                        request_method: "%REQ(:METHOD)%"
-                        request_host: "%REQ(HOST)%"
-                        path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
-                        response_flags: "%RESPONSE_FLAGS%"
-                        route_name: "%ROUTE_NAME%"
-                        upstream_host: "%UPSTREAM_HOST%"
-                        upstream_cluster: "%UPSTREAM_CLUSTER%"
-                        upstream_local_address: "%UPSTREAM_LOCAL_ADDRESS%"
-                      path: "/tmp/access.log"
+                  - name: envoy.filters.http.router
   clusters:
     - name: ordering_cluster
       connect_timeout: 0.25s
       type: strict_dns
+      dns_lookup_family: v4_only
       lb_policy: round_robin
-      hosts:
-        - socket_address:
-            address: ordering-api-service
-            port_value: 80
+      load_assignment:
+        cluster_name: ordering_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: ordering-api-service
+                      port_value: 80
     - name: customers_cluster
       connect_timeout: 0.25s
       type: strict_dns
+      dns_lookup_family: v4_only
       lb_policy: round_robin
-      hosts:
-        - socket_address:
-            address: customers-api-service
-            port_value: 80
-    - name: locations_cluster
+      load_assignment:
+        cluster_name: customers_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: customers-api-service
+                      port_value: 80
+    - name: locations-api-service
       connect_timeout: 0.25s
       type: strict_dns
+      dns_lookup_family: v4_only
       lb_policy: round_robin
-      hosts:
-        - socket_address:
-            address: locations-api-service
-            port_value: 80
+      load_assignment:
+        cluster_name: locations-api-service
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: locations-api-service
+                      port_value: 80
