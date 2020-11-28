@@ -35,6 +35,15 @@ func NewSQL(dsn string) (*gorm.DB, error) {
 				return nil, err
 			}
 		} else {
+			sql, err := db.DB()
+			if err != nil {
+				return nil, err
+			}
+
+			sql.SetMaxIdleConns(5)
+			sql.SetMaxOpenConns(10000)
+			sql.SetConnMaxLifetime(time.Minute * 5)
+
 			return db, nil
 		}
 	}
