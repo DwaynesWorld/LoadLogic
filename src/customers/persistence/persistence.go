@@ -1,7 +1,10 @@
 package persistence
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 
@@ -52,4 +55,32 @@ func NewInMem() (*gorm.DB, error) {
 // AutoMigrate runs auto migration for given models
 func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(&domain.Customer{})
+}
+
+type customerSeed struct {
+	Customers []domain.Customer `json:"customers"`
+}
+
+// Seed adds initial data to the database
+func Seed(db *gorm.DB) error {
+	file, err := os.Open("customers.json")
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+	result := db.Take(&domain.Customer{})
+
+	if result.RowsAffected == 0 {
+		bytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			return err
+		}
+
+		var seed customerSeed
+		json.Unmarshal(bytes, &seed)
+		db.Debug().Create(&seed.Customers)
+	}
+
+	return nil
 }

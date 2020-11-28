@@ -30,6 +30,9 @@ WORKDIR /dist
 # Copy binary from build to main folder
 RUN cp /build/locations .
 
+# Copy seed data from build to main folder
+RUN cp /build/locations.json .
+
 # Export necessary port
 EXPOSE 80
 

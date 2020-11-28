@@ -95,6 +95,13 @@ func setupPersistence(logger *log.Entry) *gorm.DB {
 		logger.Info("Attempted database migration executed successfully.")
 	}
 
+	err = persistence.Seed(db)
+	if err != nil {
+		logger.Fatal("An error occurred seeding the database.", err)
+	} else {
+		logger.Info("Attempted database seeding executed successfully.")
+	}
+
 	return db
 }
 

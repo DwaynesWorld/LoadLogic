@@ -30,6 +30,9 @@ WORKDIR /dist
 # Copy binary from build to main folder
 RUN cp /build/customers .
 
+# Copy seed data from build to main folder
+RUN cp /build/customers.json .
+
 # Export necessary port
 EXPOSE 80
 
