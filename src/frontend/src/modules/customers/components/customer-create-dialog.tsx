@@ -1,20 +1,132 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-
+import { Box, colors, makeStyles } from "@material-ui/core";
 import { Customer } from "src/api";
-import { Box, makeStyles } from "@material-ui/core";
+import { BaseFormField, InputField } from "src/components";
+import { createCustomer } from "src/api/customers";
 
 type CloseReason = "backdropClick" | "escapeKeyDown" | "cancel";
+
+const PERSON_FIELDS: BaseFormField[] = [
+  {
+    name: "first_name",
+    xs: 12,
+    sm: 6,
+    required: true,
+    title: "First Name",
+    id: "first_name",
+    placeholder: 'ex. "John"',
+    autoComplete: "given-name",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    required: true,
+    title: "Last Name",
+    id: "last_name",
+    name: "last_name",
+    placeholder: 'ex. "Doe"',
+    autoComplete: "family-name",
+  },
+  {
+    xs: 12,
+    title: "Email",
+    id: "email",
+    name: "email",
+    placeholder: 'ex. "john.doe@example.com"',
+    autoComplete: "email",
+  },
+];
+
+const COMPANY_FIELDS: BaseFormField[] = [
+  {
+    xs: 12,
+    sm: 6,
+    title: "Company",
+    id: "company",
+    name: "company",
+    placeholder: 'ex. "John Trucking"',
+    autoComplete: "shipping name",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    title: "Phone",
+    id: "phone",
+    name: "phone",
+    placeholder: "###-###-####",
+    autoComplete: "phone",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    title: "Address",
+    id: "address1",
+    name: "address1",
+    placeholder: "Address line 1",
+    autoComplete: "shipping address-line1",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    id: "address2",
+    name: "address2",
+    title: "Apartment, suite, etc.",
+    placeholder: "Address line 2",
+    autoComplete: "shipping address-line2",
+  },
+
+  {
+    xs: 12,
+    sm: 6,
+    id: "city",
+    name: "city",
+    title: "City",
+    placeholder: "New York",
+    autoComplete: "shipping address-level2",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    id: "state",
+    name: "state",
+    title: "State",
+    placeholder: "State/Province/Region",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    id: "zip",
+    name: "zip",
+    placeholder: "Zip / Postal code",
+    title: "Zip",
+    autoComplete: "shipping postal-code",
+  },
+  {
+    xs: 12,
+    sm: 6,
+    id: "country",
+    name: "country",
+    placeholder: "Country",
+    title: "Country",
+    autoComplete: "shipping country",
+  },
+];
+
+const DEFAULT_CUSTOMER: Customer = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone: "",
+};
 
 interface Props {
   open: boolean;
@@ -23,10 +135,24 @@ interface Props {
 }
 export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
   const styles = useStyles();
+  const [isSaving, setIsSaving] = useState(false);
+  const [customer, setCustomer] = useState(DEFAULT_CUSTOMER);
 
-  function handleSave() {
-    // do something
-    onSaved({} as any);
+  async function handleSave() {
+    setIsSaving(true);
+
+    try {
+      const response = await createCustomer(customer);
+      onSaved(response.data.customer);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsSaving(true);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCustomer({ ...customer, [e.target.name]: e.target.value });
   }
 
   return (
@@ -41,143 +167,63 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
       <DialogTitle id="form-dialog-title">
         <Typography variant="h3">Create a new customer</Typography>
       </DialogTitle>
+      {isSaving && <div>Saving...</div>}
 
-      <DialogContent>
-        {/* <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
-        </DialogContentText> */}
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              required
-              id="firstName"
-              name="firstName"
-              label="First name"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="given-name"
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label="Last name"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="sur-name"
-            />
+      {!isSaving && (
+        <DialogContent>
+          <Grid container spacing={3}>
+            {PERSON_FIELDS.map((f) => (
+              <Grid item xs={f.xs} sm={f.sm}>
+                <InputField {...f} showLabel onChange={handleChange} />
+              </Grid>
+            ))}
+
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox name="saveAddress" value="yes" />}
+                label="Customer is tax exempt"
+              />
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <TextField
-              required
-              id="email"
-              name="email"
-              label="Email"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="email"
-            />
-          </Grid>
-        </Grid>
+          <Box mt={4} pb={2}>
+            <Typography variant="h5" gutterBottom>
+              Billing address
+            </Typography>
+          </Box>
 
-        <Box mt={4}>
-          <Typography variant="h5" gutterBottom>
-            Shipping address
-          </Typography>
-        </Box>
+          <Grid container spacing={3}>
+            {COMPANY_FIELDS.map((f) => (
+              <Grid item xs={f.xs} sm={f.sm}>
+                <InputField {...f} showLabel onChange={handleChange} />
+              </Grid>
+            ))}
 
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="address1"
-              name="address1"
-              label="Address line 1"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="shipping address-line1"
-            />
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox name="saveAddress" checked />}
+                label="Use this address for shipping details"
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="address2"
-              name="address2"
-              label="Address line 2"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="shipping address-line2"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="city"
-              name="city"
-              label="City"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="shipping address-level2"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              id="state"
-              name="state"
-              label="State/Province/Region"
-              fullWidth
-              variant="outlined"
-              size="small"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="zip"
-              name="zip"
-              label="Zip / Postal code"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="shipping postal-code"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="country"
-              name="country"
-              label="Country"
-              fullWidth
-              variant="outlined"
-              size="small"
-              autoComplete="shipping country"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox color="secondary" name="saveAddress" value="yes" />
-              }
-              label="Use this address for payment details"
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
+        </DialogContent>
+      )}
+
       <DialogActions>
-        <Button onClick={(e) => onClose(e, "cancel")} color="primary">
+        <Button
+          className={styles.cancelButton}
+          onClick={(e) => onClose(e, "cancel")}
+          color="primary"
+          variant="contained"
+        >
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary">
+        <Button
+          className={styles.saveButton}
+          onClick={handleSave}
+          color="primary"
+          variant="contained"
+        >
           Save Customer
         </Button>
       </DialogActions>
@@ -194,5 +240,17 @@ const useStyles = makeStyles((theme) => ({
     "& > div.MuiDialog-scrollPaper": {
       alignItems: "flex-start",
     },
+  },
+  cancelButton: {
+    textTransform: "none",
+    fontSize: 15,
+    marginLeft: theme.spacing(),
+    backgroundColor: colors.common.black,
+  },
+  saveButton: {
+    textTransform: "none",
+    fontSize: 15,
+    marginLeft: theme.spacing(),
+    backgroundColor: colors.green[800],
   },
 }));

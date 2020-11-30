@@ -13,9 +13,19 @@ interface CustomersResponse {
   customers: Customer[];
 }
 
-export async function getAllCustomers(path: string) {
+export async function getAllCustomers(path = "/customers") {
   const baseUrl = config.endpoints.customers_baseurl;
   const url = baseUrl + path;
   const response = await axios.get<CustomersResponse>(url);
-  return response.data;
+  return response;
+}
+
+interface CreateCustomerResponse {
+  customer: Customer;
+}
+export async function createCustomer(customer: Customer) {
+  const baseUrl = config.endpoints.customers_baseurl;
+  const url = `${baseUrl}/customers`;
+  const response = await axios.post<CreateCustomerResponse>(url, customer);
+  return response;
 }

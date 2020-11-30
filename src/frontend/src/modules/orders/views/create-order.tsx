@@ -26,7 +26,7 @@ import {
   IconToggleButton,
   LocationSelect,
   Page,
-  FormLabel,
+  InputLabel,
   CustomerSelect,
 } from "src/components";
 
@@ -129,7 +129,7 @@ function JobInfoSection() {
 
         <Box pt={2}>
           <Box pt={1} mr={2}>
-            <FormLabel title="Customer" />
+            <InputLabel title="Customer" />
             <Box pt={1}>
               <CustomerSelect
                 value={customer}
@@ -175,14 +175,14 @@ function HaulingInfoSection() {
     >
       <Box display="flex" flexDirection="column">
         <Box pt={1}>
-          <FormLabel title="Pick-up from" />
+          <InputLabel title="Pick-up from" />
           <Box pt={1}>
             <LocationSelect onChange={handlePickupLocationChange} />
           </Box>
         </Box>
 
         <Box pt={2}>
-          <FormLabel title="Pick-up time" />
+          <InputLabel title="Pick-up time" />
           <Box pt={1}>
             <KeyboardDateTimePicker
               variant="inline"
@@ -220,14 +220,14 @@ function HaulingInfoSection() {
 
       <Box display="flex" flexDirection="column">
         <Box pt={1}>
-          <FormLabel title="Deliver to" />
+          <InputLabel title="Deliver to" />
           <Box pt={1}>
             <LocationSelect onChange={handleDeliveryLocationChange} />
           </Box>
         </Box>
 
         <Box pt={2}>
-          <FormLabel title="Deliver time" />
+          <InputLabel title="Deliver time" />
           <Box pt={1}>
             <KeyboardDateTimePicker
               variant="inline"
@@ -268,35 +268,35 @@ function MaterialSection() {
     >
       <Box display="flex">
         <Box pt={1} mr={2}>
-          <FormLabel title="Material" />
+          <InputLabel title="Material" />
           <Box pt={1}>
             <TextField placeholder="asphalt" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
-          <FormLabel title="Quantity" />
+          <InputLabel title="Quantity" />
           <Box pt={1}>
             <TextField placeholder="qty" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
-          <FormLabel title="Unit" />
+          <InputLabel title="Unit" />
           <Box pt={1}>
             <TextField placeholder="each" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
-          <FormLabel title="Weight" />
+          <InputLabel title="Weight" />
           <Box pt={1}>
             <TextField placeholder="lbs each" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1}>
-          <FormLabel title="Length" />
+          <InputLabel title="Length" />
           <Box pt={1}>
             <TextField
               placeholder="L X W X H (inches)"
@@ -309,13 +309,13 @@ function MaterialSection() {
 
       <Box display="flex" pt={1}>
         <Box flex={1} pt={1}>
-          <FormLabel title="Description" />
-          <Box flex={1} pt={1}>
+          <InputLabel title="Description" />
+          <Box pt={1}>
             <TextField
-              style={{ width: "100%" }}
               rows={6}
               placeholder="Material description..."
               multiline
+              fullWidth
               variant="outlined"
               size="small"
             />

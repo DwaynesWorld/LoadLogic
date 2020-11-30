@@ -4,7 +4,7 @@ import { colors, makeStyles, Typography } from "@material-ui/core";
 interface Props {
   title: string;
 }
-export function FormLabel({ title }: Props) {
+export function InputLabel({ title }: Props) {
   const styles = useStyles();
 
   return <Typography className={styles.label}>{title}</Typography>;

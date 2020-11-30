@@ -62,7 +62,7 @@ export function CustomerSelect({ value, onChange, onCreate }: Props) {
     }
 
     if (data) {
-      setOptions([createOption, ...data.customers]);
+      setOptions([createOption, ...data.data.customers]);
     }
   }, [data, error]);
 
