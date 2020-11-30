@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import moment from "moment";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import { Customer, Location } from "src/api";
+import { CustomerCreateDialog } from "src/modules/customers";
 
 import {
   LocalShippingRounded,
@@ -23,32 +25,15 @@ import {
 import {
   IconToggleButton,
   LocationSelect,
-  Location,
   Page,
+  FormLabel,
+  CustomerSelect,
 } from "src/components";
 
 type ReactMouseEvent = React.MouseEvent<HTMLElement, MouseEvent>;
 
 export function CreateOrder() {
   const styles = useStyles();
-  const [orderType, setOrderType] = useState("haul");
-  const [pickupLocation, setPickupLocation] = useState<Location>();
-  const [deliveryLocation, setDeliveryLocation] = useState<Location>();
-  const [pickupDate, setPickupDate] = useState(moment().format());
-
-  function handleOrderTypeChange(event: ReactMouseEvent, newType: string) {
-    if (newType !== null) {
-      setOrderType(newType);
-    }
-  }
-
-  function handlePickupLocationChange(newLocation: Location | null) {
-    setPickupLocation(newLocation || undefined);
-  }
-
-  function handleDeliveryLocationChange(newLocation: Location | null) {
-    setDeliveryLocation(newLocation || undefined);
-  }
 
   return (
     <Page title="Orders">
@@ -79,149 +64,265 @@ export function CreateOrder() {
         </Box>
 
         <Box display="flex" flexDirection="column">
-          <Box
-            display="flex"
-            flexDirection="column"
-            bgcolor={colors.common.white}
-            padding={2}
-            mt={2}
-            borderRadius={4}
-          >
-            <Typography className={styles.typeSectionTitle}>Type</Typography>
-            <ToggleButtonGroup
-              className={styles.toggleGroup}
-              size="large"
-              value={orderType}
-              exclusive
-              onChange={handleOrderTypeChange}
-            >
-              <IconToggleButton
-                icon={LocalShippingRounded}
-                value="haul"
-                title="One-Time Haul"
-              />
-              <IconToggleButton
-                icon={ThreeSixtyRounded}
-                value="onsite"
-                title="On-Site Load/Dump"
-              />
-              <IconToggleButton
-                icon={AllInclusiveRounded}
-                value="multisite"
-                title="Multi-Site Load/Dump"
-              />
-            </ToggleButtonGroup>
-          </Box>
-
-          <Box
-            display="flex"
-            pt={2}
-            bgcolor={colors.common.white}
-            padding={2}
-            mt={2}
-            borderRadius={4}
-          >
-            <Box display="flex" flexDirection="column">
-              <Box pt={1}>
-                <Typography className={styles.typeSectionTitle}>
-                  Pick-up from
-                </Typography>
-                <Box pt={1}>
-                  <LocationSelect onChange={handlePickupLocationChange} />
-                </Box>
-              </Box>
-
-              <Box pt={2}>
-                <Typography className={styles.typeSectionTitle}>
-                  Pick-up time
-                </Typography>
-                <Box pt={1}>
-                  <KeyboardDateTimePicker
-                    variant="inline"
-                    ampm
-                    value={pickupDate}
-                    style={{ width: 350 }}
-                    TextFieldComponent={(props) => {
-                      return (
-                        <TextField
-                          {...props}
-                          label="Choose Pickup Time"
-                          variant="outlined"
-                          size="small"
-                        />
-                      );
-                    }}
-                    onChange={(d: any, _) => setPickupDate(d)}
-                    disablePast
-                    format="MM/DD/yyyy HH:mm a"
-                  />
-                </Box>
-              </Box>
-            </Box>
-
-            <Box display="flex" pt={1} mx={3}>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="flex-start"
-                pt={3}
-              >
-                <ArrowForwardRounded />
-              </Box>
-            </Box>
-
-            <Box display="flex" flexDirection="column">
-              <Box pt={1}>
-                <Typography className={styles.typeSectionTitle}>
-                  Deliver to
-                </Typography>
-                <Box pt={1}>
-                  <LocationSelect onChange={handleDeliveryLocationChange} />
-                </Box>
-              </Box>
-
-              <Box pt={2}>
-                <Typography className={styles.typeSectionTitle}>
-                  Delivery time
-                </Typography>
-                <Box pt={1}>
-                  <KeyboardDateTimePicker
-                    variant="inline"
-                    ampm
-                    value={pickupDate}
-                    style={{ width: 350 }}
-                    TextFieldComponent={(props) => {
-                      return (
-                        <TextField
-                          {...props}
-                          label="Choose Pickup Time"
-                          variant="outlined"
-                          size="small"
-                        />
-                      );
-                    }}
-                    onChange={(d: any, _) => setPickupDate(d)}
-                    disablePast
-                    format="MM/DD/yyyy HH:mm a"
-                  />
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-
-          <Box
-            display="flex"
-            pt={2}
-            bgcolor={colors.common.white}
-            padding={2}
-            mt={2}
-            borderRadius={4}
-          >
-            Material
-          </Box>
+          <JobInfoSection />
+          <HaulingInfoSection />
+          <MaterialSection />
         </Box>
       </Container>
     </Page>
+  );
+}
+
+function JobInfoSection() {
+  const styles = useStyles();
+  const [orderType, setOrderType] = useState("haul");
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [createCustomerIsOpen, setCreateCustomerIsOpen] = useState(false);
+
+  function handleOrderTypeChange(event: ReactMouseEvent, newType: string) {
+    if (newType !== null) setOrderType(newType);
+  }
+
+  function handleCustomerChange(newCustomer: Customer | null) {
+    setCustomer(newCustomer);
+  }
+
+  function handleCustomerCreate(newCustomer: Customer) {
+    setCustomer(newCustomer);
+    setCreateCustomerIsOpen(false);
+  }
+
+  return (
+    <>
+      <Box
+        display="flex"
+        flexDirection="column"
+        bgcolor={colors.common.white}
+        padding={2}
+        mt={2}
+        borderRadius={4}
+      >
+        <Typography className={styles.typeSectionTitle}>Type</Typography>
+        <ToggleButtonGroup
+          className={styles.toggleGroup}
+          size="large"
+          value={orderType}
+          exclusive
+          onChange={handleOrderTypeChange}
+        >
+          <IconToggleButton
+            icon={LocalShippingRounded}
+            value="haul"
+            title="One-Time Haul"
+          />
+          <IconToggleButton
+            icon={ThreeSixtyRounded}
+            value="onsite"
+            title="On-Site Load/Dump"
+          />
+          <IconToggleButton
+            icon={AllInclusiveRounded}
+            value="multisite"
+            title="Multi-Site Load/Dump"
+          />
+        </ToggleButtonGroup>
+
+        <Box pt={2}>
+          <Box pt={1} mr={2}>
+            <FormLabel title="Customer" />
+            <Box pt={1}>
+              <CustomerSelect
+                value={customer}
+                onChange={handleCustomerChange}
+                onCreate={() => setCreateCustomerIsOpen(true)}
+              />
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+      {createCustomerIsOpen && (
+        <CustomerCreateDialog
+          open
+          onSaved={handleCustomerCreate}
+          onClose={() => setCreateCustomerIsOpen(false)}
+        />
+      )}
+    </>
+  );
+}
+
+function HaulingInfoSection() {
+  const [pickupLocation, setPickupLocation] = useState<Location>();
+  const [deliveryLocation, setDeliveryLocation] = useState<Location>();
+  const [pickupDate, setPickupDate] = useState(moment().format());
+
+  function handlePickupLocationChange(newLocation: Location | null) {
+    setPickupLocation(newLocation || undefined);
+  }
+
+  function handleDeliveryLocationChange(newLocation: Location | null) {
+    setDeliveryLocation(newLocation || undefined);
+  }
+
+  return (
+    <Box
+      display="flex"
+      pt={2}
+      bgcolor={colors.common.white}
+      padding={2}
+      mt={2}
+      borderRadius={4}
+    >
+      <Box display="flex" flexDirection="column">
+        <Box pt={1}>
+          <FormLabel title="Pick-up from" />
+          <Box pt={1}>
+            <LocationSelect onChange={handlePickupLocationChange} />
+          </Box>
+        </Box>
+
+        <Box pt={2}>
+          <FormLabel title="Pick-up time" />
+          <Box pt={1}>
+            <KeyboardDateTimePicker
+              variant="inline"
+              ampm
+              value={pickupDate}
+              style={{ width: 350 }}
+              TextFieldComponent={(props) => {
+                return (
+                  <TextField
+                    {...props}
+                    placeholder="Choose Pickup Time"
+                    variant="outlined"
+                    size="small"
+                  />
+                );
+              }}
+              onChange={(d: any, _) => setPickupDate(d)}
+              disablePast
+              format="MM/DD/yyyy HH:mm a"
+            />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box display="flex" pt={1} mx={3}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="flex-start"
+          pt={3}
+        >
+          <ArrowForwardRounded />
+        </Box>
+      </Box>
+
+      <Box display="flex" flexDirection="column">
+        <Box pt={1}>
+          <FormLabel title="Deliver to" />
+          <Box pt={1}>
+            <LocationSelect onChange={handleDeliveryLocationChange} />
+          </Box>
+        </Box>
+
+        <Box pt={2}>
+          <FormLabel title="Deliver time" />
+          <Box pt={1}>
+            <KeyboardDateTimePicker
+              variant="inline"
+              ampm
+              value={pickupDate}
+              style={{ width: 350 }}
+              TextFieldComponent={(props) => {
+                return (
+                  <TextField
+                    {...props}
+                    placeholder="Choose Pickup Time"
+                    variant="outlined"
+                    size="small"
+                  />
+                );
+              }}
+              onChange={(d: any, _) => setPickupDate(d)}
+              disablePast
+              format="MM/DD/yyyy HH:mm a"
+            />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function MaterialSection() {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      pt={2}
+      bgcolor={colors.common.white}
+      padding={2}
+      mt={2}
+      borderRadius={4}
+    >
+      <Box display="flex">
+        <Box pt={1} mr={2}>
+          <FormLabel title="Material" />
+          <Box pt={1}>
+            <TextField placeholder="asphalt" variant="outlined" size="small" />
+          </Box>
+        </Box>
+
+        <Box pt={1} mr={2}>
+          <FormLabel title="Quantity" />
+          <Box pt={1}>
+            <TextField placeholder="qty" variant="outlined" size="small" />
+          </Box>
+        </Box>
+
+        <Box pt={1} mr={2}>
+          <FormLabel title="Unit" />
+          <Box pt={1}>
+            <TextField placeholder="each" variant="outlined" size="small" />
+          </Box>
+        </Box>
+
+        <Box pt={1} mr={2}>
+          <FormLabel title="Weight" />
+          <Box pt={1}>
+            <TextField placeholder="lbs each" variant="outlined" size="small" />
+          </Box>
+        </Box>
+
+        <Box pt={1}>
+          <FormLabel title="Length" />
+          <Box pt={1}>
+            <TextField
+              placeholder="L X W X H (inches)"
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box display="flex" pt={1}>
+        <Box flex={1} pt={1}>
+          <FormLabel title="Description" />
+          <Box flex={1} pt={1}>
+            <TextField
+              style={{ width: "100%" }}
+              rows={6}
+              placeholder="Material description..."
+              multiline
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

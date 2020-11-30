@@ -1,2 +1,3 @@
+export { FormLabel } from "./form-label";
 export { LocationSelect } from "./location-select";
-export type { Location } from "./location-select";
+export { CustomerSelect } from "./customer-select";
