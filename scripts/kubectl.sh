@@ -3,7 +3,7 @@ k create secret docker-registry acr-registry-secrets \
   --docker-server=loadlogicacr.azurecr.io \
   --docker-username=$ACR_USERNAME \
   --docker-password=$ACR_PASSWORD \
-  --docker-email=kthompson713@gmail.com
+  --docker-email=$DOCKER_EMAIL
 
 
 # Create DB Connections String Secrets
