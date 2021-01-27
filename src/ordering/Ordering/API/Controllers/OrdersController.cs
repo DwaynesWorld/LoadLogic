@@ -14,7 +14,7 @@ namespace LoadLogic.Services.Ordering.API.Controllers
 {
     [ApiController]
     [ApiVersion("1")]
-    [Route("v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/orders")]
     public class OrdersController : RootController
     {
         private readonly ILogger<OrdersController> _logger;
