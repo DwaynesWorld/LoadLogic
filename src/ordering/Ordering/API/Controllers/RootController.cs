@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LoadLogic.Services.Ordering.API.Controllers
 {
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public abstract class RootController : ControllerBase
     {
         private IMediator? _mediator;

@@ -22,7 +22,8 @@ import {
 } from "@material-ui/core";
 import { SearchRounded, AddRounded } from "@material-ui/icons";
 import { theme } from "src/theme";
-import { getAllCustomers, Customer } from "src/api";
+import { getAllCustomers } from "src/api";
+import { Customer } from "src/models/customer";
 
 interface Props {
   value: Customer | null;

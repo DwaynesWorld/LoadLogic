@@ -7,30 +7,28 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
     public class Route : Entity
     {
-        private readonly List<Leg> _legs = new List<Leg>();
+        private readonly List<RouteLeg> _routeLegs = new();
 
-        public Route(OrderItem orderItem, List<Leg> legs)
+        public Route(OrderLineItem orderItem, List<RouteLeg> legs)
         {
             this.OrderItem = orderItem;
             this.OrderItemId = orderItem.Id;
-            _legs = legs;
+            _routeLegs = legs;
         }
 
         public long OrderItemId { get; set; }
-        public OrderItem OrderItem { get; }
-        public IReadOnlyCollection<Leg> Legs => _legs;
+        public OrderLineItem OrderItem { get; }
+        public IReadOnlyCollection<RouteLeg> RouteLegs => _routeLegs;
 
 
         /// <summary>
-        /// The initial departure location.
+        /// The initial location.
         /// </summary>
         /// <returns></returns>
-        public Point? InitialDepartureLocation()
+        public Point? InitialLocation()
         {
-            if (_legs.Any())
-            {
-                return _legs.First().LoadLocation;
-            }
+            if (_routeLegs.Any())
+                return _routeLegs.First().Location;
 
             return null;
         }
@@ -41,10 +39,8 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         /// <returns></returns>
         public Point? FinalArrivalLocation()
         {
-            if (_legs.Any())
-            {
-                return _legs.Last().DumpLocation;
-            }
+            if (_routeLegs.Any())
+                return _routeLegs.Last().Location;
 
             return null;
         }
@@ -55,10 +51,8 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         /// <returns></returns>
         public DateTime? FinalArrivalDate()
         {
-            if (_legs.Any())
-            {
-                return _legs.Last().DumpTime;
-            }
+            if (_routeLegs.Any())
+                return _routeLegs.Last().Timestamp;
 
             return null;
         }

@@ -21,9 +21,7 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public async Task<Order?> FindByIdAsync(
-            long id,
-            CancellationToken cancellationToken = default)
+        public async Task<Order?> FindByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             return await _context.Orders.FindAsync(id, cancellationToken);
         }

@@ -2,16 +2,16 @@
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
-    public class OrderItem : Entity
+    public class OrderLineItem : Entity
     {
-        public OrderItem(
-            Order order, OrderActivity activity, Route route, string materialName, string materialUnit,
+        public OrderLineItem(
+            Order order, Route route,
+            string materialName, string materialUnit,
             double materialQuantity, string truckType, int truckQuantity,
             string chargeType, decimal chargeRate)
         {
             this.Order = order;
             this.OrderId = order.Id;
-            this.Activity = activity;
             this.Route = route;
             this.MaterialName = materialName;
             this.MaterialUnit = materialUnit;
@@ -24,7 +24,6 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 
         public long OrderId { get; private set; }
         public Order Order { get; private set; }
-        public OrderActivity Activity { get; private set; }
         public Route Route { get; private set; }
         public long MaterialId { get; private set; }
         public string MaterialName { get; private set; } = string.Empty;
@@ -39,7 +38,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         /// <summary>
         /// Needed for Persistence
         /// </summary>
-        private OrderItem() { }
+        private OrderLineItem() { }
 #nullable enable
     }
 }

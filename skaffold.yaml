@@ -1,0 +1,36 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+metadata:
+  name: loadlogic
+build:
+  artifacts:
+  - image: loadlogicacr.azurecr.io/api-gateway
+    context: src
+    docker:
+      dockerfile: api-gateway/Dockerfile
+  - image: loadlogicacr.azurecr.io/customers-api
+    context: src
+    docker:
+      dockerfile: customers/Dockerfile
+  - image: loadlogicacr.azurecr.io/locations-api
+    context: src
+    docker:
+      dockerfile: locations/Dockerfile
+  - image: loadlogicacr.azurecr.io/monitoring
+    context: src
+    docker:
+      dockerfile: monitoring/Dockerfile
+  - image: loadlogicacr.azurecr.io/ordering-api
+    context: src
+    docker:
+      dockerfile: ordering/Ordering/Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - deploy/customers-api.yaml
+    - deploy/locations-api.yaml
+    - deploy/ordering-api.yaml
+    # - deploy/api-gateway.yaml
+    # - deploy/monitoring.yaml
+    # - deploy/rabbitmq.yaml
+    # - deploy/seq.yaml

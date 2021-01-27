@@ -13,7 +13,8 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import { Typography, TextField } from "@material-ui/core";
-import { getAllLocations, Location } from "../../api";
+import { getAllLocations } from "src/api";
+import { Location } from "src/models/location";
 
 interface Props {
   onChange?: (value: Location | null) => void;
@@ -38,7 +39,7 @@ export function LocationSelect({ onChange }: Props) {
     }
 
     if (data) {
-      setOptions(data.locations);
+      setOptions(data.data.locations);
     }
   }, [data, error]);
 

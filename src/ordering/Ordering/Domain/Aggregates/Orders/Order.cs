@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LoadLogic.Services;
 using LoadLogic.Services.Abstractions;
 using LoadLogic.Services.Ordering.Domain.Events;
 
@@ -8,63 +7,69 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
     public class Order : Entity, IAggregateRoot
     {
-        private readonly HashSet<OrderItem> _orderItems = new HashSet<OrderItem>();
-
-        public static Order NewDraft()
-        {
-            var order = new Order();
-            order.IsDraft = true;
-            return order;
-        }
+        private readonly HashSet<OrderLineItem> _orderLineItems = new();
 
         public Order(
-            int orderNo, long customerId, string customerName,
-            Email customerEmail, PhoneNumber customerPhone, string jobName,
-            string jobDescription, Address jobAddress, DateTime jobStartDate,
-            DateTime? jobEndDate)
+            int orderNo, OrderType type, long customerId, string customerFirstName,
+            string customerLastName, Email customerEmail, PhoneNumber customerPhone, string jobName,
+            string jobDescription, Address jobAddress, DateTime jobStartDate)
         {
             this.OrderNo = orderNo;
-            this.OrderStatus = OrderStatus.Confirmed;
+            this.Type = type;
+            this.OrderStatus = OrderStatus.Draft;
             this.CustomerId = customerId;
-            this.CustomerName = customerName;
+            this.CustomerFirstName = customerFirstName;
+            this.CustomerLastName = customerLastName;
             this.CustomerEmail = customerEmail;
             this.CustomerPhone = customerPhone;
             this.JobName = jobName;
             this.JobDescription = jobDescription;
             this.JobAddress = jobAddress;
             this.JobStartDate = jobStartDate;
-            this.JobEndDate = jobEndDate;
 
-            this.AddOrderConfirmedDomainEvent(orderNo, customerId);
+            this.AddOrderCreatedDomainEvent(orderNo, customerId);
         }
 
         public int OrderNo { get; private set; }
-        public OrderStatus? OrderStatus { get; private set; }
-        public bool IsDraft { get; set; }
+        public OrderStatus OrderStatus { get; private set; }
+        public OrderType Type { get; private set; }
 
-        public long? CustomerId { get; private set; }
-        public string? CustomerName { get; private set; }
-        public Email? CustomerEmail { get; private set; }
-        public PhoneNumber? CustomerPhone { get; private set; }
+        public long CustomerId { get; private set; }
+        public string CustomerFirstName { get; private set; }
+        public string CustomerLastName { get; private set; }
+        public Email CustomerEmail { get; private set; }
+        public PhoneNumber CustomerPhone { get; private set; }
 
-        public string? JobName { get; private set; }
-        public string? JobDescription { get; private set; }
-        public Address? JobAddress { get; private set; }
-        public DateTime? JobStartDate { get; set; }
-        public DateTime? JobEndDate { get; set; }
+        public string JobName { get; private set; }
+        public string JobDescription { get; private set; }
+        public Address JobAddress { get; private set; }
+        public DateTime JobStartDate { get; private set; }
 
-        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
+        public IReadOnlyCollection<OrderLineItem> OrderLineItems => _orderLineItems;
+        public bool IsDraft => this.OrderStatus == OrderStatus.Draft;
 
-
-        private void AddOrderConfirmedDomainEvent(int orderNo, long customerId)
+        public void AddOrderLineItem(OrderLineItem item)
         {
-            var domainEvent = new OrderConfirmedDomainEvent(orderNo, customerId);
+            _orderLineItems.Add(item);
+        }
+
+        private void AddOrderCreatedDomainEvent(int orderNo, long customerId)
+        {
+            var domainEvent = new OrderCreatedDomainEvent(orderNo, customerId);
             this.AddDomainEvent(domainEvent);
         }
 
+        // private void AddOrderConfirmedDomainEvent(int orderNo, long customerId)
+        // {
+        //     var domainEvent = new OrderConfirmedDomainEvent(orderNo, customerId);
+        //     this.AddDomainEvent(domainEvent);
+        // }
+
+#nullable disable
         /// <summary>
         /// Used for Persistence and Draft Orders.
         /// </summary>
         private Order() { }
     }
+#nullable enable
 }

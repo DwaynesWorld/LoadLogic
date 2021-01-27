@@ -11,31 +11,33 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
     public sealed class CreateOrderCommand : IRequest<long>
     {
         public CreateOrderCommand(
-            long customerId, string customerName,
-            Email customerEmail, PhoneNumber customerPhone,
+            OrderType type, long customerId, string customerFirstName,
+            string customerLastName, Email customerEmail, PhoneNumber customerPhone,
             string jobName, string jobDescription, Address jobAddress,
-            DateTime jobStartDate, DateTime? jobEndDate)
+            DateTime jobStartDate)
         {
+            this.Type = type;
             this.CustomerId = customerId;
-            this.CustomerName = customerName;
+            this.CustomerFirstName = customerFirstName;
+            this.CustomerLastName = customerLastName;
             this.CustomerEmail = customerEmail;
             this.CustomerPhone = customerPhone;
             this.JobName = jobName;
             this.JobDescription = jobDescription;
             this.JobAddress = jobAddress;
             this.JobStartDate = jobStartDate;
-            this.JobEndDate = jobEndDate;
         }
 
+        public OrderType Type { get; }
         public long CustomerId { get; }
-        public string CustomerName { get; }
+        public string CustomerFirstName { get; }
+        public string CustomerLastName { get; }
         public Email CustomerEmail { get; }
         public PhoneNumber CustomerPhone { get; }
         public string JobName { get; }
         public string JobDescription { get; }
         public Address JobAddress { get; }
         public DateTime JobStartDate { get; }
-        public DateTime? JobEndDate { get; }
     }
 
     internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, long>
@@ -55,16 +57,16 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
             var orderNo = await _orderRepository.GetNextOrderNo(cancellationToken);
 
             var order = new Order(
-                orderNo, request.CustomerId,
-                request.CustomerName, request.CustomerEmail,
-                request.CustomerPhone, request.JobName,
-                request.JobDescription, request.JobAddress,
-                request.JobStartDate, request.JobEndDate);
+                orderNo, request.Type, request.CustomerId,
+                request.CustomerFirstName, request.CustomerLastName,
+                request.CustomerEmail, request.CustomerPhone,
+                request.JobName, request.JobDescription,
+                request.JobAddress, request.JobStartDate);
 
             _orderRepository.Add(order);
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            await _publishEndpoint.Publish(new OrderConfirmedEvent { UserId = 9999 }, cancellationToken);
+            // await _publishEndpoint.Publish(new OrderConfirmedEvent { UserId = 9999 }, cancellationToken);
 
             _createOrderCount.Inc();
 

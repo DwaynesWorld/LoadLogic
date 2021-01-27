@@ -1,15 +1,8 @@
 import axios from "axios";
-import config from "src/config";
+import config from "src/app.config";
+import { Customer } from "../models/customer";
 
-export interface Customer {
-  id?: number;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-}
-
-interface CustomersResponse {
+export interface CustomersResponse {
   customers: Customer[];
 }
 
@@ -20,7 +13,7 @@ export async function getAllCustomers(path = "/customers") {
   return response;
 }
 
-interface CreateCustomerResponse {
+export interface CreateCustomerResponse {
   customer: Customer;
 }
 export async function createCustomer(customer: Customer) {

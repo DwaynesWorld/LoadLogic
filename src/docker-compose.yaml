@@ -20,8 +20,8 @@ services:
       dockerfile: ordering/Ordering/Dockerfile
     depends_on:
       - sqlserver
-      - seq
-      - rabbitmq
+      - seq-service
+      - rabbitmq-service
 
   customers-api-service:
     image: ${REGISTRY:-kt713}/customers-api:${TAG:-latest}
@@ -30,8 +30,8 @@ services:
       dockerfile: customers/Dockerfile
     depends_on:
       - sqlserver
-      - seq
-      - rabbitmq
+      - seq-service
+      - rabbitmq-service
 
   locations-api-service:
     image: ${REGISTRY:-kt713}/locations-api:${TAG:-latest}
@@ -40,13 +40,13 @@ services:
       dockerfile: locations/Dockerfile
     depends_on:
       - sqlserver
-      - seq
-      - rabbitmq
+      - seq-service
+      - rabbitmq-service
 
   monitoring-service:
     image: prom/prometheus:latest
     depends_on:
-      - rabbitmq
-      - ordering-api
-      - customers-api
-      - locations-api
+      - rabbitmq-service
+      - ordering-api-service
+      - customers-api-service
+      - locations-api-service

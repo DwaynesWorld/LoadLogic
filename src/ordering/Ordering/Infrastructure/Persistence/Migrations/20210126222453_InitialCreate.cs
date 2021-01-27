@@ -15,24 +15,24 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "101, 1"),
                     OrderNo = table.Column<int>(type: "int", nullable: false),
-                    OrderStatus = table.Column<int>(type: "int", nullable: true),
-                    IsDraft = table.Column<bool>(type: "bit", nullable: false),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: true),
-                    CustomerName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CustomerEmail_Identifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerEmail_Domain = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerPhone_Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    JobDescription = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    JobAddress_AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_Building = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_StateProvince = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobAddress_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    JobEndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
+                    CustomerFirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CustomerLastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CustomerEmail_Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerEmail_Domain = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerPhone_Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    JobDescription = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    JobAddress_AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_StateProvince = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobAddress_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobStartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,13 +41,12 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "OrderLineItems",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "101, 1"),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
-                    Activity = table.Column<int>(type: "int", nullable: false),
                     MaterialId = table.Column<long>(type: "bigint", nullable: false),
                     MaterialName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     MaterialUnit = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
@@ -59,10 +58,10 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id)
+                    table.PrimaryKey("PK_OrderLineItems", x => x.Id)
                         .Annotation("SqlServer:Clustered", true);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
+                        name: "FK_OrderLineItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
@@ -82,45 +81,37 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                     table.PrimaryKey("PK_Routes", x => x.Id)
                         .Annotation("SqlServer:Clustered", true);
                     table.ForeignKey(
-                        name: "FK_Routes_OrderItems_OrderItemId",
+                        name: "FK_Routes_OrderLineItems_OrderItemId",
                         column: x => x.OrderItemId,
-                        principalTable: "OrderItems",
+                        principalTable: "OrderLineItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Legs",
+                name: "RouteLegs",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "101, 1"),
                     RouteId = table.Column<long>(type: "bigint", nullable: false),
-                    LoadLocation = table.Column<Point>(type: "geography", nullable: false),
-                    LoadAddress_AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_StateProvince = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadAddress_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpLocation = table.Column<Point>(type: "geography", nullable: false),
-                    DumpAddress_AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_StateProvince = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DumpAddress_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoadTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DumpTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Location = table.Column<Point>(type: "geography", nullable: false),
+                    Address_AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_StateProvince = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_CountryRegion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Legs", x => x.Id)
+                    table.PrimaryKey("PK_RouteLegs", x => x.Id)
                         .Annotation("SqlServer:Clustered", true);
                     table.ForeignKey(
-                        name: "FK_Legs_Routes_RouteId",
+                        name: "FK_RouteLegs_Routes_RouteId",
                         column: x => x.RouteId,
                         principalTable: "Routes",
                         principalColumn: "Id",
@@ -128,13 +119,8 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Legs_RouteId",
-                table: "Legs",
-                column: "RouteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
+                name: "IX_OrderLineItems_OrderId",
+                table: "OrderLineItems",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
@@ -142,6 +128,11 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                 table: "Orders",
                 column: "OrderNo",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RouteLegs_RouteId",
+                table: "RouteLegs",
+                column: "RouteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Routes_OrderItemId",
@@ -153,13 +144,13 @@ namespace Ordering.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Legs");
+                name: "RouteLegs");
 
             migrationBuilder.DropTable(
                 name: "Routes");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "OrderLineItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");

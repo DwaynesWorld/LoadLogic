@@ -19,11 +19,17 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
             builder.Property(x => x.OrderNo)
                 .IsRequired();
 
+            builder.Property(x => x.Type)
+                .HasConversion(x => x!.Id, x => Enumeration.FromValue<OrderType>(x));
+
             builder.Property(x => x.OrderStatus)
                 .HasConversion(x => x!.Id, x => Enumeration.FromValue<OrderStatus>(x));
 
-            builder.Property(x => x.CustomerName)
-                .HasMaxLength(50);
+            builder.Property(x => x.CustomerFirstName)
+                .HasMaxLength(20);
+
+            builder.Property(x => x.CustomerLastName)
+                .HasMaxLength(20);
 
             builder.OwnsOne(x => x.CustomerEmail);
             builder.OwnsOne(x => x.CustomerPhone);
@@ -36,18 +42,18 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
             builder.OwnsOne(x => x.JobAddress);
 
-            builder.HasMany(x => x.OrderItems)
+            builder.HasMany(x => x.OrderLineItems)
                 .WithOne(x => x.Order)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            var orderItems = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
+            var orderItems = builder.Metadata.FindNavigation(nameof(Order.OrderLineItems));
             orderItems.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 
-    public class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderItem>
+    public class OrderLineItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderLineItem>
     {
-        public void Configure(EntityTypeBuilder<OrderItem> builder)
+        public void Configure(EntityTypeBuilder<OrderLineItem> builder)
         {
             builder.HasKey(x => x.Id)
                 .IsClustered(true);
@@ -57,12 +63,9 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
             builder.HasIndex(x => x.OrderId);
 
-            builder.HasOne(x => x.Order).WithMany(x => x.OrderItems);
+            builder.HasOne(x => x.Order).WithMany(x => x.OrderLineItems);
 
             builder.HasOne(x => x.Route).WithOne(x => x.OrderItem);
-
-            builder.Property(x => x.Activity)
-                .HasConversion(x => x!.Id, x => Enumeration.FromValue<OrderActivity>(x));
 
             builder.Property(x => x.MaterialName)
                 .HasMaxLength(50);
@@ -87,13 +90,13 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 
             builder.HasOne(x => x.OrderItem).WithOne(x => x.Route);
 
-            builder.HasMany(x => x.Legs).WithOne(x => x.Route);
+            builder.HasMany(x => x.RouteLegs).WithOne(x => x.Route);
         }
     }
 
-    public class LegEntityTypeConfiguration : IEntityTypeConfiguration<Leg>
+    public class RouteLegEntityTypeConfiguration : IEntityTypeConfiguration<RouteLeg>
     {
-        public void Configure(EntityTypeBuilder<Leg> builder)
+        public void Configure(EntityTypeBuilder<RouteLeg> builder)
         {
             builder.HasKey(x => x.Id)
                 .IsClustered(true);
@@ -101,10 +104,9 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
             builder.Property(x => x.Id)
                 .UseIdentityColumn(101);
 
-            builder.HasOne(x => x.Route).WithMany(x => x.Legs);
+            builder.HasOne(x => x.Route).WithMany(x => x.RouteLegs);
 
-            builder.OwnsOne(x => x.LoadAddress);
-            builder.OwnsOne(x => x.DumpAddress);
+            builder.OwnsOne(x => x.Address);
         }
     }
 }

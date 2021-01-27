@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { Box, colors, makeStyles } from "@material-ui/core";
-import { Customer } from "src/api";
+import { Customer } from "src/models/customer";
 import { BaseFormField, InputField } from "src/components";
 import { createCustomer } from "src/api/customers";
 

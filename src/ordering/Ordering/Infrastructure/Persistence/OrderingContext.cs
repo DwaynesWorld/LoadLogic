@@ -3,7 +3,6 @@ using LoadLogic.Services.Extensions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,9 +22,9 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         }
 
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; private set; }
+        public DbSet<OrderLineItem> OrderLineItems { get; private set; }
         public DbSet<Route> Routes { get; private set; }
-        public DbSet<Leg> Legs { get; private set; }
+        public DbSet<RouteLeg> RouteLegs { get; private set; }
 
         public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
@@ -36,9 +35,9 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderLineItemEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new RouteEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new LegEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RouteLegEntityTypeConfiguration());
         }
     }
 }

@@ -6,19 +6,19 @@ using LoadLogic.Services.Ordering.Domain.Exceptions;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
-    public class OrderActivity : Enumeration
+    public class OrderType : Enumeration
     {
-        public static OrderActivity Haul = new OrderActivity(1, nameof(Haul).ToLowerInvariant());
-        public static OrderActivity OnSiteLoadDump = new OrderActivity(2, nameof(OnSiteLoadDump).ToLowerInvariant());
-        public static OrderActivity MultiSiteLoadDump = new OrderActivity(3, nameof(MultiSiteLoadDump).ToLowerInvariant());
+        public static OrderType Haul = new OrderType(1, nameof(Haul).ToLowerInvariant());
+        public static OrderType OnSiteLoadDump = new OrderType(2, nameof(OnSiteLoadDump).ToLowerInvariant());
+        public static OrderType MultiSiteLoadDump = new OrderType(3, nameof(MultiSiteLoadDump).ToLowerInvariant());
 
-        public OrderActivity(int id, string name) : base(id, name)
+        public OrderType(int id, string name) : base(id, name)
         {
         }
 
-        public static IEnumerable<OrderActivity> List() => new[] { Haul, OnSiteLoadDump, MultiSiteLoadDump };
+        public static IEnumerable<OrderType> List() => new[] { Haul, OnSiteLoadDump, MultiSiteLoadDump };
 
-        public static OrderActivity FromName(string name)
+        public static OrderType FromName(string name)
         {
             var state = List()
                 .SingleOrDefault(s => string.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
@@ -32,7 +32,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
             return state;
         }
 
-        public static OrderActivity From(int id)
+        public static OrderType From(int id)
         {
             var state = List().SingleOrDefault(s => s.Id == id);
 

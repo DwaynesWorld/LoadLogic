@@ -4,14 +4,6 @@ namespace LoadLogic.Services
 {
     public class Address : ValueObject
     {
-        public string AddressLine1 { get; set; } = string.Empty;
-        public string AddressLine2 { get; set; } = string.Empty;
-        public string Building { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string StateProvince { get; set; } = string.Empty;
-        public string CountryRegion { get; set; } = string.Empty;
-        public string PostalCode { get; set; } = string.Empty;
-
         public Address() { }
 
         public Address(
@@ -31,6 +23,14 @@ namespace LoadLogic.Services
             CountryRegion = countryRegion ?? "";
             PostalCode = postalCode ?? "";
         }
+        public string AddressLine1 { get; set; } = string.Empty;
+        public string AddressLine2 { get; set; } = string.Empty;
+        public string Building { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string StateProvince { get; set; } = string.Empty;
+        public string CountryRegion { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+
 
         public static implicit operator string(Address address)
         {

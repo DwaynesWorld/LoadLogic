@@ -18,39 +18,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
-
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Leg", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn(101);
-
-                    b.Property<Point>("DumpLocation")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<DateTime>("DumpTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Point>("LoadLocation")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<DateTime>("LoadTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("RouteId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.HasIndex("RouteId");
-
-                    b.ToTable("Legs");
-                });
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", b =>
                 {
@@ -59,34 +27,39 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityColumn(101);
 
-                    b.Property<long?>("CustomerId")
+                    b.Property<string>("CustomerFirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("CustomerName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsDraft")
-                        .HasColumnType("bit");
+                    b.Property<string>("CustomerLastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("JobDescription")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime?>("JobEndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("JobName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime?>("JobStartDate")
+                    b.Property<DateTime>("JobStartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderNo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderStatus")
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
@@ -98,15 +71,12 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderItem", b =>
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderLineItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityColumn(101);
-
-                    b.Property<int>("Activity")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("ChargeRate")
                         .HasColumnType("decimal(12,6)");
@@ -146,7 +116,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderLineItems");
                 });
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", b =>
@@ -168,107 +138,32 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Leg", b =>
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.RouteLeg", b =>
                 {
-                    b.HasOne("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", "Route")
-                        .WithMany("Legs")
-                        .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn(101);
 
-                    b.OwnsOne("LoadLogic.Services.Address", "DumpAddress", b1 =>
-                        {
-                            b1.Property<long>("LegId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("bigint")
-                                .UseIdentityColumn();
+                    b.Property<Point>("Location")
+                        .IsRequired()
+                        .HasColumnType("geography");
 
-                            b1.Property<string>("AddressLine1")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.Property<long>("RouteId")
+                        .HasColumnType("bigint");
 
-                            b1.Property<string>("AddressLine2")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
-                            b1.Property<string>("Building")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                            b1.Property<string>("CountryRegion")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.HasIndex("RouteId");
 
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("StateProvince")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("LegId");
-
-                            b1.ToTable("Legs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LegId");
-                        });
-
-                    b.OwnsOne("LoadLogic.Services.Address", "LoadAddress", b1 =>
-                        {
-                            b1.Property<long>("LegId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("bigint")
-                                .UseIdentityColumn();
-
-                            b1.Property<string>("AddressLine1")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("AddressLine2")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Building")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("CountryRegion")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("StateProvince")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("LegId");
-
-                            b1.ToTable("Legs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LegId");
-                        });
-
-                    b.Navigation("DumpAddress")
-                        .IsRequired();
-
-                    b.Navigation("LoadAddress")
-                        .IsRequired();
-
-                    b.Navigation("Route");
+                    b.ToTable("RouteLegs");
                 });
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", b =>
@@ -358,17 +253,20 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.Navigation("CustomerEmail");
+                    b.Navigation("CustomerEmail")
+                        .IsRequired();
 
-                    b.Navigation("CustomerPhone");
+                    b.Navigation("CustomerPhone")
+                        .IsRequired();
 
-                    b.Navigation("JobAddress");
+                    b.Navigation("JobAddress")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderItem", b =>
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderLineItem", b =>
                 {
                     b.HasOne("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", "Order")
-                        .WithMany("OrderItems")
+                        .WithMany("OrderLineItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -378,7 +276,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", b =>
                 {
-                    b.HasOne("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderItem", "OrderItem")
+                    b.HasOne("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderLineItem", "OrderItem")
                         .WithOne("Route")
                         .HasForeignKey("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", "OrderItemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -387,12 +285,69 @@ namespace Ordering.Infrastructure.Persistence.Migrations
                     b.Navigation("OrderItem");
                 });
 
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", b =>
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.RouteLeg", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.HasOne("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", "Route")
+                        .WithMany("RouteLegs")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("LoadLogic.Services.Address", "Address", b1 =>
+                        {
+                            b1.Property<long>("RouteLegId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("bigint")
+                                .UseIdentityColumn();
+
+                            b1.Property<string>("AddressLine1")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressLine2")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Building")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("CountryRegion")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("StateProvince")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("RouteLegId");
+
+                            b1.ToTable("RouteLegs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RouteLegId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("Route");
                 });
 
-            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderItem", b =>
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Order", b =>
+                {
+                    b.Navigation("OrderLineItems");
+                });
+
+            modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.OrderLineItem", b =>
                 {
                     b.Navigation("Route")
                         .IsRequired();
@@ -400,7 +355,7 @@ namespace Ordering.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("LoadLogic.Services.Ordering.Domain.Aggregates.Orders.Route", b =>
                 {
-                    b.Navigation("Legs");
+                    b.Navigation("RouteLegs");
                 });
 #pragma warning restore 612, 618
         }
