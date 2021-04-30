@@ -8,23 +8,23 @@ export const theme = createMuiTheme({
   palette: {
     background: {
       default: colors.grey[200],
-      paper: colors.common.white,
+      paper: colors.common.white
     },
     primary: {
       main: colors.common.black,
-      contrastText: colors.grey[100],
+      contrastText: colors.grey[100]
     },
     secondary: {
-      main: colors.blue[400],
+      main: colors.blue[400]
     },
     text: {
       primary: colors.grey[900],
-      secondary: colors.blueGrey[600],
-    },
+      secondary: colors.blueGrey[600]
+    }
   },
   shadows,
   typography: {
     ...typography,
-    fontFamily: ["Open Sans", "Helvetica", "Arial", "sans-serif"].join(","),
-  },
+    fontFamily: ['"Be Vietnam"', "sans-serif"].join(",")
+  }
 });

@@ -11,8 +11,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 
         public Order(
             int orderNo, OrderType type, long customerId, string customerFirstName,
-            string customerLastName, Email customerEmail, PhoneNumber customerPhone, string jobName,
-            string jobDescription, Address jobAddress, DateTime jobStartDate)
+            string customerLastName, Email customerEmail, PhoneNumber customerPhone)
         {
             this.OrderNo = orderNo;
             this.Type = type;
@@ -22,10 +21,6 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
             this.CustomerLastName = customerLastName;
             this.CustomerEmail = customerEmail;
             this.CustomerPhone = customerPhone;
-            this.JobName = jobName;
-            this.JobDescription = jobDescription;
-            this.JobAddress = jobAddress;
-            this.JobStartDate = jobStartDate;
 
             this.AddOrderCreatedDomainEvent(orderNo, customerId);
         }
@@ -40,11 +35,6 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
         public Email CustomerEmail { get; private set; }
         public PhoneNumber CustomerPhone { get; private set; }
 
-        public string JobName { get; private set; }
-        public string JobDescription { get; private set; }
-        public Address JobAddress { get; private set; }
-        public DateTime JobStartDate { get; private set; }
-
         public IReadOnlyCollection<OrderLineItem> OrderLineItems => _orderLineItems;
         public bool IsDraft => this.OrderStatus == OrderStatus.Draft;
 
@@ -58,12 +48,6 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
             var domainEvent = new OrderCreatedDomainEvent(orderNo, customerId);
             this.AddDomainEvent(domainEvent);
         }
-
-        // private void AddOrderConfirmedDomainEvent(int orderNo, long customerId)
-        // {
-        //     var domainEvent = new OrderConfirmedDomainEvent(orderNo, customerId);
-        //     this.AddDomainEvent(domainEvent);
-        // }
 
 #nullable disable
         /// <summary>

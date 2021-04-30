@@ -5,9 +5,12 @@ import { ArrowForwardRounded } from "@material-ui/icons";
 import { Box, colors, TextField } from "@material-ui/core";
 import { Location } from "src/models/location";
 import { LocationSelect, InputLabel } from "src/components";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
 export function HaulingInfoSection() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pickupLocation, setPickupLocation] = useState<Location>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [deliveryLocation, setDeliveryLocation] = useState<Location>();
   const [pickupDate, setPickupDate] = useState(moment().format());
 
@@ -46,17 +49,17 @@ export function HaulingInfoSection() {
                 ampm
                 value={pickupDate}
                 style={{ width: 350 }}
-                TextFieldComponent={(props) => {
-                  return (
-                    <TextField
-                      {...props}
-                      placeholder="Choose Pickup Time"
-                      variant="outlined"
-                      size="small"
-                    />
-                  );
-                }}
-                onChange={(d: any, _) => setPickupDate(d)}
+                TextFieldComponent={props => (
+                  <TextField
+                    {...props}
+                    placeholder="Choose Pickup Time"
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+                onChange={(d: MaterialUiPickersDate) =>
+                  setPickupDate((d as unknown) as string)
+                }
                 disablePast
                 format="MM/DD/yyyy HH:mm a"
               />
@@ -91,17 +94,17 @@ export function HaulingInfoSection() {
                 ampm
                 value={pickupDate}
                 style={{ width: 350 }}
-                TextFieldComponent={(props) => {
-                  return (
-                    <TextField
-                      {...props}
-                      placeholder="Choose Pickup Time"
-                      variant="outlined"
-                      size="small"
-                    />
-                  );
-                }}
-                onChange={(d: any, _) => setPickupDate(d)}
+                TextFieldComponent={props => (
+                  <TextField
+                    {...props}
+                    placeholder="Choose Pickup Time"
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+                onChange={(d: MaterialUiPickersDate) =>
+                  setPickupDate((d as unknown) as string)
+                }
                 disablePast
                 format="MM/DD/yyyy HH:mm a"
               />

@@ -45,7 +45,6 @@ namespace LoadLogic.Services.Ordering
                 options.SubstituteApiVersionInUrl = true;
             });
             services.AddSwaggerGen();
-            services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerExamplesFromAssemblyOf<Startup>();
             services.AddControllers();
             services.AddMediatR(typeof(Startup));

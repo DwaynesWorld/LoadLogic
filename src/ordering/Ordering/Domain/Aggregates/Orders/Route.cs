@@ -9,16 +9,20 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
     {
         private readonly List<RouteLeg> _routeLegs = new();
 
-        public Route(OrderLineItem orderItem, List<RouteLeg> legs)
+        public Route(OrderLineItem orderItem)
         {
             this.OrderItem = orderItem;
             this.OrderItemId = orderItem.Id;
-            _routeLegs = legs;
         }
 
         public long OrderItemId { get; set; }
         public OrderLineItem OrderItem { get; }
         public IReadOnlyCollection<RouteLeg> RouteLegs => _routeLegs;
+
+        public void AddRouteLeg(RouteLeg leg)
+        {
+            _routeLegs.Add(leg);
+        }
 
 
         /// <summary>

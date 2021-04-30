@@ -1,3 +1,2 @@
-docker-compose up --build rabbitmq-service seq-service sqlserver
-
-docker-compose up --build rabbitmq-service seq-service sqlserver
+docker compose -f docker-compose.yaml -f docker-compose.override.yaml -p LoadLogic up
+docker compose -f docker-compose.yaml -f docker-compose.override.yaml -p LoadLogic up rabbitmq-service seq-service sqlserver

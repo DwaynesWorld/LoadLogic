@@ -17,28 +17,28 @@ export function MaterialSection() {
         <Box pt={1} mr={2}>
           <InputLabel title="Material" />
           <Box pt={1}>
-            <TextField placeholder="asphalt" variant="outlined" size="small" />
+            <TextField placeholder="Asphalt" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
           <InputLabel title="Quantity" />
           <Box pt={1}>
-            <TextField placeholder="qty" variant="outlined" size="small" />
+            <TextField placeholder="Qty" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
           <InputLabel title="Unit" />
           <Box pt={1}>
-            <TextField placeholder="each" variant="outlined" size="small" />
+            <TextField placeholder="Each" variant="outlined" size="small" />
           </Box>
         </Box>
 
         <Box pt={1} mr={2}>
           <InputLabel title="Weight" />
           <Box pt={1}>
-            <TextField placeholder="lbs each" variant="outlined" size="small" />
+            <TextField placeholder="Lbs each" variant="outlined" size="small" />
           </Box>
         </Box>
 

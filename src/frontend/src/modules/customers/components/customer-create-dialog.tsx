@@ -24,7 +24,7 @@ const PERSON_FIELDS: BaseFormField[] = [
     title: "First Name",
     id: "first_name",
     placeholder: 'ex. "John"',
-    autoComplete: "given-name",
+    autoComplete: "given-name"
   },
   {
     xs: 12,
@@ -34,7 +34,7 @@ const PERSON_FIELDS: BaseFormField[] = [
     id: "last_name",
     name: "last_name",
     placeholder: 'ex. "Doe"',
-    autoComplete: "family-name",
+    autoComplete: "family-name"
   },
   {
     xs: 12,
@@ -42,8 +42,8 @@ const PERSON_FIELDS: BaseFormField[] = [
     id: "email",
     name: "email",
     placeholder: 'ex. "john.doe@example.com"',
-    autoComplete: "email",
-  },
+    autoComplete: "email"
+  }
 ];
 
 const COMPANY_FIELDS: BaseFormField[] = [
@@ -54,7 +54,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     id: "company",
     name: "company",
     placeholder: 'ex. "John Trucking"',
-    autoComplete: "shipping name",
+    autoComplete: "shipping name"
   },
   {
     xs: 12,
@@ -63,7 +63,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     id: "phone",
     name: "phone",
     placeholder: "###-###-####",
-    autoComplete: "phone",
+    autoComplete: "phone"
   },
   {
     xs: 12,
@@ -72,7 +72,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     id: "address1",
     name: "address1",
     placeholder: "Address line 1",
-    autoComplete: "shipping address-line1",
+    autoComplete: "shipping address-line1"
   },
   {
     xs: 12,
@@ -81,7 +81,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     name: "address2",
     title: "Apartment, suite, etc.",
     placeholder: "Address line 2",
-    autoComplete: "shipping address-line2",
+    autoComplete: "shipping address-line2"
   },
 
   {
@@ -91,7 +91,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     name: "city",
     title: "City",
     placeholder: "New York",
-    autoComplete: "shipping address-level2",
+    autoComplete: "shipping address-level2"
   },
   {
     xs: 12,
@@ -99,7 +99,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     id: "state",
     name: "state",
     title: "State",
-    placeholder: "State/Province/Region",
+    placeholder: "State/Province/Region"
   },
   {
     xs: 12,
@@ -108,7 +108,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
     name: "zip",
     placeholder: "Zip / Postal code",
     title: "Zip",
-    autoComplete: "shipping postal-code",
+    autoComplete: "shipping postal-code"
   },
   {
     xs: 12,
@@ -117,15 +117,15 @@ const COMPANY_FIELDS: BaseFormField[] = [
     name: "country",
     placeholder: "Country",
     title: "Country",
-    autoComplete: "shipping country",
-  },
+    autoComplete: "shipping country"
+  }
 ];
 
 const DEFAULT_CUSTOMER: Customer = {
   first_name: "",
   last_name: "",
   email: "",
-  phone: "",
+  phone: ""
 };
 
 interface Props {
@@ -145,6 +145,7 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
       const response = await createCustomer(customer);
       onSaved(response.data.customer);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
 
@@ -172,7 +173,7 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
       {!isSaving && (
         <DialogContent>
           <Grid container spacing={3}>
-            {PERSON_FIELDS.map((f) => (
+            {PERSON_FIELDS.map(f => (
               <Grid item xs={f.xs} sm={f.sm}>
                 <InputField {...f} showLabel onChange={handleChange} />
               </Grid>
@@ -193,7 +194,7 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
           </Box>
 
           <Grid container spacing={3}>
-            {COMPANY_FIELDS.map((f) => (
+            {COMPANY_FIELDS.map(f => (
               <Grid item xs={f.xs} sm={f.sm}>
                 <InputField {...f} showLabel onChange={handleChange} />
               </Grid>
@@ -212,7 +213,7 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
       <DialogActions>
         <Button
           className={styles.cancelButton}
-          onClick={(e) => onClose(e, "cancel")}
+          onClick={e => onClose(e, "cancel")}
           color="primary"
           variant="contained"
         >
@@ -231,26 +232,26 @@ export function CustomerCreateDialog({ open, onClose, onSaved }: Props) {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   dialog: {
     marginTop: "82px",
     "& > div.MuiDialog-root": {
-      marginTop: "82px",
+      marginTop: "82px"
     },
     "& > div.MuiDialog-scrollPaper": {
-      alignItems: "flex-start",
-    },
+      alignItems: "flex-start"
+    }
   },
   cancelButton: {
     textTransform: "none",
     fontSize: 15,
     marginLeft: theme.spacing(),
-    backgroundColor: colors.common.black,
+    backgroundColor: colors.common.black
   },
   saveButton: {
     textTransform: "none",
     fontSize: 15,
     marginLeft: theme.spacing(),
-    backgroundColor: colors.green[800],
-  },
+    backgroundColor: colors.green[800]
+  }
 }));

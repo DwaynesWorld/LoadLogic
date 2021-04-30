@@ -35,7 +35,7 @@ namespace LoadLogic.Services.Ordering.API
             }
         }
 
-        private string ApiXmlPath()
+        private static string ApiXmlPath()
         {
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -43,7 +43,7 @@ namespace LoadLogic.Services.Ordering.API
         }
 
 
-        private OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
+        private static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
             var info = new OpenApiInfo()
             {

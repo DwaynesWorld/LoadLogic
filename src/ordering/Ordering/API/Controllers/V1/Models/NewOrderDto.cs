@@ -1,9 +1,9 @@
-using System;
+using System.Collections.Generic;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 
-namespace LoadLogic.Services.Ordering.Application.Models.Orders
+namespace LoadLogic.Services.Ordering.API.Controllers.V1.Models
 {
-    public class CreateOrderDto
+    public class NewOrderDto
     {
         public OrderType Type { get; set; } = OrderType.Haul;
         public long CustomerId { get; set; }
@@ -11,9 +11,6 @@ namespace LoadLogic.Services.Ordering.Application.Models.Orders
         public string CustomerLastName { get; set; } = string.Empty;
         public string CustomerEmail { get; set; } = string.Empty;
         public string CustomerPhone { get; set; } = string.Empty;
-        public string JobName { get; set; } = string.Empty;
-        public string JobDescription { get; set; } = string.Empty;
-        public Address? JobAddress { get; set; }
-        public DateTime JobStartDate { get; set; }
+        public IEnumerable<NewOrderLineItemDto> OrderLineItems { get; set; } = new List<NewOrderLineItemDto>();
     }
 }

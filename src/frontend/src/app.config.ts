@@ -8,17 +8,17 @@ interface AppConfiguration {
 
 const local: AppConfiguration = {
   endpoints: {
-    orders_baseurl: "http://localhost:30000/o/v1",
-    customers_baseurl: "http://localhost:30000/c/v1",
-    locations_baseurl: "http://localhost:30000/l/v1",
-  },
+    orders_baseurl: "http://localhost:10000/o/v1",
+    customers_baseurl: "http://localhost:10000/c/v1",
+    locations_baseurl: "http://localhost:10000/l/v1"
+  }
 };
 
 export enum Environment {
   Local,
   Dev,
   Staging,
-  Production,
+  Production
 }
 
 const getCurrentEnvironment = () => {
@@ -41,5 +41,5 @@ export const getEnvironmentConfig = () => {
 };
 
 export default {
-  ...getEnvironmentConfig(),
+  ...getEnvironmentConfig()
 };

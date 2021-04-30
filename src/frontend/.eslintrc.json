@@ -4,8 +4,6 @@
     "airbnb",
     "airbnb-typescript",
     "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint",
     "plugin:i18next/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking"

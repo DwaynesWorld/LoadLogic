@@ -8,7 +8,7 @@ import { CustomersResponse, getAllCustomers } from "src/api";
 import {
   Grid,
   Table,
-  TableHeaderRow,
+  TableHeaderRow
 } from "@devexpress/dx-react-grid-material-ui";
 import { AxiosResponse } from "axios";
 
@@ -16,17 +16,17 @@ const initColumns = [
   { name: "id", title: "ID" },
   { name: "name", title: "Name" },
   { name: "email", title: "Email" },
-  { name: "phone", title: "Phone" },
+  { name: "phone", title: "Phone" }
 ];
 
 export function CustomerList() {
+  const [columns] = useState(initColumns);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const { data, error } = useSWR<AxiosResponse<CustomersResponse>, unknown>(
     "/customers",
     getAllCustomers
   );
 
-  const [columns] = useState(initColumns);
-  const [customers, setCustomers] = useState<Customer[]>([]);
   const loading = !error && !data;
 
   useEffect(() => {
@@ -42,8 +42,6 @@ export function CustomerList() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log(customers);
 
   return (
     <Paper>

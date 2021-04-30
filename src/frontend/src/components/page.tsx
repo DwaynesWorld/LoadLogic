@@ -13,7 +13,7 @@ interface InnerPageProps extends ReactDiv {
 
 function InnerPage(
   { children, title = "", ...rest }: InnerPageProps,
-  ref: ForwardedRef<any>
+  ref: ForwardedRef<HTMLDivElement>
 ) {
   return (
     <div ref={ref} {...rest}>
