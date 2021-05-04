@@ -1,12 +1,10 @@
-using LoadLogic.Services.Ordering.Application.Interfaces;
-using LoadLogic.Services.Ordering.Application.Models.Orders;
-using Dapper;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
+using LoadLogic.Services.Ordering.Application.Abstractions;
+using LoadLogic.Services.Ordering.Application.Models.Orders;
+using MediatR;
 
 namespace LoadLogic.Services.Ordering.Application.Queries.Orders
 {
@@ -94,7 +92,7 @@ namespace LoadLogic.Services.Ordering.Application.Queries.Orders
             //     param: parameters,
             //     splitOn: "Type, AddressLine1"
             // );
-
+            await Task.Yield();
             return new List<OrderDto>();
         }
     }

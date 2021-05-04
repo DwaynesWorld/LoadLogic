@@ -122,6 +122,7 @@ const COMPANY_FIELDS: BaseFormField[] = [
 ];
 
 const DEFAULT_CUSTOMER: Customer = {
+  id: 0,
   first_name: "",
   last_name: "",
   email: "",

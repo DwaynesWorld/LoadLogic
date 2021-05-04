@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NetTopologySuite.Geometries;
 
 namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders

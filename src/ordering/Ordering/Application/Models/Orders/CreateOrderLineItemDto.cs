@@ -1,4 +1,4 @@
-namespace LoadLogic.Services.Ordering.Application.Models.Orders
+﻿namespace LoadLogic.Services.Ordering.Application.Models.Orders
 {
     public class CreateOrderLineItemDto
     {

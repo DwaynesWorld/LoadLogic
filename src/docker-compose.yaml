@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   seq-service:
-    image: datalust/seq:latest
+    image: datalust/seq:2020.5
 
   sqlserver:
     # image: mcr.microsoft.com/mssql/server:2017-latest

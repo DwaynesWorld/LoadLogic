@@ -1,8 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import React, { useEffect, useState } from "react";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
@@ -10,27 +5,32 @@ import useSWR from "swr";
 import Autocomplete, {
   AutocompleteRenderInputParams,
   AutocompleteRenderOptionState,
-  createFilterOptions,
+  createFilterOptions
 } from "@material-ui/lab/Autocomplete";
 import { Typography, TextField } from "@material-ui/core";
-import { getAllLocations } from "src/api";
+import { getAllLocations, LocationsResponse } from "src/api";
 import { Location } from "src/models/location";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface Props {
+  location: Location | null;
   onChange?: (value: Location | null) => void;
 }
 
 const filterOptions = createFilterOptions({
   matchFrom: "any",
   limit: 50,
-  stringify: (option: Location) => `${option.name} ${option.address1}`,
+  stringify: (option: Location) => `${option.name} ${option.address1}`
 });
 
-export function LocationSelect({ onChange }: Props) {
-  const { data, error } = useSWR("/locations", getAllLocations);
-
+export function LocationSelect({ location, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Location[]>([]);
+  const { data, error } = useSWR<AxiosResponse<LocationsResponse>, AxiosError>(
+    "/locations",
+    getAllLocations
+  );
+
   const loading = open && !error && !data;
 
   useEffect(() => {
@@ -49,16 +49,18 @@ export function LocationSelect({ onChange }: Props) {
 
   return (
     <Autocomplete
-      id="location-select"
+      data-testid="location-select"
       style={{ width: "100%", minWidth: 250, maxWidth: 350 }}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       options={options}
       loading={loading}
+      value={location}
       onChange={handleOnChange}
       filterOptions={filterOptions}
-      getOptionLabel={(option) => option.name}
+      getOptionSelected={(o, v) => o.id === v.id}
+      getOptionLabel={option => option.name}
       renderInput={renderAutocompleteInput}
       renderOption={renderAutocompleteOption}
     />
@@ -90,7 +92,7 @@ function renderAutocompleteOption(
       <div>
         {nameParts.map((part, index) => (
           <Typography
-            key={index}
+            key={index.toString()}
             variant="body1"
             component="span"
             style={{ fontWeight: part.highlight ? 700 : 400 }}
@@ -103,7 +105,7 @@ function renderAutocompleteOption(
       <div>
         {addressParts.map((part, index) => (
           <Typography
-            key={index}
+            key={index.toString()}
             variant="body2"
             component="span"
             style={{ fontWeight: part.highlight ? 700 : 400 }}

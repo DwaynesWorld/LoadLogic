@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+#nullable disable
+
 namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
 {
     public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
@@ -34,13 +36,13 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
             builder.OwnsOne(x => x.CustomerEmail);
             builder.OwnsOne(x => x.CustomerPhone);
 
-            builder.Property(x => x.JobName)
-                .HasMaxLength(50);
+            // builder.Property(x => x.JobName)
+            //     .HasMaxLength(50);
 
-            builder.Property(x => x.JobDescription)
-                .HasMaxLength(200);
+            // builder.Property(x => x.JobDescription)
+            //     .HasMaxLength(200);
 
-            builder.OwnsOne(x => x.JobAddress);
+            // builder.OwnsOne(x => x.JobAddress);
 
             builder.HasMany(x => x.OrderLineItems)
                 .WithOne(x => x.Order)
@@ -110,3 +112,4 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence
         }
     }
 }
+#nullable restore

@@ -1,22 +1,7 @@
-import { Address } from "./address";
+// import { Address } from "./address";
 
-export interface OrderType {
-  id: number;
-  name: string;
-}
-
-export interface OrderSummary {
-  id: number;
-  orderNo: number;
-  orderStatus: number;
-  type: OrderType;
-  customerId: number;
-  customerFirstName: string;
-  customerLastName: string;
-  customerEmail: string;
-  customerPhone: string;
-  jobName: string;
-  jobDescription: string;
-  jobAddress: Address;
-  jobStartDate: Date;
+export enum OrderType {
+  Haul = 1,
+  OnSiteLoadDump,
+  MultiSiteLoadDump
 }

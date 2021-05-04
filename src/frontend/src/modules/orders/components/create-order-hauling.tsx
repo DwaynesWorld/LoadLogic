@@ -1,25 +1,42 @@
-import React, { useState } from "react";
-import moment from "moment";
+import React from "react";
+import { Moment } from "moment";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { ArrowForwardRounded } from "@material-ui/icons";
 import { Box, colors, TextField } from "@material-ui/core";
+
 import { Location } from "src/models/location";
 import { LocationSelect, InputLabel } from "src/components";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
-export function HaulingInfoSection() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [pickupLocation, setPickupLocation] = useState<Location>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [deliveryLocation, setDeliveryLocation] = useState<Location>();
-  const [pickupDate, setPickupDate] = useState(moment().format());
+const DATETIME_FORMAT = "MM/DD/yyyy h:mm a";
 
-  function handlePickupLocationChange(newLocation: Location | null) {
-    setPickupLocation(newLocation || undefined);
-  }
-
-  function handleDeliveryLocationChange(newLocation: Location | null) {
-    setDeliveryLocation(newLocation || undefined);
+interface Props {
+  pickupLocation?: Location;
+  deliveryLocation?: Location;
+  pickupDate?: Moment;
+  deliveryDate?: Moment;
+  instructions: string;
+  onPickupLocationChange: (next: Location | null) => void;
+  onDeliveryLocationChange: (next: Location | null) => void;
+  onPickupDateChange: (next: Moment | null) => void;
+  onDeliveryDateChange: (next: Moment | null) => void;
+  onInstructionsChange: (next: string) => void;
+}
+export function HaulingInfoSection({
+  pickupLocation,
+  deliveryLocation,
+  pickupDate,
+  deliveryDate,
+  instructions,
+  onPickupLocationChange,
+  onDeliveryLocationChange,
+  onPickupDateChange,
+  onDeliveryDateChange,
+  onInstructionsChange
+}: Props) {
+  function handleInstructionsChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    onInstructionsChange(e.target.value);
   }
 
   return (
@@ -37,7 +54,10 @@ export function HaulingInfoSection() {
           <Box pt={1}>
             <InputLabel title="Pick-up from" />
             <Box pt={1}>
-              <LocationSelect onChange={handlePickupLocationChange} />
+              <LocationSelect
+                location={pickupLocation || null}
+                onChange={onPickupLocationChange}
+              />
             </Box>
           </Box>
 
@@ -45,10 +65,15 @@ export function HaulingInfoSection() {
             <InputLabel title="Pick-up time" />
             <Box pt={1}>
               <KeyboardDateTimePicker
-                variant="inline"
                 ampm
-                value={pickupDate}
+                autoOk
+                disablePast
+                hideTabs
+                format={DATETIME_FORMAT}
                 style={{ width: 350 }}
+                value={pickupDate || null}
+                variant="inline"
+                onChange={onPickupDateChange}
                 TextFieldComponent={props => (
                   <TextField
                     {...props}
@@ -57,11 +82,6 @@ export function HaulingInfoSection() {
                     size="small"
                   />
                 )}
-                onChange={(d: MaterialUiPickersDate) =>
-                  setPickupDate((d as unknown) as string)
-                }
-                disablePast
-                format="MM/DD/yyyy HH:mm a"
               />
             </Box>
           </Box>
@@ -82,7 +102,10 @@ export function HaulingInfoSection() {
           <Box pt={1}>
             <InputLabel title="Deliver to" />
             <Box pt={1}>
-              <LocationSelect onChange={handleDeliveryLocationChange} />
+              <LocationSelect
+                location={deliveryLocation || null}
+                onChange={onDeliveryLocationChange}
+              />
             </Box>
           </Box>
 
@@ -92,8 +115,13 @@ export function HaulingInfoSection() {
               <KeyboardDateTimePicker
                 variant="inline"
                 ampm
-                value={pickupDate}
+                value={deliveryDate || null}
                 style={{ width: 350 }}
+                disablePast
+                disableToolbar
+                autoOk
+                format={DATETIME_FORMAT}
+                onChange={onDeliveryDateChange}
                 TextFieldComponent={props => (
                   <TextField
                     {...props}
@@ -102,11 +130,6 @@ export function HaulingInfoSection() {
                     size="small"
                   />
                 )}
-                onChange={(d: MaterialUiPickersDate) =>
-                  setPickupDate((d as unknown) as string)
-                }
-                disablePast
-                format="MM/DD/yyyy HH:mm a"
               />
             </Box>
           </Box>
@@ -120,6 +143,8 @@ export function HaulingInfoSection() {
             <TextField
               rows={6}
               placeholder=""
+              value={instructions}
+              onChange={handleInstructionsChange}
               multiline
               fullWidth
               variant="outlined"

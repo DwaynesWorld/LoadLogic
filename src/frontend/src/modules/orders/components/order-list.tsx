@@ -1,16 +1,16 @@
+import useSWR from "swr";
 import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
+import { AxiosError, AxiosResponse } from "axios";
 import { Column } from "@devexpress/dx-react-grid";
 
 import {
   Grid,
   Table,
-  TableHeaderRow,
+  TableHeaderRow
 } from "@devexpress/dx-react-grid-material-ui";
-import { OrderSummary } from "src/models/orders";
-import useSWR from "swr";
-import { getAllOrders } from "src/api/orders";
-import { AxiosResponse } from "axios";
+
+import { getAllOrders, OrderSummaryApiResponse } from "src/api/orders";
 
 const initColumns: Column[] = [
   { name: "id", title: "ID" },
@@ -19,25 +19,26 @@ const initColumns: Column[] = [
   {
     name: "customer",
     title: "Customer",
-    getCellValue: (o: OrderSummary) =>
-      `${o.customerFirstName} ${o.customerLastName}`,
+    getCellValue: (o: OrderSummaryApiResponse) =>
+      `${o.customerFirstName} ${o.customerLastName}`
   },
   { name: "email", title: "Email" },
-  { name: "phone", title: "Phone" },
+  { name: "phone", title: "Phone" }
 ];
 
 export function OrderList() {
-  const { data, error } = useSWR<AxiosResponse<OrderSummary[]>, unknown>(
-    "/orders",
-    getAllOrders
-  );
-
   const [columns] = useState(initColumns);
-  const [orders, setOrders] = useState<OrderSummary[]>([]);
+  const [orders, setOrders] = useState<OrderSummaryApiResponse[]>([]);
+  const { data, error } = useSWR<
+    AxiosResponse<OrderSummaryApiResponse[]>,
+    AxiosError
+  >("/orders", getAllOrders);
+
   const loading = !error && !data;
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       return; // Handle
     }
 

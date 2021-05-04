@@ -1,4 +1,4 @@
-namespace LoadLogic.Services
+﻿namespace LoadLogic.Services
 {
     public class WebAddress
     {

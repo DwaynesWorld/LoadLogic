@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,7 +64,6 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
                 order.AddOrderLineItem(lineItem);
             }
 
-
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             // await _publishEndpoint.Publish(new OrderConfirmedEvent { UserId = 9999 }, cancellationToken);
 
@@ -76,9 +75,14 @@ namespace LoadLogic.Services.Ordering.Application.Commands.Orders
         private static OrderLineItem CreateOrderLineItem(Order order, CreateOrderLineItemDto item)
         {
             var lineItem = new OrderLineItem(
-                order, item.MaterialName,
-                item.MaterialUnit, item.MaterialQuantity,
-                "TEMP", 1, "TEMP", (decimal)100.01);
+                order,
+                item.MaterialName,
+                item.MaterialUnit,
+                item.MaterialQuantity,
+                "TEMP",
+                1,
+                "TEMP",
+                (decimal)100.01);
 
             if (item.Route is not null)
             {

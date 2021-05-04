@@ -1,35 +1,45 @@
 import React, { useState } from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { Customer } from "src/models/customer";
-import { CustomerCreateDialog } from "src/modules/customers";
+import { Box, colors, makeStyles, Typography } from "@material-ui/core";
 
 import {
   LocalShippingRounded,
   ThreeSixtyRounded,
-  AllInclusiveRounded,
+  AllInclusiveRounded
 } from "@material-ui/icons";
 
-import { Box, colors, makeStyles, Typography } from "@material-ui/core";
+import { OrderType } from "src/models/orders";
+import { Customer } from "src/models/customer";
+import { CustomerCreateDialog } from "src/modules/customers";
 import { IconToggleButton, InputLabel, CustomerSelect } from "src/components";
 
 type ReactMouseEvent = React.MouseEvent<HTMLElement, MouseEvent>;
 
-export function JobInfoSection() {
+interface Props {
+  orderType: OrderType;
+  customer?: Customer;
+  onOrderTypeChange: (next: OrderType) => void;
+  onCustomerChange: (next: Customer | null) => void;
+}
+export function JobInfoSection({
+  orderType,
+  customer,
+  onOrderTypeChange,
+  onCustomerChange
+}: Props) {
   const styles = useStyles();
-  const [orderType, setOrderType] = useState("haul");
-  const [customer, setCustomer] = useState<Customer | null>(null);
   const [createCustomerIsOpen, setCreateCustomerIsOpen] = useState(false);
 
-  function handleOrderTypeChange(event: ReactMouseEvent, newType: string) {
-    if (newType !== null) setOrderType(newType);
+  function handleOrderTypeChange(_: ReactMouseEvent, next: OrderType) {
+    if (next !== null) onOrderTypeChange(next);
   }
 
-  function handleCustomerChange(newCustomer: Customer | null) {
-    setCustomer(newCustomer);
+  function handleCustomerChange(next: Customer | null) {
+    onCustomerChange(next);
   }
 
-  function handleCustomerCreate(newCustomer: Customer) {
-    setCustomer(newCustomer);
+  function handleCustomerCreate(next: Customer) {
+    onCustomerChange(next);
     setCreateCustomerIsOpen(false);
   }
 
@@ -53,17 +63,17 @@ export function JobInfoSection() {
         >
           <IconToggleButton
             icon={LocalShippingRounded}
-            value="haul"
+            value={OrderType.Haul}
             title="One-Time Haul"
           />
           <IconToggleButton
             icon={ThreeSixtyRounded}
-            value="onsite"
+            value={OrderType.OnSiteLoadDump}
             title="On-Site Load/Dump"
           />
           <IconToggleButton
             icon={AllInclusiveRounded}
-            value="multisite"
+            value={OrderType.MultiSiteLoadDump}
             title="Multi-Site Load/Dump"
           />
         </ToggleButtonGroup>
@@ -73,7 +83,7 @@ export function JobInfoSection() {
             <InputLabel title="Customer" />
             <Box pt={1}>
               <CustomerSelect
-                value={customer}
+                value={customer || null}
                 onChange={handleCustomerChange}
                 onCreate={() => setCreateCustomerIsOpen(true)}
               />
@@ -93,12 +103,12 @@ export function JobInfoSection() {
   );
 }
 
-export const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles(theme => ({
   typeSectionTitle: {
     color: colors.grey[600],
     fontSize: 13,
     fontWeight: theme.typography.fontWeightBold,
-    textTransform: "uppercase",
+    textTransform: "uppercase"
   },
   toggleGroup: {
     paddingTop: theme.spacing(),
@@ -107,21 +117,21 @@ export const useStyles = makeStyles((theme) => ({
       backgroundColor: colors.common.white,
       fontWeight: theme.typography.fontWeightBold,
       textTransform: "none",
-      borderWidth: 1,
+      borderWidth: 1
     },
     "& > button.Mui-selected": {
       color: colors.common.white,
-      backgroundColor: colors.common.black,
+      backgroundColor: colors.common.black
     },
     "& > button.MuiToggleButtonGroup-groupedHorizontal:not(:first-child)": {
-      borderLeft: `1px solid ${colors.grey[200]}`,
+      borderLeft: `1px solid ${colors.grey[200]}`
     },
     "& > button.MuiToggleButton-root:hover": {
       backgroundColor: colors.grey[100],
-      transition: "0.5s",
+      transition: "0.5s"
     },
     "& > button.MuiToggleButton-root.Mui-selected:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.85)",
-    },
-  },
+      backgroundColor: "rgba(0, 0, 0, 0.85)"
+    }
+  }
 }));

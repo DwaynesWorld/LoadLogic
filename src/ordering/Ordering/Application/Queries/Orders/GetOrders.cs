@@ -1,12 +1,12 @@
-using LoadLogic.Services.Ordering.Application.Interfaces;
-using LoadLogic.Services.Ordering.Application.Models.Orders;
-using Dapper;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
+using LoadLogic.Services.Ordering.Application.Abstractions;
+using LoadLogic.Services.Ordering.Application.Models.Orders;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
+using MediatR;
 
 namespace LoadLogic.Services.Ordering.Application.Queries.Orders
 {
@@ -32,41 +32,32 @@ namespace LoadLogic.Services.Ordering.Application.Queries.Orders
                     ,o.[OrderNo]
                     ,o.[CustomerId]
                     ,o.[CustomerFirstName] 
-                    ,o.[CustomerLastName] 
-                    ,o.CustomerEmail_Identifier [Identifier]
-                    ,o.CustomerEmail_Domain [Domain]
+                    ,o.[CustomerLastName]
                     ,o.CustomerPhone_Number [CustomerPhone]
-                    ,o.[JobName] 
-                    ,o.[JobDescription] 
-                    ,o.[JobStartDate] 
-                    
+
                     ,o.[Type]
 
-                    ,o.JobAddress_AddressLine1 [AddressLine1]
-                    ,o.JobAddress_AddressLine2 [AddressLine2]
-                    ,o.JobAddress_Building [Building]
-                    ,o.JobAddress_City [City]
-                    ,o.JobAddress_StateProvince [StateProvince]
-                    ,o.JobAddress_CountryRegion [CountryRegion]
-                    ,o.JobAddress_PostalCode [PostalCode]
+                    ,o.CustomerEmail_Identifier [Identifier]
+                    ,o.CustomerEmail_Domain [Domain]
+                    
                 FROM Orders o
                 ";
 
             using var connection = _provider.GetDbConnection();
             connection.Open();
 
-            var vendors = await connection.QueryAsync<OrderSummaryDto, int, Address, OrderSummaryDto>(
+            var orders = await connection.QueryAsync<OrderSummaryDto, int, Email, OrderSummaryDto>(
                 query,
-                (o, type, a) =>
+                (o, type, e) =>
                 {
                     o.Type = Enumeration.FromValue<OrderType>(type);
-                    o.JobAddress = a;
+                    o.CustomerEmail = e;
                     return o;
                 },
-                splitOn: "Type, AddressLine1"
+                splitOn: "Type, Identifier"
             );
 
-            return vendors;
+            return orders;
         }
     }
 }

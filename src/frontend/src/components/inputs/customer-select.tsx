@@ -10,7 +10,7 @@ import useSWR from "swr";
 import Autocomplete, {
   AutocompleteRenderInputParams,
   AutocompleteRenderOptionState,
-  createFilterOptions,
+  createFilterOptions
 } from "@material-ui/lab/Autocomplete";
 
 import {
@@ -18,7 +18,7 @@ import {
   TextField,
   InputAdornment,
   Box,
-  colors,
+  colors
 } from "@material-ui/core";
 import { SearchRounded, AddRounded } from "@material-ui/icons";
 import { theme } from "src/theme";
@@ -39,15 +39,16 @@ const filterOptions = createFilterOptions({
   matchFrom: "any",
   limit: 50,
   stringify: (option: Customer) =>
-    `${option.first_name} ${option.last_name} ${option.email}`,
+    `${option.first_name} ${option.last_name} ${option.email}`
 });
 
 const createOption: CustomerType = {
+  id: 0,
   creation: true,
   first_name: "",
   last_name: "",
   email: "",
-  phone: "",
+  phone: ""
 };
 
 export function CustomerSelect({ value, onChange, onCreate }: Props) {
@@ -74,7 +75,7 @@ export function CustomerSelect({ value, onChange, onCreate }: Props) {
 
   return (
     <Autocomplete
-      id="customer-select"
+      data-testid="customer-select"
       style={{ width: "100%", minWidth: 250, maxWidth: 350 }}
       value={value}
       open={open}
@@ -84,7 +85,8 @@ export function CustomerSelect({ value, onChange, onCreate }: Props) {
       loading={loading}
       onChange={handleOnChange}
       filterOptions={filterOptions}
-      getOptionLabel={(option) => `${option.first_name} ${option.last_name}`}
+      getOptionSelected={(o, v) => o.id === v.id}
+      getOptionLabel={option => `${option.first_name} ${option.last_name}`}
       renderInput={renderAutocompleteInput}
       renderOption={renderAutocompleteOption}
     />
@@ -104,7 +106,7 @@ function renderAutocompleteInput(params: AutocompleteRenderInputParams) {
           <InputAdornment position="start">
             <SearchRounded />
           </InputAdornment>
-        ),
+        )
       }}
     />
   );
@@ -130,7 +132,7 @@ function renderAutocompleteOption(
             style={{
               fontSize: 14,
               fontWeight: theme.typography.fontWeightBold,
-              color,
+              color
             }}
           >
             Add a new customer

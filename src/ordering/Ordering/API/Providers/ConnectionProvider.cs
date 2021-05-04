@@ -1,8 +1,8 @@
-using LoadLogic.Services.Ordering.Application.Interfaces;
-using Microsoft.Extensions.Options;
-using System.Data;
+﻿using System.Data;
+using LoadLogic.Services.Ordering.Application.Abstractions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace LoadLogic.Services.Ordering.API.Providers
 {

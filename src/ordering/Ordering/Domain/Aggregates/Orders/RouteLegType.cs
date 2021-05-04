@@ -1,4 +1,4 @@
-namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
+﻿namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
     public enum RouteLegType
     {

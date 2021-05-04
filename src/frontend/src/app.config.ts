@@ -8,6 +8,7 @@ interface AppConfiguration {
 
 const local: AppConfiguration = {
   endpoints: {
+    // orders_baseurl: "http://localhost:5000/v1",
     orders_baseurl: "http://localhost:10000/o/v1",
     customers_baseurl: "http://localhost:10000/c/v1",
     locations_baseurl: "http://localhost:10000/l/v1"

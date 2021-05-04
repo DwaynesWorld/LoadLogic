@@ -18,11 +18,9 @@ export const theme = createMuiTheme({
       main: colors.blue[400]
     },
     text: {
-      primary: colors.grey[900],
-      secondary: colors.blueGrey[600]
+      primary: colors.grey[900]
     }
   },
-  shadows,
   typography: {
     ...typography,
     fontFamily: ['"Be Vietnam"', "sans-serif"].join(",")

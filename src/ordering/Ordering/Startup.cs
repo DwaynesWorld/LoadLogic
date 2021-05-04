@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Linq;
+using Backups.Application.Behaviors;
 using LoadLogic.Services.Ordering.API;
 using LoadLogic.Services.Ordering.API.Providers;
-using LoadLogic.Services.Ordering.Application.Interfaces;
+using LoadLogic.Services.Ordering.Application.Abstractions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using LoadLogic.Services.Ordering.Infrastructure.Persistence;
 using LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories;
@@ -15,7 +16,6 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Prometheus;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
@@ -44,14 +44,20 @@ namespace LoadLogic.Services.Ordering
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
+
             services.AddSwaggerGen();
             services.AddSwaggerExamplesFromAssemblyOf<Startup>();
             services.AddControllers();
+            services.AddHttpContextAccessor();
+
+            services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+
             services.AddMassTransit(ConfigureMassTransit);
             services.AddMassTransitHostedService();
-            services.AddTransient<IOrderRepository, OrderRepository>();
 
+            services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IConnectionProvider, ConnectionProvider>();
             services.AddDbContext<OrderingContext>(options =>
             {
@@ -66,6 +72,9 @@ namespace LoadLogic.Services.Ordering
 
             services.AddCors(options =>
             {
+                Log.Logger.Information("test 2");
+                Log.Logger.Debug("test 2");
+
                 var allowedOrigins = Configuration
                     .GetValue<string>("Auth:CorsAllowedOrigins")
                     .Split(",", StringSplitOptions.RemoveEmptyEntries)
@@ -92,12 +101,12 @@ namespace LoadLogic.Services.Ordering
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiProvider)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+#if DEBUG
+            app.UseDeveloperExceptionPage();
+#else
             // app.UseHttpsRedirection();
+#endif
+
             app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseCors("default");

@@ -1,10 +1,10 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
 using LoadLogic.Services.Abstractions;
 using LoadLogic.Services.Extensions;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
 
 #nullable disable
 namespace LoadLogic.Services.Ordering.Infrastructure.Persistence

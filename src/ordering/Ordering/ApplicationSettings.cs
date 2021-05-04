@@ -1,4 +1,4 @@
-
+﻿
 namespace LoadLogic.Services.Ordering
 {
     public class ConnectionStrings

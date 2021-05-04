@@ -1,4 +1,4 @@
-namespace LoadLogic.Services.Abstractions
+﻿namespace LoadLogic.Services.Abstractions
 {
     public interface IAggregateRoot { }
 }

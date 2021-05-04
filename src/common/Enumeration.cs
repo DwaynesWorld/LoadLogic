@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -38,7 +38,7 @@ namespace LoadLogic.Services
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Enumeration otherValue))
+            if (obj is not Enumeration otherValue)
             {
                 return false;
             }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LoadLogic.Services;
@@ -8,9 +8,9 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
 {
     public class OrderType : Enumeration
     {
-        public static OrderType Haul = new OrderType(1, nameof(Haul).ToLowerInvariant());
-        public static OrderType OnSiteLoadDump = new OrderType(2, nameof(OnSiteLoadDump).ToLowerInvariant());
-        public static OrderType MultiSiteLoadDump = new OrderType(3, nameof(MultiSiteLoadDump).ToLowerInvariant());
+        public static readonly OrderType Haul = new(1, nameof(Haul).ToLowerInvariant());
+        public static readonly OrderType OnSiteLoadDump = new(2, nameof(OnSiteLoadDump).ToLowerInvariant());
+        public static readonly OrderType MultiSiteLoadDump = new(3, nameof(MultiSiteLoadDump).ToLowerInvariant());
 
         public OrderType(int id, string name) : base(id, name)
         {
@@ -26,7 +26,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
             if (state == null)
             {
                 var values = string.Join(",", List().Select(s => s.Name));
-                throw new OrderingDomainException($"Possible values for OrderActivity: {values}");
+                throw new OrderingDomainException($"Possible values for OrderType: {values}");
             }
 
             return state;
@@ -39,7 +39,7 @@ namespace LoadLogic.Services.Ordering.Domain.Aggregates.Orders
             if (state == null)
             {
                 var values = string.Join(",", List().Select(s => s.Name));
-                throw new OrderingDomainException($"Possible values for OrderActivity: {values}");
+                throw new OrderingDomainException($"Possible values for OrderType: {values}");
             }
 
             return state;

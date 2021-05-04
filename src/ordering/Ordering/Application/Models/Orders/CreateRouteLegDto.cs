@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
 
 namespace LoadLogic.Services.Ordering.Application.Models.Orders

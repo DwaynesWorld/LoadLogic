@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using LoadLogic.Services.Abstractions;
-using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using LoadLogic.Services.Abstractions;
+using LoadLogic.Services.Ordering.Domain.Aggregates.Orders;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 {
@@ -23,7 +23,9 @@ namespace LoadLogic.Services.Ordering.Infrastructure.Persistence.Repositories
 
         public async Task<Order?> FindById(long id, CancellationToken cancellationToken = default)
         {
-            return await _context.Orders.FindAsync(id, cancellationToken);
+            return await _context.Orders
+                .Where(x => x.Id == id)
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
         public async Task<int> GetNextOrderNo(CancellationToken cancellationToken = default)

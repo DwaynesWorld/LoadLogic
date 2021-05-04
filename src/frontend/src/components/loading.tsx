@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Container, Typography } from "@material-ui/core";
 
-export const FullPageLoading = () => {
+export function FullPageLoading() {
   return (
     <Container>
       <Box>
@@ -10,4 +10,4 @@ export const FullPageLoading = () => {
       <Box>Loading</Box>
     </Container>
   );
-};
+}

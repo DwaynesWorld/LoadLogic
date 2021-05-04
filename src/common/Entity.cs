@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MediatR;
 
@@ -6,7 +6,7 @@ namespace LoadLogic.Services
 {
     public class Entity
     {
-        private readonly List<INotification> _domainEvents = new List<INotification>();
+        private readonly List<INotification> _domainEvents = new();
 
         public long Id { get; protected set; }
 
