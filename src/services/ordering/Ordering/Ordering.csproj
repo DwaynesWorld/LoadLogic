@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\common\Common.csproj"/>
+    <ProjectReference Include="..\..\..\common\Common.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

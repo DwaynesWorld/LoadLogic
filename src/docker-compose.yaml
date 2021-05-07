@@ -18,7 +18,7 @@ services:
     image: ${REGISTRY:-kt713}/ordering-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: ordering/Ordering/Dockerfile
+      dockerfile: services/ordering/Ordering/Dockerfile
     depends_on:
       - sqlserver
       - seq-service
@@ -28,7 +28,7 @@ services:
     image: ${REGISTRY:-kt713}/customers-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: customers/Dockerfile
+      dockerfile: services/customers/Dockerfile
     depends_on:
       - sqlserver
       - seq-service
@@ -38,7 +38,7 @@ services:
     image: ${REGISTRY:-kt713}/locations-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: locations/Dockerfile
+      dockerfile: services/locations/Dockerfile
     depends_on:
       - sqlserver
       - seq-service

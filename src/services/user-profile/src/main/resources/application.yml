@@ -1,0 +1,20 @@
+server:
+  port: 9001
+
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=LoadLogic_UserProfileDB
+    username: sa
+    password: Pass@word
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        hbm2ddl:
+          auto: create-drop
+        id:
+          new_generator_mappings: false

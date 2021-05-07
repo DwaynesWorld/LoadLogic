@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "src/locations/**"
+      - "src/services/locations/**"
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./src
-          file: ./src/locations/Dockerfile
+          file: ./src/services/locations/Dockerfile
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: loadlogicacr.azurecr.io/locations-api:latest

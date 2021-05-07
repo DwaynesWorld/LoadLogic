@@ -11,11 +11,11 @@ build:
   - image: loadlogicacr.azurecr.io/customers-api
     context: src
     docker:
-      dockerfile: customers/Dockerfile
+      dockerfile: services/customers/Dockerfile
   - image: loadlogicacr.azurecr.io/locations-api
     context: src
     docker:
-      dockerfile: locations/Dockerfile
+      dockerfile: services/locations/Dockerfile
   - image: loadlogicacr.azurecr.io/monitoring
     context: src
     docker:
@@ -23,7 +23,7 @@ build:
   - image: loadlogicacr.azurecr.io/ordering-api
     context: src
     docker:
-      dockerfile: ordering/Ordering/Dockerfile
+      dockerfile: services/ordering/Ordering/Dockerfile
 deploy:
   kubectl:
     manifests:
