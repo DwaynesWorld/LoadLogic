@@ -68,6 +68,18 @@ static_resources:
                           route:
                             prefix_rewrite: "/"
                             cluster: locations_cluster
+                        - name: "u-short"
+                          match:
+                            prefix: "/u/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: userprofile_cluster
+                        - name: "u-long"
+                          match:
+                            prefix: "/userprofile-api/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: userprofile_cluster                            
   clusters:
     - name: ordering_cluster
       connect_timeout: 0.25s
@@ -110,4 +122,18 @@ static_resources:
                   address:
                     socket_address:
                       address: locations-api-service
+                      port_value: 80
+    - name: userprofile_cluster
+      connect_timeout: 0.25s
+      type: strict_dns
+      dns_lookup_family: v4_only
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: userprofile_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: userprofile-api-service
                       port_value: 80

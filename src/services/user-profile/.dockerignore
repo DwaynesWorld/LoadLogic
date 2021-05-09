@@ -1,0 +1,9 @@
+.dockerignore
+.git
+.gitignore
+.vscode
+**/azds.yaml
+**/Dockerfile
+**/Dockerfile.develop
+**/secrets.dev.yaml
+**/values.dev.yaml

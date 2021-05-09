@@ -1,11 +1,11 @@
 server:
-  port: 9001
+  port: ${PORT:9001}
 
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=LoadLogic_UserProfileDB
-    username: sa
-    password: Pass@word
+    url: ${DATABASE_CONNECTION_STRING:jdbc:sqlserver://localhost:1433;database=LoadLogic_UserProfileDB}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:Pass@word}
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:

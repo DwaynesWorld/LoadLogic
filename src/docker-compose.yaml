@@ -44,6 +44,16 @@ services:
       - seq-service
       - rabbitmq-service
 
+  userprofile-api-service:
+    image: ${REGISTRY:-kt713}/userprofile-api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: services/user-profile/Dockerfile
+    depends_on:
+      - sqlserver
+      - seq-service
+      - rabbitmq-service
+
   monitoring-service:
     image: prom/prometheus:latest
     depends_on:

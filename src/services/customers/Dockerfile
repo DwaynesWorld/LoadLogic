@@ -12,14 +12,14 @@ ENV GO111MODULE=on \
 WORKDIR /build
 
 # Copy go.mod and go.sum files to the workspace
-COPY "customers/go.mod" . 
-COPY "customers/go.sum" .
+COPY "services/customers/go.mod" . 
+COPY "services/customers/go.sum" .
 
 # Get dependancies
 RUN go mod download
 
 # Copy the code into the container
-COPY "customers/" .
+COPY "services/customers/" .
 
 # Build the application
 RUN go build 

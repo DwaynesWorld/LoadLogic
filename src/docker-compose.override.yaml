@@ -68,6 +68,15 @@ services:
     ports:
       - "5161:80"
 
+  userprofile-api-service:
+    environment:
+      - PORT=80
+      - DATABASE_CONNECTION_STRING=${USERPROFILE_DB:-jdbc:sqlserver://sqlserver;database=LoadLogic_UserProfileDB}
+      - DATABASE_USERNAME=${USERPROFILE_DB_USERNAME:-sa}
+      - DATABASE_PASSWORD=${USERPROFILE_DB_PASSWORD:-Pass@word}
+    ports:
+      - "5171:80"
+
   monitoring-service:
     ports:
       - "9090:9090"
