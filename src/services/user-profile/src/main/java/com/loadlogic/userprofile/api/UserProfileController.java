@@ -66,13 +66,13 @@ public class UserProfileController {
             profile.getAvatarUrl());
     }
 
-    private GetUserProfileResponse makeGetUserProfileResponse(UserProfile userProfile) {
+    private GetUserProfileResponse makeGetUserProfileResponse(UserProfile profile) {
         return new GetUserProfileResponse(
-            userProfile.getId(), 
-            userProfile.getUserId(), 
-            userProfile.getCompanyId(),
-            userProfile.getDisplayName(), 
-            userProfile.getAvatarUrl());
+            profile.getId(), 
+            profile.getUserId(), 
+            profile.getCompanyId(),
+            profile.getDisplayName(), 
+            profile.getAvatarUrl());
     }
 
     private GetUserProfilesResponse makeGetUserProfilesResponse(List<GetUserProfileResponse> profiles) {

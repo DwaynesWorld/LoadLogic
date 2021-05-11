@@ -38,4 +38,5 @@ msbuild.wrn
 
 appsettings.Local.json
 loadlogic.code-workspace
-src/customers/customers
+src/services/customers/customers
+src/services/locations/locations

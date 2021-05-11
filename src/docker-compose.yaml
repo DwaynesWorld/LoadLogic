@@ -1,8 +1,12 @@
 version: "3.4"
 
 services:
-  seq-service:
-    image: datalust/seq:2020.5
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+
+  kibana:
+    platform: linux/amd64
+    image: docker.elastic.co/kibana/kibana:7.12.1
 
   sqlserver:
     # image: mcr.microsoft.com/mssql/server:2017-latest
@@ -21,7 +25,7 @@ services:
       dockerfile: services/ordering/Ordering/Dockerfile
     depends_on:
       - sqlserver
-      - seq-service
+      - elasticsearch
       - rabbitmq-service
 
   customers-api-service:
@@ -31,7 +35,7 @@ services:
       dockerfile: services/customers/Dockerfile
     depends_on:
       - sqlserver
-      - seq-service
+      - elasticsearch
       - rabbitmq-service
 
   locations-api-service:
@@ -41,7 +45,7 @@ services:
       dockerfile: services/locations/Dockerfile
     depends_on:
       - sqlserver
-      - seq-service
+      - elasticsearch
       - rabbitmq-service
 
   userprofile-api-service:
@@ -51,7 +55,7 @@ services:
       dockerfile: services/user-profile/Dockerfile
     depends_on:
       - sqlserver
-      - seq-service
+      - elasticsearch
       - rabbitmq-service
 
   monitoring-service:

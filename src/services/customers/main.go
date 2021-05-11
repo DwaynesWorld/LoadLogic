@@ -3,15 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
+	neturl "net/url"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
-	"github.com/nullseed/logruseq"
+	"github.com/olivere/elastic/v7"
 	"github.com/prometheus/client_golang/prometheus"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
+	"gopkg.in/sohlich/elogrus.v7"
 	"gorm.io/gorm"
 
 	"github.com/DwaynesWorld/LoadLogic/src/customers/application"
@@ -25,7 +27,7 @@ const (
 	defaultHost        = "localhost"
 	defaultPort        = "8080"
 	defaultDsn         = "sqlserver://sa:Pass@word@localhost:1433?database=LoadLogic_CustomersDB"
-	defaultSeq         = "http://seq"
+	defaultES          = "http://localhost:9200"
 )
 
 func main() {
@@ -35,7 +37,7 @@ func main() {
 	startServer(logger)
 }
 
-func startServer(logger *log.Entry) {
+func startServer(logger *logrus.Entry) {
 	host := envString("HOST", defaultHost, true)
 	port := envString("PORT", defaultPort, true)
 	addr := fmt.Sprintf("%s:%s", host, port)
@@ -43,7 +45,7 @@ func startServer(logger *log.Entry) {
 	errs := make(chan error, 2)
 
 	go func() {
-		logger.WithFields(log.Fields{
+		logger.WithFields(logrus.Fields{
 			"Transport":    "http",
 			"Host":         host,
 			"Port":         port,
@@ -62,12 +64,27 @@ func startServer(logger *log.Entry) {
 	logger.Info("Server terminated.", <-errs)
 }
 
-func setupLoggers() (*log.Entry, *log.Entry) {
-	seq := envString("SEQ_SERVER_URL", defaultSeq, false)
+func setupLoggers() (*logrus.Entry, *logrus.Entry) {
+	url := envString("ES_SERVER_URL", defaultES, false)
 
-	base := log.New()
-	base.AddHook(logruseq.NewSeqHook(seq))
-	base.SetFormatter(&log.TextFormatter{
+	base := logrus.New()
+	client, err := elastic.NewClient(elastic.SetURL(url))
+	if err != nil {
+		logrus.Panic(err)
+	}
+
+	uri, err := neturl.Parse(url)
+	if err != nil {
+		logrus.Panic(err)
+	}
+
+	hook, err := elogrus.NewAsyncElasticHook(client, uri.Host, logrus.DebugLevel, "logs-customers")
+	if err != nil {
+		logrus.Panic(err)
+	}
+
+	base.AddHook(hook)
+	base.SetFormatter(&logrus.TextFormatter{
 		DisableColors: false,
 		FullTimestamp: true,
 	})
@@ -78,7 +95,7 @@ func setupLoggers() (*log.Entry, *log.Entry) {
 	return logger, httpLogger
 }
 
-func setupPersistence(logger *log.Entry) *gorm.DB {
+func setupPersistence(logger *logrus.Entry) *gorm.DB {
 	dsn := envString("DATABASE_CONNECTION_STRING", defaultDsn, true)
 
 	db, err := persistence.NewSQL(dsn)
@@ -105,7 +122,7 @@ func setupPersistence(logger *log.Entry) *gorm.DB {
 	return db
 }
 
-func setupCustomerService(db *gorm.DB, logger *log.Entry, httpLogger *log.Entry) {
+func setupCustomerService(db *gorm.DB, logger *logrus.Entry, httpLogger *logrus.Entry) {
 	serviceLogger := logger.WithField("SourceContext", "LoggingService")
 	var cs application.CustomersService
 	cs = application.NewService(domain.NewCustomerStore(db))

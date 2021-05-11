@@ -71,14 +71,16 @@ namespace LoadLogic.Services.Ordering
 
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
-            var seqServerUrl = configuration.GetValue<string>("SEQ_SERVER_URL");
+            var esServerUrl = configuration.GetValue<string>("ES_SERVER_URL");
 
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", AppName)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-                .WriteTo.Seq(seqServerUrl)
+                .WriteTo.Elasticsearch(
+                    esServerUrl,
+                    indexFormat: "logs-ordering-{0:yyyy.MM}")
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }

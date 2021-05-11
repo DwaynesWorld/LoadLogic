@@ -1,17 +1,27 @@
 version: "3.4"
 
 volumes:
-  loadlogic-prometheus_data:
-  loadlogic-sql_data:
-  loadlogic-rabbitmq_log:
-  loadlogic-rabbitmq_data:
+  prometheus_data:
+  sql_data:
+  rabbitmq_log:
+  rabbitmq_data:
+  elasticsearch_data:
 
 services:
-  seq-service:
+  elasticsearch:
     environment:
-      - ACCEPT_EULA=Y
+      - discovery.type=single-node
     ports:
-      - "5340:80"
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  kibana:
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
 
   sqlserver:
     environment:
@@ -20,15 +30,15 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - loadlogic-sql_data:/var/opt/mssql
+      - sql_data:/var/opt/mssql
 
   rabbitmq-service:
     ports:
       - "15672:15672"
       - "5672:5672"
     volumes:
-      - loadlogic-rabbitmq_log:/var/log/rabbitmq
-      - loadlogic-rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
 
   envoy:
     ports:
@@ -42,7 +52,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PORT=80
-      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
+      - ES_SERVER_URL=${ES_SERVER_URL:-http://elasticsearch:9200}
       - DATABASE_CONNECTION_STRING=${ORDERING_DB:-Server=sqlserver;Database=LoadLogic_OrderingDB;User Id=sa;Password=Pass@word}
       - EVENTBUS_CONNECTION_STRING=${EVENTBUS_CONNECTION_STRING:-rabbitmq-service}
       - EVENTBUS_USERNAME=${EVENTBUS_USERNAME:-guest}
@@ -54,7 +64,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
+      - ES_SERVER_URL=${ES_SERVER_URL:-http://elasticsearch:9200}
       - DATABASE_CONNECTION_STRING=${CUSTOMERS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_CustomersDB}
     ports:
       - "5151:80"
@@ -63,7 +73,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - SEQ_SERVER_URL=${SEQ_SERVER_URL:-http://seq-service}
+      - ES_SERVER_URL=${ES_SERVER_URL:-http://elasticsearch:9200}
       - DATABASE_CONNECTION_STRING=${LOCATIONS_DB:-sqlserver://sa:Pass@word@sqlserver?database=LoadLogic_LocationsDB}
     ports:
       - "5161:80"
@@ -82,7 +92,7 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/:/etc/prometheus/
-      - loadlogic-prometheus_data:/prometheus
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
       - "--storage.tsdb.path=/prometheus"
