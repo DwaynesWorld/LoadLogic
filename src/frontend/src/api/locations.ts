@@ -7,7 +7,7 @@ export interface LocationsResponse {
 }
 
 export async function getAllLocations(path = "/locations") {
-  const baseUrl = config.endpoints.locations_baseurl;
+  const baseUrl = config.endpoints.locations;
   const url = baseUrl + path;
   const response = await axios.get<LocationsResponse>(url);
   return response;

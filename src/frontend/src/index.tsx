@@ -5,14 +5,17 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 import reportWebVitals from "./report-web-vitals";
+import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 import { App } from "./app";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <App />
-      </MuiPickersUtilsProvider>
+      <Auth0ProviderWithHistory>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <App />
+        </MuiPickersUtilsProvider>
+      </Auth0ProviderWithHistory>
     </Router>
   </React.StrictMode>,
   document.getElementById("root")

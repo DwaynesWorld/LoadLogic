@@ -38,7 +38,8 @@ export function OrderList() {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
+      // eslint-disable-next-line no-console
+      console.error(error);
       return; // Handle
     }
 

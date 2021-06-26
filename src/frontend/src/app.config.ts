@@ -1,17 +1,24 @@
 interface AppConfiguration {
+  auth: {
+    domain: string;
+    clientId: string;
+  };
   endpoints: {
-    orders_baseurl: string;
-    customers_baseurl: string;
-    locations_baseurl: string;
+    orders: string;
+    customers: string;
+    locations: string;
   };
 }
 
 const local: AppConfiguration = {
+  auth: {
+    domain: "dev-loadlogic.us.auth0.com",
+    clientId: "LeyfUG6j6aepEwpErM40uat8sFCGf3NB"
+  },
   endpoints: {
-    // orders_baseurl: "http://localhost:5000/v1",
-    orders_baseurl: "http://localhost:10000/o/v1",
-    customers_baseurl: "http://localhost:10000/c/v1",
-    locations_baseurl: "http://localhost:10000/l/v1"
+    orders: "http://localhost:10000/o/v1",
+    customers: "http://localhost:10000/c/v1",
+    locations: "http://localhost:10000/l/v1"
   }
 };
 

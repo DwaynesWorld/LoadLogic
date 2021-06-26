@@ -19,8 +19,8 @@ export const routes = [
       { path: "billing/*", element: <BillingRouting /> },
       { path: "people/*", element: <CustomerRouting /> },
       { path: "settings/*", element: <SettingsRouting /> },
-      { path: "*", element: <Navigate to="/404" /> },
-    ],
+      { path: "*", element: <Navigate to="/404" /> }
+    ]
   },
   {
     path: "/",
@@ -28,8 +28,8 @@ export const routes = [
     children: [
       { path: "login", element: <LoginView /> },
       { path: "404", element: <NotFoundView /> },
-      { path: "/", element: <Navigate to="/app/orders" /> },
-      { path: "*", element: <Navigate to="/404" /> },
-    ],
-  },
+      { path: "/", element: <LoginView /> },
+      { path: "*", element: <Navigate to="/404" /> }
+    ]
+  }
 ];
